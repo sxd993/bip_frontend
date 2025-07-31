@@ -1,0 +1,67 @@
+.chat {
+  background: #222222;
+  border-radius: 8px;
+  padding: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  background: #2c2c2c;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: background 0.2s;
+}
+
+.message:hover {
+  background: #333333;
+}
+
+.message-header {
+  font-size: 14px;
+  color: #888888;
+  margin: 0 0 8px;
+}
+
+.message-header strong {
+  color: #cccccc;
+}
+
+.message-content {
+  font-size: 16px;
+  color: #e0e0e0;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.message-file {
+  margin-top: 8px;
+}
+
+.file-link {
+  color: #4a90e2;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-link:hover {
+  text-decoration: underline;
+  color: #357abd;
+}
+
+.file-link i {
+  font-size: 16px;
+}
+
+.no-messages {
+  font-size: 16px;
+  color: #888888;
+  text-align: center;
+}

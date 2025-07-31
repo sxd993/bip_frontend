@@ -1,0 +1,18 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+  overflow-y: hidden;
+  font-family: 'Rubik', sans-serif;
+  margin: auto;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}

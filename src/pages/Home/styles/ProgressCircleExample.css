@@ -1,0 +1,50 @@
+.progress-circle-wrapper {
+  --progress-value: 75%; /* Динамическая переменная для процента */
+  --path-color: #ff0000; /* Цвет линии прогресса */
+  --trail-color: #e5e7eb; /* Цвет фона круга */
+  --text-color: #1f2937; /* Цвет текста */
+  --text-size: 18px; /* Размер текста */
+  --transition-duration: 0.5s; /* Длительность анимации */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  width: 120px;
+  height: 120px;
+}
+
+/* Стилизация внутренних элементов через глубокий селектор */
+.progress-circle-wrapper .CircularProgressbar-path {
+  stroke: var(--path-color);
+  transition: stroke-dashoffset var(--transition-duration) ease;
+}
+
+.progress-circle-wrapper .CircularProgressbar-trail {
+  stroke: var(--trail-color);
+}
+
+.progress-circle-wrapper .CircularProgressbar-text {
+  fill: var(--text-color);
+  font-size: var(--text-size);
+}
+
+/* Убедимся, что анимация применяется корректно */
+.progress-circle-wrapper .CircularProgressbar-path {
+  stroke-linecap: round; /* Закруглённые концы (дублируем для надёжности) */
+}
+.circle-container {
+  display: flex;
+  gap: 2rem;
+  align-items: end;
+
+
+}
+
+@media (max-width: 768px) {
+  .circle-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+}

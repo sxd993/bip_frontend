@@ -1,0 +1,72 @@
+.footer {
+  background: linear-gradient(120deg, #3C3C3C, #2A2A2A, #5A5A5A, #3C3C3C);
+  color: white;
+  padding: 40px 20px;
+  font-size: 20px;
+  text-align: center;
+  position: relative;
+  font-family: 'Rubik', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.footer::before {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.footer-columns {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 0;
+}
+
+.footer-column strong {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.footer-column ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin: 8px 0;
+  transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease; /* Добавлен opacity в transition */
+  opacity: 0.7; /* Placeholder-подобный эффект для неактивных элементов */
+}
+
+.footer-column li:hover,
+.footer-column li.active {
+  transform: scale(1.1);
+  opacity: 1; /* Убираем прозрачность при наведении/активности */
+}
+
+.footer-column a {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: 'Rubik', sans-serif;
+  text-decoration: none;
+  line-height: 1.6;
+}
