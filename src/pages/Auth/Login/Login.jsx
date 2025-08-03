@@ -5,7 +5,7 @@ import { loginApi } from '../../../api/auth/loginApi';
 import './Login.css';
 
 const Login = ({ currentStage, setCurrentStage }) => {
-    const [login, setLogin] = useState('');
+    const [emailOrPhone, setEmailOrPhone] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -30,12 +30,11 @@ const Login = ({ currentStage, setCurrentStage }) => {
         } else {
             errorMessage = 'Произошла ошибка. Попробуйте ещё раз.';
         }
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        mutation.mutate({ login, password });
-    };
+        mutation.mutate({ email_or_phone: emailOrPhone, password });
+    }};
 
     return (
         <div className="login-container">
@@ -49,10 +48,10 @@ const Login = ({ currentStage, setCurrentStage }) => {
                         <input
                             type="text"
                             id="login"
-                            value={login}
+                            value={emailOrPhone}
                             onChange={(e) => setLogin(e.target.value)}
                             className="input-field"
-                            placeholder="Введите ваш логин"
+                            placeholder="Email или номер телефона"
                             required
                         />
                     </div>

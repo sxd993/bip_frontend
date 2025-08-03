@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { registerPhysicalPersonApi } from '../../../api/auth/registerApi';
+import { Loading} from '../../../components/Loading';
+import { normalizePhoneForServer, handlePhoneInput, validatePhone, handlePhoneKeyDown } from '../../../utils/RegisterUtils/phoneUtils';
 
 export const PhysicalRegister = () => {
   const navigate = useNavigate();
@@ -10,17 +12,10 @@ export const PhysicalRegister = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm();
-
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
   const phoneValue = watch('phone');
 
-  const physicalPersonMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: registerPhysicalPersonApi,
     onSuccess: (data) => {
       setMessage('Регистрация успешна!');
@@ -34,74 +29,35 @@ export const PhysicalRegister = () => {
     },
   });
 
-  const formatPhoneForDisplay = (digits) => {
-    if (!digits || digits.length < 1) return '+7 ';
-
-    if (digits.startsWith('8')) {
-      digits = digits.slice(1);
-    } else if (digits.startsWith('7')) {
-      digits = digits.slice(1);
-    }
-
-    let formatted = '+7 ';
-    if (digits.length > 0) formatted += digits.slice(0, 3);
-    if (digits.length > 3) formatted += ' ' + digits.slice(3, 6);
-    if (digits.length > 6) formatted += '-' + digits.slice(6, 8);
-    if (digits.length > 8) formatted += '-' + digits.slice(8, 10);
-    return formatted;
-  };
-
-  const handlePhoneChange = (e) => {
-    let raw = e.target.value.replace(/\D/g, '');
-
-    if (raw.length === 0) {
-      setValue('phone', '+7 ');
-      return;
-    }
-
-    if (raw.startsWith('8')) {
-      raw = '7' + raw.slice(1);
-    } else if (raw.length === 10 && !raw.startsWith('7')) {
-      raw = '7' + raw;
-    }
-
-    if (raw.length > 11) {
-      raw = raw.slice(0, 11);
-    }
-
-    const displayValue = formatPhoneForDisplay(raw);
-    setValue('phone', displayValue);
-  };
-
   const onSubmit = (data) => {
-    const digitsOnly = data.phone.replace(/\D/g, '');
-    let normalizedPhone = digitsOnly;
-
-    if (digitsOnly.length === 10) {
-      normalizedPhone = '7' + digitsOnly;
-    } else if (digitsOnly.startsWith('8')) {
-      normalizedPhone = '7' + digitsOnly.slice(1);
-    }
-
-    const payload = {
-      ...data,
-      phone: normalizedPhone,
-    };
-
     setMessage('');
     setError('');
-    physicalPersonMutation.mutate(payload);
+    
+    const payload = {
+      ...data,
+      phone: normalizePhoneForServer(data.phone),
+    };
+
+    mutation.mutate(payload);
   };
+
+  if (mutation.isPending) return <Loading />;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="form-group">
-        <label>Логин</label>
+        <label>Номер телефона</label>
         <input
-          type="text"
-          {...register('login', { required: 'Обязательное поле' })}
+          type="tel"
+          value={phoneValue || '+7 '}
+          {...register('phone', {
+            required: 'Обязательное поле',
+            validate: validatePhone,
+          })}
+          onChange={(e) => handlePhoneInput(e, setValue)}
+          onKeyDown={handlePhoneKeyDown}
         />
-        {errors.login && <span className="error-message">{errors.login.message}</span>}
+        {errors.phone && <span className="error-message">{errors.phone.message}</span>}
       </div>
 
       <div className="form-group">
@@ -137,31 +93,6 @@ export const PhysicalRegister = () => {
       </div>
 
       <div className="form-group">
-        <label>Номер телефона</label>
-        <input
-          type="tel"
-          value={phoneValue || '+7 '}
-          {...register('phone', {
-            required: 'Обязательное поле',
-            validate: (value) => {
-              const digitsOnly = value.replace(/\D/g, '');
-              if (!/^[78]?\d{10}$/.test(digitsOnly)) {
-                return 'Некорректный формат номера телефона';
-              }
-              return true;
-            },
-          })}
-          onChange={handlePhoneChange}
-          onKeyDown={(e) => {
-            if (e.target.selectionStart <= 3 && (e.key === 'Backspace' || e.key === 'Delete')) {
-              e.preventDefault();
-            }
-          }}
-        />
-        {errors.phone && <span className="error-message">{errors.phone.message}</span>}
-      </div>
-
-      <div className="form-group">
         <label>Email</label>
         <input
           type="email"
@@ -179,7 +110,9 @@ export const PhysicalRegister = () => {
         {errors.birthdate && <span className="error-message">{errors.birthdate.message}</span>}
       </div>
 
-      <button type="submit">Зарегистрироваться</button>
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? 'Регистрация...' : 'Зарегистрироваться'}
+      </button>
 
       {error && <p className="error-message">{error}</p>}
       {message && <p className="success-message">{message}</p>}
