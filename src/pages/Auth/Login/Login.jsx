@@ -19,22 +19,18 @@ const Login = ({ currentStage, setCurrentStage }) => {
         },
     });
 
-    let errorMessage = '';
-    if (mutation.error) {
-        if (mutation.error.response && mutation.error.response.data && mutation.error.response.data.detail) {
-            errorMessage = mutation.error.response.data.detail;
-        } else if (mutation.error.message) {
-            errorMessage = mutation.error.message === 'Network Error'
-                ? 'Нет соединения с сервером. Проверьте интернет или попробуйте позже.'
-                : mutation.error.message;
-        } else {
-            errorMessage = 'Произошла ошибка. Попробуйте ещё раз.';
-        }
+    const errorMessage = mutation.error
+        ? mutation.error.response?.data?.detail
+            ? mutation.error.response.data.detail
+            : mutation.error.message === 'Network Error'
+            ? 'Нет соединения с сервером. Проверьте интернет или попробуйте позже.'
+            : mutation.error.message || 'Произошла ошибка. Попробуйте ещё раз.'
+        : '';
 
     const handleSubmit = (e) => {
         e.preventDefault();
         mutation.mutate({ email_or_phone: emailOrPhone, password });
-    }};
+    };
 
     return (
         <div className="login-container">
@@ -49,7 +45,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
                             type="text"
                             id="login"
                             value={emailOrPhone}
-                            onChange={(e) => setLogin(e.target.value)}
+                            onChange={(e) => setEmailOrPhone(e.target.value)}
                             className="input-field"
                             placeholder="Email или номер телефона"
                             required
@@ -81,7 +77,6 @@ const Login = ({ currentStage, setCurrentStage }) => {
                     >
                         Регистрация
                     </div>
-
                     <button
                         type="submit"
                         className="login-button"
@@ -90,7 +85,6 @@ const Login = ({ currentStage, setCurrentStage }) => {
                         {mutation.isPending ? 'Вход...' : 'Войти'}
                     </button>
                 </form>
-
             </div>
         </div>
     );

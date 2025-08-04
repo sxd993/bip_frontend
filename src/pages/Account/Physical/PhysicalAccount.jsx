@@ -1,5 +1,6 @@
 import './PhysicalAccount.css';
 import { Transactions } from './Transactions';
+import { Deals } from './Deals';
 
 export const PhysicalAccount = ({ user }) => {
     return (
@@ -36,6 +37,7 @@ export const PhysicalAccount = ({ user }) => {
                 </div>
                 <div>
                     <Transactions/>
+                    <Deals/>
                 </div>
             </div>
         </div>
