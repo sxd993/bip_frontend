@@ -4,10 +4,6 @@ import { addEmployeeApi } from "../../../../api/personal_account/Emloyers";
 
 export const AddEmployeeForm = ({ onClose, role }) => {
     const queryClient = useQueryClient();
-    const { data: departments } = useQuery({
-        queryKey: ['departments'],
-        queryFn: getDepartamentApi,
-    });
 
     const {
         register,
@@ -23,7 +19,6 @@ export const AddEmployeeForm = ({ onClose, role }) => {
             email: "",
             password: "",
             role: "Сотрудник",
-            department_id: ""
         }
     });
 
@@ -42,14 +37,6 @@ export const AddEmployeeForm = ({ onClose, role }) => {
         mutation.mutate(data);
     };
 
-    const availableRoles = role === 'Руководитель'
-        ? [
-            { value: "Сотрудник", label: "Сотрудник" },
-            { value: "Руководитель отдела", label: "Руководитель отдела" }
-        ]
-        : [
-            { value: "Сотрудник", label: "Сотрудник" }
-        ];
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
@@ -256,52 +243,6 @@ export const AddEmployeeForm = ({ onClose, role }) => {
                                 )}
                             </div>
 
-                            <div className="space-y-2">
-                                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                                    Роль <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    id="role"
-                                    {...register("role", { required: "Выберите роль" })}
-                                    className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-0 bg-white ${
-                                        errors.role 
-                                            ? 'border-red-300 focus:border-red-500 bg-red-50' 
-                                            : 'border-gray-200 focus:border-blue-500 hover:border-gray-300'
-                                    }`}
-                                >
-                                    {availableRoles.map(roleOption => (
-                                        <option key={roleOption.value} value={roleOption.value}>
-                                            {roleOption.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.role && (
-                                    <p className="text-sm text-red-600 flex items-center gap-1">
-                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                        </svg>
-                                        {errors.role.message}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2 md:col-span-2">
-                                <label htmlFor="department_id" className="block text-sm font-medium text-gray-700">
-                                    Отдел
-                                </label>
-                                <select
-                                    id="department_id"
-                                    {...register("department_id")}
-                                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 transition-all duration-200 focus:outline-none focus:ring-0 focus:border-blue-500 hover:border-gray-300 bg-white"
-                                >
-                                    <option value="">Выберите отдел</option>
-                                    {departments?.departments?.map((department) => (
-                                        <option key={department.id} value={department.id}>
-                                            {department.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
                         </div>
                     </section>
 
