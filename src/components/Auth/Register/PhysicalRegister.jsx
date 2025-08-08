@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { registerPhysicalPersonApi } from '../../../api/auth/registerApi';
-import { Loading} from '../../../components/Loading';
+import { Loading } from '../../Loading';
 import { normalizePhoneForServer, handlePhoneInput, validatePhone, handlePhoneKeyDown } from '../../../utils/RegisterUtils/phoneUtils';
 
 export const PhysicalRegister = () => {
@@ -32,7 +32,7 @@ export const PhysicalRegister = () => {
   const onSubmit = (data) => {
     setMessage('');
     setError('');
-    
+
     const payload = {
       ...data,
       phone: normalizePhoneForServer(data.phone),

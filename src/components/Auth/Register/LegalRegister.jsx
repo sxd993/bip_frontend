@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { registerLegalEntityApi } from '../../../api/auth/registerApi';
 import { useNavigate } from 'react-router-dom';
-import { Loading} from '../../../components/Loading';
+import { Loading } from '../../Loading';
 import { normalizePhoneForServer, handlePhoneInput, validatePhone, handlePhoneKeyDown } from '../../../utils/RegisterUtils/phoneUtils';
 
 export const LegalRegister = () => {
@@ -32,12 +32,12 @@ export const LegalRegister = () => {
   const onSubmit = (data) => {
     setMessage('');
     setError('');
-    
+
     const formData = {
       ...data,
       phone: normalizePhoneForServer(data.phone),
     };
-    
+
     mutation.mutate(formData);
   };
 
