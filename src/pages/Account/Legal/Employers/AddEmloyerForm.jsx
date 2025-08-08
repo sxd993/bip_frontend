@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addEmployeeApi } from "../../../../api/personal_account/Emloyers";
-import { getDepartamentApi } from "../../../../api/personal_account/Departament";
 
 export const AddEmployeeForm = ({ onClose, role }) => {
     const queryClient = useQueryClient();

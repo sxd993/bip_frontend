@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './LegalAccount.css';
 import { AddEmployee } from './Employers/AddEmployee';
-import { Departament } from './Departament/Departament';
 
 export const LegalAccount = ({ user }) => {
     const [isOpenDepartament, setIsOpenDepartament] = useState(false);
@@ -68,19 +67,6 @@ export const LegalAccount = ({ user }) => {
                     </div>
                 </div>
 
-                <div
-                    className={`legal-action-btn${isOpenDepartament ? ' open' : ''}`}
-                    onClick={() => setIsOpenDepartament((prev) => !prev)}
-                >
-                    <span>Управление отделами</span>
-                    <span className="arrow">{isOpenDepartament ? '▲' : '▼'}</span>
-                </div>
-                {isOpenDepartament && user.role === 'Руководитель' && (
-                    <Departament
-                        isOpenDepartament={isOpenDepartament}
-                        setIsOpenDepartament={setIsOpenDepartament}
-                    />
-                )}
 
                 <div
                     className={`legal-action-btn${isOpenEmployers ? ' open' : ''}`}
