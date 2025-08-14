@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './LegalAccount.css';
+import DealsManagement from './DealsManagement'; // НОВЫЙ ИМПОРТ
 
 export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompany, isLoadingEmployees }) => {
     const [isOpenEmployers, setIsOpenEmployers] = useState(false);
@@ -117,6 +118,9 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                         </div>
                     </div>
                 </div>
+
+                {/* НОВЫЙ РАЗДЕЛ: Обращения компании */}
+                <DealsManagement user={user} />
 
                 {/* Управление сотрудниками - только для руководителя */}
                 {user.role === 'Руководитель' && (

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getCurrentDealsApi, getDealsHistoryApi } from '../../../api/deals/dealsApi';
 import CreateAppealModal from '../../../components/Account/Shared/CreateAppealModal';
 
-const Deals = () => {
+const DealsManagement = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
 
@@ -44,23 +44,26 @@ const Deals = () => {
   };
 
   const DealCard = ({ deal, showOpportunity = false }) => (
-    <div className="info-item hover:bg-blue-50 transition-colors p-4 rounded-lg border border-gray-200">
+    <div className="info-item balance-item p-4 rounded-lg">
       <div className="flex justify-between items-start mb-3">
-        <h4 className="font-medium text-gray-900 text-sm leading-tight">
-          {deal.title}
-        </h4>
+        <div>
+          <h4 className="font-medium text-gray-900 text-sm leading-tight mb-1">
+            {deal.title}
+          </h4>
+          <div className="text-xs text-gray-500">
+            ID: {deal.id} • Создано: {formatDate(deal.created_at)}
+          </div>
+        </div>
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(deal.stage_id)}`}>
           {deal.stage_name}
         </span>
       </div>
       
-      <div className="text-xs text-gray-500 space-y-1 mb-3">
-        <div>ID: {deal.id}</div>
-        <div>Создано: {formatDate(deal.created_at)}</div>
-        {showOpportunity && deal.opportunity && Number(deal.opportunity) > 0 && (
-          <div>Сумма: {Number(deal.opportunity).toLocaleString('ru-RU')} ₽</div>
-        )}
-      </div>
+      {showOpportunity && deal.opportunity && Number(deal.opportunity) > 0 && (
+        <div className="text-sm text-gray-600 mb-2">
+          Сумма: {Number(deal.opportunity).toLocaleString('ru-RU')} ₽
+        </div>
+      )}
       
       <button 
         onClick={() => window.open(`/deal/${deal.id}`, '_blank')}
@@ -72,16 +75,23 @@ const Deals = () => {
   );
 
   return (
-    <div className="section">
+    <div className="section company-section">
       <div className="flex justify-between items-center mb-4">
-        <h2>Мои обращения</h2>
+        <h2>Обращения компании</h2>
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
         >
-          Создать обращение
+          Новое обращение
         </button>
       </div>
+
+      <p className="text-sm text-gray-600 mb-4">
+        {user.role === 'Руководитель' 
+          ? 'Управление всеми обращениями компании' 
+          : 'Мои обращения от имени компании'
+        }
+      </p>
 
       {/* Табы */}
       <div className="border-b border-gray-200 mb-4">
@@ -94,7 +104,7 @@ const Deals = () => {
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            Текущие
+            Активные обращения
             {currentDeals && (
               <span className="ml-2 bg-blue-100 text-blue-600 py-0.5 px-2 rounded-full text-xs">
                 {currentDeals.length}
@@ -126,8 +136,8 @@ const Deals = () => {
               <p className="text-red-700 text-sm">{currentError.message}</p>
             </div>
           ) : !currentDeals || currentDeals.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500 mb-4">Нет активных обращений</p>
+            <div className="text-center py-8 bg-blue-50 rounded-lg">
+              <p className="text-gray-600 mb-4">Нет активных обращений</p>
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
@@ -136,7 +146,7 @@ const Deals = () => {
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="info-grid">
               {currentDeals.map((deal) => (
                 <DealCard key={deal.id} deal={deal} />
               ))}
@@ -156,11 +166,11 @@ const Deals = () => {
               <p className="text-red-700 text-sm">{historyError.message}</p>
             </div>
           ) : !historyDeals || historyDeals.length === 0 ? (
-            <div className="text-center py-8">
+            <div className="text-center py-8 bg-gray-50 rounded-lg">
               <p className="text-gray-500">История обращений пуста</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="info-grid">
               {historyDeals.map((deal) => (
                 <DealCard key={deal.id} deal={deal} showOpportunity={true} />
               ))}
@@ -178,4 +188,4 @@ const Deals = () => {
   );
 };
 
-export default Deals;
+export default DealsManagement;
