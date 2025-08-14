@@ -1,9 +1,11 @@
-import NavBar from './NavBar';
-import logo from '../../assets/logo.png';
 import './styles/Header.css';
+import logo from '../../assets/logo.png';
+import shapka from '../../assets/shapka.svg';
 import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import shapka from '../../assets/shapka.svg';
+import NavBar from './NavBar';
+
+
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');

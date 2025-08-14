@@ -1,8 +1,8 @@
-import { NavLink, useNavigate } from 'react-router-dom';
 import './styles/NavBar.css';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logoutApi } from '../../api/auth/loginApi';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { logoutApi } from '../../features/auth/api/loginApi';
+import { useUser } from '../../shared/hooks/useUser';
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ const NavBar = () => {
             navigate('/auth/login');
         },
     });
-    const { data: user } = useCurrentUser();
+    const { user } = useUser();
     const handleLogout = (e) => {
         e.preventDefault();
         mutation.mutate();

@@ -1,11 +1,17 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import './styles/App.css';
+
+// Layout
 import Header from './ui/Header/Header';
 import Footer from './ui/Footer/Footer';
-import Home from './pages/Home/Home';
-import Account from './pages/Account/Account';
-import './styles/App.css';
-import { Contacts } from './pages/Contacts/Contacts';
-import { Auth } from './pages/Auth/Auth';
+
+// Страницы
+import { Home } from './pages/Home'
+import { Account } from './pages/Account';
+import { Contacts } from './pages/Contacts';
+import { Auth } from './pages/Auth';
+
+// Утилиты
 import { ProtectedRoute } from './utils/ProtectedRoute';
 
 
