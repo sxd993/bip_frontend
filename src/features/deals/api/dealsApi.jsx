@@ -21,3 +21,8 @@ export const getDealsHistoryApi = async () => {
     const response = await client.get('/deals/history');
     return response.data;
 };
+// API для получения статусов сделок
+export const getDealStagesApi = async () => {
+    const response = await client.get('/deals/stages');
+    return response.data;
+};

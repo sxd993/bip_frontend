@@ -1,6 +1,6 @@
 import './PhysicalAccount.css';
 import { Balance } from '../../shared/components/Balance';
-import Deals from '../deals/components/Deals';
+import AppealsSection from '../deals/components/AppealsSection';
 import { Loading } from '../../shared/ui/Loading';
 
 export const PhysicalAccount = ({ user, isLoading }) => {
@@ -46,7 +46,7 @@ export const PhysicalAccount = ({ user, isLoading }) => {
                 <Balance />
 
                 {/* Обращения */}
-                <Deals />
+                <AppealsSection user={user} />
             </div>
         </div>
     );
