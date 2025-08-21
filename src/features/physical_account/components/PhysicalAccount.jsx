@@ -1,7 +1,7 @@
 import './PhysicalAccount.css';
-import { Balance } from '../../shared/components/Balance';
-import AppealsSection from '../deals/components/AppealsSection';
-import { Loading } from '../../shared/ui/Loading';
+import { Balance } from '../../../shared/components/Balance';
+import AppealsSection from '../../deals/components/AppealsSection';
+import { Loading } from '../../../shared/ui/Loading';
 
 export const PhysicalAccount = ({ user, isLoading }) => {
     if (isLoading) {
