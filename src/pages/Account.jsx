@@ -1,7 +1,7 @@
 import { useUser } from '../shared/hooks/useUser';
 import { useCompanyData, useCompanyEmployees } from '../shared/hooks/useCompanyData';
 import { LegalAccount } from '../features/legal_account/components/LegalAccount';
-import { PhysicalAccount } from '../features/physical_account/PhysicalAccount';
+import { PhysicalAccount } from '../features/physical_account/components/PhysicalAccount';
 import { Loading } from '../shared/ui/Loading';
 
 export const Account = () => {
