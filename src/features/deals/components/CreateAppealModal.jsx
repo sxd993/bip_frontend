@@ -31,7 +31,6 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
       setFunnels(data);
     } catch (error) {
       console.error('Ошибка загрузки воронок:', error);
-      alert('Ошибка загрузки воронок');
     } finally {
       setIsLoadingFunnels(false);
     }
@@ -49,7 +48,6 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     const maxSize = 10 * 1024 * 1024; // 10MB
     const validFiles = files.filter(file => {
       if (file.size > maxSize) {
-        alert(`Файл "${file.name}" превышает максимальный размер 10MB`);
         return false;
       }
       return true;
@@ -65,8 +63,8 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
         }))
       );
       setSelectedFiles(prev => [...prev, ...filesWithBase64]);
-    } catch {
-      alert('Ошибка при обработке файлов');
+    } catch (error) {
+      console.error('Ошибка при обработке файлов:', error);
     }
   };
 
@@ -86,17 +84,17 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries(['current-deals']);
       queryClient.invalidateQueries(['deals']);
-      alert(`Обращение успешно создано! ID сделки: ${data.deal_id}`);
       reset();
       setSelectedFiles([]);
       onClose();
     },
-    onError: (error) => alert(`Ошибка: ${error.message}`)
+    onError: (error) => {
+      console.error('Ошибка создания обращения:', error);
+    }
   });
 
   const onSubmit = (data) => {
     if (!data.title.trim() || !data.comment.trim() || !data.category_id) {
-      alert('Заполните все обязательные поля');
       return;
     }
     createAppealMutation.mutate(data);
