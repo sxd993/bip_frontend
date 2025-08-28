@@ -19,7 +19,7 @@ import { ProtectedRoute } from './utils/ProtectedRoute';
 const App = () => {
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-white text-gray-800">
       <Header />
       <main className="flex-1 pt-20">
         <Routes>

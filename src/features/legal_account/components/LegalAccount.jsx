@@ -15,62 +15,62 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8 px-4">
-            <div className="max-w-6xl mx-auto space-y-6">
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Личный кабинет юридического лица</h1>
+        <div className="min-h-screen bg-white py-8 px-4">
+            <div className="max-w-6xl mx-auto space-y-8">
+                <div className="bg-white border-2 border-gray-100 rounded-3xl p-8 md:p-12">
+                    <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 mb-12 text-center">Личный кабинет юридического лица</h1>
 
                     {/* Данные пользователя */}
-                    <div className="mb-8">
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Данные сотрудника</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <span className="block text-sm font-medium text-gray-600 mb-1">ФИО</span>
+                    <div className="mb-12">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-8">Данные сотрудника</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                <span className="block text-sm font-medium text-gray-600 mb-2">ФИО</span>
                                 <span className="text-lg text-gray-800">{user.last_name} {user.first_name} {user.second_name}</span>
                             </div>
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <span className="block text-sm font-medium text-gray-600 mb-1">Роль</span>
+                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                <span className="block text-sm font-medium text-gray-600 mb-2">Роль</span>
                                 <span className="text-lg text-gray-800">{user.role}</span>
                             </div>
                             {user.position && (
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                    <span className="block text-sm font-medium text-gray-600 mb-1">Должность</span>
+                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                    <span className="block text-sm font-medium text-gray-600 mb-2">Должность</span>
                                     <span className="text-lg text-gray-800">{user.position}</span>
                                 </div>
                             )}
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <span className="block text-sm font-medium text-gray-600 mb-1">Номер телефона</span>
+                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                <span className="block text-sm font-medium text-gray-600 mb-2">Номер телефона</span>
                                 <span className="text-lg text-gray-800">{user.phone}</span>
                             </div>
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <span className="block text-sm font-medium text-gray-600 mb-1">Электронная почта</span>
+                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                <span className="block text-sm font-medium text-gray-600 mb-2">Электронная почта</span>
                                 <span className="text-lg text-gray-800">{user.email}</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Данные компании */}
-                    <div className="mb-8">
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Данные компании</h2>
+                    <div className="mb-12">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-8">Данные компании</h2>
                         {isLoadingCompany ? (
                             <div className="text-gray-600 text-center py-8">Загрузка данных компании...</div>
                         ) : companyData ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-4 gap-6">
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                    <span className="block text-sm font-medium text-gray-600 mb-1">Название компании</span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                    <span className="block text-sm font-medium text-gray-600 mb-2">Название компании</span>
                                     <span className="text-lg text-gray-800">{companyData.name}</span>
                                 </div>
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                    <span className="block text-sm font-medium text-gray-600 mb-1">ИНН</span>
+                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                    <span className="block text-sm font-medium text-gray-600 mb-2">ИНН</span>
                                     <span className="text-lg text-gray-800">{companyData.inn}</span>
                                 </div>
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                    <span className="block text-sm font-medium text-gray-600 mb-1">Количество сотрудников</span>
+                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
+                                    <span className="block text-sm font-medium text-gray-600 mb-2">Количество сотрудников</span>
                                     <span className="text-lg text-gray-800">{companyData.employees_count}</span>
                                 </div>
-                                <div className="bg-gradient-to-r from-pink-50 to-pink-100 p-6 rounded-lg border border-pink-200">
-                                    <span className="block text-sm font-medium text-gray-600 mb-2">Баланс компании</span>
-                                    <span className="text-3xl font-bold text-pink-600">{companyData.balance} ₽</span>
+                                <div className="border-2 border-red-200 bg-red-50 p-8 rounded-2xl">
+                                    <span className="block text-sm font-medium text-gray-600 mb-3">Баланс компании</span>
+                                    <span className="text-3xl font-bold text-red-600">{companyData.balance} ₽</span>
                                 </div>
                             </div>
                         ) : (

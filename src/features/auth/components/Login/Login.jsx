@@ -28,17 +28,17 @@ const Login = ({ currentStage, setCurrentStage }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 md:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 md:px-6">
       <div className="max-w-md w-full space-y-8">
-        <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">Вход в систему</h2>
-            <p className="text-gray-600 mt-2">Войдите в личный кабинет для доступа к услугам</p>
+            <h2 className="text-3xl md:text-4xl font-semibold text-gray-800">Вход в систему</h2>
+            <p className="text-gray-600 mt-3 text-lg">Войдите в личный кабинет для доступа к услугам</p>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div>
-              <label htmlFor="login" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="login" className="block text-sm font-medium text-gray-700 mb-3">
                 Логин
               </label>
               <input
@@ -46,14 +46,14 @@ const Login = ({ currentStage, setCurrentStage }) => {
                 id="login"
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 focus:bg-white"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-400 transition-colors duration-200"
                 placeholder="Email или номер телефона"
                 required
               />
             </div>
             
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-3">
                 Пароль
               </label>
               <input
@@ -61,21 +61,21 @@ const Login = ({ currentStage, setCurrentStage }) => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 focus:bg-white"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-400 transition-colors duration-200"
                 placeholder="Введите ваш пароль"
                 required
               />
             </div>
             
             {errorMessage && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
                 <p className="text-red-600 text-sm text-center">{errorMessage}</p>
               </div>
             )}
             
             <button
               type="submit"
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-red-400 hover:bg-red-500 text-white font-semibold py-4 px-8 rounded-xl transition-colors duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={mutation.isPending}
             >
               {mutation.isPending ? 'Вход...' : 'Войти'}

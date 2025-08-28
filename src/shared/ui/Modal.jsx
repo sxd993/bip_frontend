@@ -30,11 +30,11 @@ export const Modal = ({ isOpen, onClose, children, title }) => {
 
     return createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 transition-opacity duration-300" onClick={handleOverlayClick}>
-            <div className="relative w-full max-w-lg mx-4 sm:mx-0 bg-white rounded-2xl shadow-2xl animate-fadeIn">
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <div className="relative w-full max-w-lg mx-4 md:mx-0 bg-white border-2 border-gray-100 rounded-3xl animate-fadeIn">
+                <div className="flex items-center justify-between px-6 py-4 border-b-2 border-gray-100">
                     <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
                     <button
-                        className="text-gray-400 hover:text-gray-700 text-2xl font-bold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-full p-1"
+                        className="text-gray-400 hover:text-gray-700 text-2xl font-bold transition-colors duration-200 focus:outline-none rounded-full p-1"
                         onClick={onClose}
                         aria-label="Закрыть модальное окно"
                     >
