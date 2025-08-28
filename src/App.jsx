@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import './styles/App.css';
 
 // Layout
 import Header from './ui/Header/Header';
@@ -10,6 +9,8 @@ import { Home } from './pages/Home'
 import { Account } from './pages/Account';
 import { Contacts } from './pages/Contacts';
 import { Auth } from './pages/Auth';
+import ServicesPrivate from './pages/ServicesPrivate';
+import ServicesBusiness from './pages/ServicesBusiness';
 
 // Утилиты
 import { ProtectedRoute } from './utils/ProtectedRoute';
@@ -18,14 +19,16 @@ import { ProtectedRoute } from './utils/ProtectedRoute';
 const App = () => {
 
   return (
-    <div className="app-container">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       <Header />
-      <main>
+      <main className="flex-1 pt-20">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/:stage" element={<Auth />} />
           <Route path="/contacts" element={<Contacts />} />
+          <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
+          <Route path="/ServicesBusiness" element={<ServicesBusiness />} />
           <Route
             path="/personal-account"
             element={

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getCurrentDealsApi, getDealsHistoryApi } from '../api/dealsApi';
 import CreateAppealModal from './CreateAppealModal';
-import './AppealsSection.css';
 
 const AppealsSection = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,25 +37,33 @@ const AppealsSection = ({ user }) => {
   const AppealCard = ({ appeal, showOpportunity = false }) => {
     
     return (
-      <div className="appeal-card">
-        <div className="appeal-header">
-          <div className="appeal-title-section">
-            <h4 className="appeal-title">{appeal.title}</h4>
-            <div className="appeal-meta">
-              <span className="appeal-id">#{appeal.id}</span>
-              <span className="appeal-date">{formatDate(appeal.created_at)}</span>
+      <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="flex-1">
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">{appeal.title}</h4>
+            <div className="flex flex-wrap gap-3 text-sm text-gray-500">
+              <span className="bg-gray-100 px-2 py-1 rounded">#{appeal.id}</span>
+              <span>{formatDate(appeal.created_at)}</span>
             </div>
           </div>
-          <div className={`appeal-status ${appeal.status_color}`}>
-            <span className="status-icon">{appeal.status_icon}</span>
-            <span className="status-label">{appeal.stage_name}</span>
+          <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+            appeal.status_color === 'green' ? 'bg-green-100 text-green-800' :
+            appeal.status_color === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
+            appeal.status_color === 'red' ? 'bg-red-100 text-red-800' :
+            appeal.status_color === 'blue' ? 'bg-blue-100 text-blue-800' :
+            'bg-gray-100 text-gray-800'
+          }`}>
+            <span className="mr-2">{appeal.status_icon}</span>
+            <span>{appeal.stage_name}</span>
           </div>
         </div>
 
         {showOpportunity && appeal.opportunity && Number(appeal.opportunity) > 0 && (
-          <div className="appeal-opportunity">
-            <span className="opportunity-label">Сумма сделки:</span>
-            <span className="opportunity-amount">{Number(appeal.opportunity).toLocaleString('ru-RU')} ₽</span>
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-600">Сумма сделки:</span>
+              <span className="text-lg font-bold text-green-600">{Number(appeal.opportunity).toLocaleString('ru-RU')} ₽</span>
+            </div>
           </div>
         )}
       </div>
@@ -64,16 +71,19 @@ const AppealsSection = ({ user }) => {
   };
 
   const EmptyState = ({ title, description, actionText, onAction }) => (
-    <div className="empty-state">
-      <div className="empty-state-icon">
-        <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="text-center py-12">
+      <div className="mx-auto w-16 h-16 text-gray-400 mb-4">
+        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
       </div>
-      <h3 className="empty-state-title">{title}</h3>
-      <p className="empty-state-description">{description}</p>
+      <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
+      <p className="text-gray-500 mb-6">{description}</p>
       {onAction && (
-        <button onClick={onAction} className="empty-state-action">
+        <button 
+          onClick={onAction} 
+          className="bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors duration-200"
+        >
           {actionText}
         </button>
       )}
@@ -81,11 +91,11 @@ const AppealsSection = ({ user }) => {
   );
 
   return (
-    <div className="appeals-section">
-      <div className="appeals-header">
-        <div className="appeals-title-section">
-          <h2>Обращения компании</h2>
-          <p className="appeals-subtitle">
+    <div className="bg-white rounded-lg shadow-lg p-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Обращения компании</h2>
+          <p className="text-gray-600">
             {user.role === 'Руководитель'
               ? 'Управление всеми обращениями компании'
               : 'Мои обращения от имени компании'
@@ -94,7 +104,7 @@ const AppealsSection = ({ user }) => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="new-appeal-btn"
+          className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors duration-200 flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -104,40 +114,54 @@ const AppealsSection = ({ user }) => {
       </div>
 
       {/* Табы */}
-      <div className="appeals-tabs">
-        <button
-          onClick={() => setActiveTab('current')}
-          className={`appeal-tab ${activeTab === 'current' ? 'active' : ''}`}
-        >
-          <span className="tab-label">Активные обращения</span>
-          {currentAppeals && currentAppeals.length > 0 && (
-            <span className="tab-badge">{currentAppeals.length}</span>
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab('history')}
-          className={`appeal-tab ${activeTab === 'history' ? 'active' : ''}`}
-        >
-          <span className="tab-label">История</span>
-        </button>
+      <div className="border-b border-gray-200 mb-6">
+        <div className="flex space-x-8">
+          <button
+            onClick={() => setActiveTab('current')}
+            className={`pb-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'current'
+                ? 'border-pink-500 text-pink-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              Активные обращения
+              {currentAppeals && currentAppeals.length > 0 && (
+                <span className="bg-pink-100 text-pink-600 py-1 px-2 rounded-full text-xs">
+                  {currentAppeals.length}
+                </span>
+              )}
+            </span>
+          </button>
+          <button
+            onClick={() => setActiveTab('history')}
+            className={`pb-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'history'
+                ? 'border-pink-500 text-pink-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            История
+          </button>
+        </div>
       </div>
 
       {/* Контент вкладок */}
-      <div className="appeals-content">
+      <div>
         {activeTab === 'current' && (
           <div>
             {currentLoading ? (
-              <div className="loading-state">
-                <div className="loading-spinner"></div>
-                <p>Загрузка обращений...</p>
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mb-4"></div>
+                <p className="text-gray-500">Загрузка обращений...</p>
               </div>
             ) : currentError ? (
-              <div className="error-state">
-                <svg className="w-12 h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="text-center py-12">
+                <svg className="mx-auto w-12 h-12 text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3>Ошибка загрузки</h3>
-                <p>{currentError.message}</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Ошибка загрузки</h3>
+                <p className="text-gray-500">{currentError.message}</p>
               </div>
             ) : !currentAppeals || currentAppeals.length === 0 ? (
               <EmptyState
@@ -147,7 +171,7 @@ const AppealsSection = ({ user }) => {
                 onAction={() => setIsModalOpen(true)}
               />
             ) : (
-              <div className="appeals-grid">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {currentAppeals.map((appeal) => (
                   <AppealCard key={appeal.id} appeal={appeal} />
                 ))}
@@ -159,17 +183,17 @@ const AppealsSection = ({ user }) => {
         {activeTab === 'history' && (
           <div>
             {historyLoading ? (
-              <div className="loading-state">
-                <div className="loading-spinner"></div>
-                <p>Загрузка истории...</p>
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mb-4"></div>
+                <p className="text-gray-500">Загрузка истории...</p>
               </div>
             ) : historyError ? (
-              <div className="error-state">
-                <svg className="w-12 h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="text-center py-12">
+                <svg className="mx-auto w-12 h-12 text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3>Ошибка загрузки</h3>
-                <p>{historyError.message}</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Ошибка загрузки</h3>
+                <p className="text-gray-500">{historyError.message}</p>
               </div>
             ) : !historyAppeals || historyAppeals.length === 0 ? (
               <EmptyState
@@ -177,7 +201,7 @@ const AppealsSection = ({ user }) => {
                 description="Здесь будут отображаться все завершенные обращения"
               />
             ) : (
-              <div className="appeals-grid">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {historyAppeals.map((appeal) => (
                   <AppealCard key={appeal.id} appeal={appeal} showOpportunity={true} />
                 ))}

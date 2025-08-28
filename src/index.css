@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+* {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 100;
+}
+
+@theme {
+    --breakpoint-md: 900px;
+  }

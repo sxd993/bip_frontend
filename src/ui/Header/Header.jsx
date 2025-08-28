@@ -1,19 +1,27 @@
-import './styles/Header.css';
+import { useState, useEffect, useRef } from 'react';
 import logo from '../../assets/logo.png';
 import shapka from '../../assets/shapka.svg';
-import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import NavBar from './NavBar';
-
-
+import MobileMenuButton from './MobileMenuButton';
+import MobileMenu from './MobileMenu';
 
 const Header = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [showWelcomeImage, setShowWelcomeImage] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const headerRef = useRef(null);
   const hasLeftViewport = useRef(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -56,53 +64,48 @@ const Header = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleSearch = () => {
-
+  const toggleMobileMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
+  const isHome = location.pathname === '/';
+  const headerBgClass = isHome && !isScrolled ? 'bg-transparent' : 'bg-black/50 backdrop-blur-sm';
+
   return (
-    <header className="header" ref={headerRef}>
-      <div
-        className={`header-container ${showWelcomeImage && location.pathname === '/' && !isMobile ? 'red-overlay' : ''
-          }`}
-      >
-        <div className="logo">
-          <NavLink to="/">
-            <img src={logo} alt="Logo" className="logo-image" />
-          </NavLink>
+    <>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBgClass}`} ref={headerRef}>
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="flex justify-between items-center h-20 gap-6">
+            {/* Логотип */}
+            <div className="flex-shrink-0">
+              <NavLink to="/" className="flex items-center">
+                <img src={logo} alt="Logo" className="h-12 w-auto" />
+              </NavLink>
+            </div>
+            
+            {/* Навигация - скрыта на мобильных, видна на md+ */}
+            <div className="hidden md:flex items-center flex-1 justify-end">
+              <NavBar />
+            </div>
+            
+            {/* Кнопка мобильного меню - видна только на мобильных */}
+            <MobileMenuButton isOpen={isMenuOpen} onToggle={toggleMobileMenu} />
+          </div>
         </div>
-        <div className="search-container">
-          <input
-            type="text"
-            id="search"
-            className="search-input"
-            placeholder="Опишите свою ситуацию..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleSearch}
-          />
-          <label htmlFor="search" className="search-label">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="25"
-              height="25"
-              viewBox="0 0 50 50"
-              aria-hidden="true"
-            >
-              <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z" />
-            </svg>
-          </label>
-        </div>
-        <div className="nav-container">
-          <NavBar />
-        </div>
-      </div>
-      {showWelcomeImage && location.pathname === '/' && (
-        <div className='shapka-container'>
-          <img src={shapka} alt="Welcome Banner" className="shapka-image" />
+      </header>
+      
+      {/* Мобильное меню - вынесено за пределы Header для независимости от прозрачности */}
+      <MobileMenu 
+        isOpen={isMenuOpen} 
+        onClose={() => setIsMenuOpen(false)}
+      />
+      
+      {showWelcomeImage && location.pathname === '/' && !isMobile && (
+        <div className="relative h-screen bg-gradient-to-r from-gray-900 to-gray-700 overflow-hidden">
+          <img src={shapka} alt="Welcome Banner" className="w-full h-full object-cover opacity-80" />
         </div>
       )}
-    </header>
+    </>
   );
 };
 

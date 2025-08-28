@@ -2,68 +2,97 @@ import { useState } from 'react';
 import { PhysicalRegister } from '../components/Register/PhysicalRegister';
 import { LegalRegister } from '../components/Register/LegalRegister';
 import { EmployeeRegister } from '../components/Register/EmployeeRegister';
-import './Register.css';
 
 const Register = ({ currentStage, setCurrentStage }) => {
-    const [userType, setUserType] = useState('physical');
-    const [legalType, setLegalType] = useState('director');
+  const [userType, setUserType] = useState('physical');
+  const [legalType, setLegalType] = useState('director');
 
-    return (
-        <div className="register-content">
-            <div className="form-container">
-                <h3>Регистрация</h3>
-                <div className="user-type-toggle">
-                    <button
-                        type="button"
-                        className={userType === 'physical' ? 'user-type-btn active' : 'user-type-btn'}
-                        onClick={() => setUserType('physical')}
-                    >
-                        Физ. лицо
-                    </button>
-                    <button
-                        type="button"
-                        className={userType === 'legal' ? 'user-type-btn active' : 'user-type-btn'}
-                        onClick={() => setUserType('legal')}
-                    >
-                        Юр. лицо
-                    </button>
-                </div>
-
-                {/* Если выбрано юр. лицо, показываем дополнительный выбор */}
-                {userType === 'legal' && (
-                    <div className="legal-type-toggle">
-                        <button
-                            type="button"
-                            className={legalType === 'director' ? 'legal-type-btn active' : 'legal-type-btn'}
-                            onClick={() => setLegalType('director')}
-                        >
-                            Руководитель компании
-                        </button>
-                        <button
-                            type="button"
-                            className={legalType === 'employee' ? 'legal-type-btn active' : 'legal-type-btn'}
-                            onClick={() => setLegalType('employee')}
-                        >
-                            Сотрудник компании
-                        </button>
-                    </div>
-                )}
-
-                {/* Отображаем нужную форму */}
-                {userType === 'physical' && <PhysicalRegister />}
-                {userType === 'legal' && legalType === 'director' && <LegalRegister />}
-                {userType === 'legal' && legalType === 'employee' && <EmployeeRegister />}
-
-                <div
-                    onClick={() => setCurrentStage('login')}
-                    className="switch-auth-button"
-                    style={{ cursor: 'pointer' }}
-                >
-                    Уже есть аккаунт? Войти
-                </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 md:px-8">
+      <div className="max-w-2xl w-full space-y-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-8">
+          <div className="text-center mb-8">
+            <h3 className="text-3xl font-bold text-gray-900">Регистрация</h3>
+            <p className="text-gray-600 mt-2">Создайте аккаунт для доступа к юридическим услугам</p>
+          </div>
+          
+          <div className="flex justify-center mb-8">
+            <div className="flex bg-gray-100 rounded-lg p-1">
+              <button
+                type="button"
+                className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
+                  userType === 'physical'
+                    ? 'bg-white text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => setUserType('physical')}
+              >
+                Физ. лицо
+              </button>
+              <button
+                type="button"
+                className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
+                  userType === 'legal'
+                    ? 'bg-white text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => setUserType('legal')}
+              >
+                Юр. лицо
+              </button>
             </div>
+          </div>
+
+          {/* Если выбрано юр. лицо, показываем дополнительный выбор */}
+          {userType === 'legal' && (
+            <div className="flex justify-center mb-8">
+              <div className="flex bg-gray-100 rounded-lg p-1">
+                <button
+                  type="button"
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    legalType === 'director'
+                      ? 'bg-white text-gray-900'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                  onClick={() => setLegalType('director')}
+                >
+                  Руководитель компании
+                </button>
+                <button
+                  type="button"
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    legalType === 'employee'
+                      ? 'bg-white text-gray-900'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                  onClick={() => setLegalType('employee')}
+                >
+                  Сотрудник компании
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Отображаем нужную форму */}
+          <div className="mt-8">
+            {userType === 'physical' && <PhysicalRegister />}
+            {userType === 'legal' && legalType === 'director' && <LegalRegister />}
+            {userType === 'legal' && legalType === 'employee' && <EmployeeRegister />}
+          </div>
+
+          <div className="text-center mt-8 pt-6 border-t border-gray-200">
+            <button
+              type="button"
+              onClick={() => setCurrentStage('login')}
+              className="text-red-600 hover:text-red-700 font-medium transition-colors duration-200"
+            >
+              Уже есть аккаунт? Войти
+            </button>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Register;

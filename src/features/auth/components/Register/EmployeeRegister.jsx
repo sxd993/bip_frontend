@@ -44,9 +44,9 @@ export const EmployeeRegister = () => {
   if (mutation.isPending) return <Loading />;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="form-group">
-        <label>Токен компании</label>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Токен компании</label>
         <input
           type="text"
           {...register('company_token', { 
@@ -55,48 +55,53 @@ export const EmployeeRegister = () => {
             maxLength: { value: 32, message: 'Токен должен содержать 32 символа' }
           })}
           placeholder="Введите 32-символьный токен от руководителя"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
-        {errors.company_token && <span className="error-message">{errors.company_token.message}</span>}
+        {errors.company_token && <span className="text-red-600 text-sm">{errors.company_token.message}</span>}
       </div>
 
-      <div className="form-group">
-        <label>Имя</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Имя</label>
         <input
           type="text"
           {...register('first_name', { required: 'Обязательное поле' })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
-        {errors.first_name && <span className="error-message">{errors.first_name.message}</span>}
+        {errors.first_name && <span className="text-red-600 text-sm">{errors.first_name.message}</span>}
       </div>
 
-      <div className="form-group">
-        <label>Фамилия</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Фамилия</label>
         <input
           type="text"
           {...register('last_name', { required: 'Обязательное поле' })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
-        {errors.last_name && <span className="error-message">{errors.last_name.message}</span>}
+        {errors.last_name && <span className="text-red-600 text-sm">{errors.last_name.message}</span>}
       </div>
 
-      <div className="form-group">
-        <label>Отчество</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Отчество</label>
         <input
           type="text"
           {...register('second_name')}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
       </div>
 
-      <div className="form-group">
-        <label>Должность в компании</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Должность в компании</label>
         <input
           type="text"
           {...register('position', { required: 'Укажите вашу должность' })}
           placeholder="Например: Менеджер по продажам"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
-        {errors.position && <span className="error-message">{errors.position.message}</span>}
+        {errors.position && <span className="text-red-600 text-sm">{errors.position.message}</span>}
       </div>
 
-      <div className="form-group">
-        <label>Номер телефона</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Номер телефона</label>
         <input
           type="tel"
           value={phoneValue || '+7 '}
@@ -106,37 +111,44 @@ export const EmployeeRegister = () => {
           })}
           onChange={(e) => handlePhoneInput(e, setValue)}
           onKeyDown={handlePhoneKeyDown}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
-        {errors.phone && <span className="error-message">{errors.phone.message}</span>}
+        {errors.phone && <span className="text-red-600 text-sm">{errors.phone.message}</span>}
       </div>
 
-      <div className="form-group">
-        <label>Email</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
         <input
           type="email"
           {...register('email', { required: 'Обязательное поле' })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
-        {errors.email && <span className="error-message">{errors.email.message}</span>}
+        {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
       </div>
 
-      <div className="form-group">
-        <label>Пароль</label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Пароль</label>
         <input
           type="password"
           {...register('password', { 
             required: 'Обязательное поле',
             minLength: { value: 6, message: 'Минимум 6 символов' }
           })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
         />
-        {errors.password && <span className="error-message">{errors.password.message}</span>}
+        {errors.password && <span className="text-red-600 text-sm">{errors.password.message}</span>}
       </div>
 
-      <button type="submit" disabled={mutation.isPending}>
+      <button 
+        type="submit" 
+        disabled={mutation.isPending}
+        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+      >
         {mutation.isPending ? 'Регистрация...' : 'Присоединиться к компании'}
       </button>
 
-      {message && <div className="success-message">{message}</div>}
-      {error && <div className="error-message">{error}</div>}
+      {message && <div className="text-green-600 text-sm text-center">{message}</div>}
+      {error && <div className="text-red-600 text-sm text-center">{error}</div>}
     </form>
   );
 };
