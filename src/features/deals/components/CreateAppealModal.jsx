@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreateAppeal, useAppealCategories } from '../hooks/useAppeals';
 
 const CreateAppealModal = ({ isOpen, onClose }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isSuccess, setIsSuccess] = useState(false);
   const { data: categories, isLoading: categoriesLoading } = useAppealCategories();
   const createAppeal = useCreateAppeal();
   
@@ -69,9 +70,10 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
         }))
       });
       
+      setIsSuccess(true);
+      // Очищаем форму и файлы, оставляем модалку открытой с галочкой
       reset();
       setSelectedFiles([]);
-      onClose();
     } catch (error) {
       console.error('Ошибка создания обращения:', error);
       alert('Ошибка при создании обращения');
@@ -80,6 +82,18 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
 
   const formatFileSize = (bytes) => {
     return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+  };
+
+  // При открытии модалки сбрасываем экран успеха и очищаем форму
+  useEffect(() => {
+    if (isOpen) {
+      setIsSuccess(false);
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    setIsSuccess(false);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -91,14 +105,25 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
           <h2 className="text-xl font-semibold text-gray-800">Создать обращение</h2>
           <button
             className="text-gray-400 hover:text-gray-700 text-2xl font-bold transition-colors duration-200 focus:outline-none rounded-full p-1"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Закрыть модальное окно"
+            
           >
             ×
           </button>
         </div>
-        
-        <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-5 space-y-6">
+
+        {isSuccess ? (
+          <div className="px-6 py-16 flex flex-col items-center justify-center text-center">
+            <div className="w-20 h-20 rounded-full border-2 border-red-300 flex items-center justify-center mb-4">
+              <svg className="w-12 h-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p className="text-gray-800 text-lg">Обращение создано</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-5 space-y-6">
           {/* Категория */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -210,7 +235,7 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
           <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t-2 border-gray-100">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:border-gray-300 transition-colors duration-200 font-medium"
             >
               Отмена
@@ -224,6 +249,7 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             </button>
           </div>
         </form>
+        )}
       </div>
     </div>
   );

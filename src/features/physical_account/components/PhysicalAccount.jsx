@@ -6,7 +6,7 @@ export const PhysicalAccount = ({ user, isLoading }) => {
     if (isLoading) {
         return <Loading />
     }
-    console.log(user)
+    
 
     return (
         <div className="min-h-screen bg-white py-8 px-4">
