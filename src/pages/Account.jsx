@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { useUser } from '../shared/hooks/useUser';
 import { useCompanyData, useCompanyEmployees } from '../shared/hooks/useCompanyData';
+import { prefetchAppealCategories } from '../hooks/useAppeals';
 import { LegalAccount } from '../features/legal_account/components/LegalAccount';
 import { PhysicalAccount } from '../features/physical_account/components/PhysicalAccount';
 import { Loading } from '../shared/ui/Loading';
@@ -8,7 +10,13 @@ export const Account = () => {
   const { user, isLoading: userLoading, error } = useUser();
   const { data: companyData, isLoading: companyLoading } = useCompanyData();
   const { data: employeesData, isLoading: employeesLoading } = useCompanyEmployees();
+
+  useEffect(() => {
+    prefetchAppealCategories();
+  }, []);
+
   console.log(user)
+
   if (userLoading) {
     return <Loading />;
   }

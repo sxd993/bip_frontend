@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createAppealApi, getDealStagesApi } from '../api/dealsApi';
+import { useCreateAppeal, useAppealCategories } from '../hooks/useAppeals';
 
 const CreateAppealModal = ({ isOpen, onClose }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [funnels, setFunnels] = useState([]);
-  const [isLoadingFunnels, setIsLoadingFunnels] = useState(false);
-  const queryClient = useQueryClient();
+  const { data: categories, isLoading: categoriesLoading } = useAppealCategories();
+  const createAppeal = useCreateAppeal();
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
@@ -16,25 +14,6 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
       comment: ''
     }
   });
-
-  // Загружаем воронки при открытии модалки
-  useEffect(() => {
-    if (isOpen) {
-      loadFunnels();
-    }
-  }, [isOpen]);
-
-  const loadFunnels = async () => {
-    setIsLoadingFunnels(true);
-    try {
-      const data = await getDealStagesApi();
-      setFunnels(data);
-    } catch (error) {
-      console.error('Ошибка загрузки воронок:', error);
-    } finally {
-      setIsLoadingFunnels(false);
-    }
-  };
 
   const fileToBase64 = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -48,6 +27,7 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     const maxSize = 10 * 1024 * 1024; // 10MB
     const validFiles = files.filter(file => {
       if (file.size > maxSize) {
+        alert(`Файл ${file.name} слишком большой (больше 10MB)`);
         return false;
       }
       return true;
@@ -59,45 +39,47 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
           name: file.name,
           size: file.size,
           base64: await fileToBase64(file),
-          file
         }))
       );
       setSelectedFiles(prev => [...prev, ...filesWithBase64]);
     } catch (error) {
       console.error('Ошибка при обработке файлов:', error);
+      alert('Ошибка при загрузке файлов');
     }
   };
 
-  const removeFile = (index) => setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  const removeFile = (index) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
 
-  const createAppealMutation = useMutation({
-    mutationFn: async (data) => createAppealApi({
-      category_id: data.category_id,
-      title: data.title,
-      comment: data.comment,
-      files: selectedFiles.map(f => ({
-        name: f.name,
-        base64: f.base64,
-        size: f.size
-      }))
-    }),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(['current-deals']);
-      queryClient.invalidateQueries(['deals']);
-      reset();
-      setSelectedFiles([]);
-      onClose();
-    },
-    onError: (error) => {
-      console.error('Ошибка создания обращения:', error);
-    }
-  });
-
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!data.title.trim() || !data.comment.trim() || !data.category_id) {
       return;
     }
-    createAppealMutation.mutate(data);
+
+    try {
+      await createAppeal.mutateAsync({
+        category_id: data.category_id,
+        title: data.title,
+        comment: data.comment,
+        files: selectedFiles.map(f => ({
+          name: f.name,
+          base64: f.base64,
+          size: f.size
+        }))
+      });
+      
+      reset();
+      setSelectedFiles([]);
+      onClose();
+    } catch (error) {
+      console.error('Ошибка создания обращения:', error);
+      alert('Ошибка при создании обращения');
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    return (bytes / 1024 / 1024).toFixed(2) + ' MB';
   };
 
   if (!isOpen) return null;
@@ -125,10 +107,10 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             <select
               {...register('category_id', { required: 'Выберите категорию' })}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 focus:outline-none focus:border-red-400 transition-colors duration-200"
-              disabled={isLoadingFunnels}
+              disabled={categoriesLoading}
             >
               <option value="">Выберите категорию</option>
-              {funnels.map((funnel) => (
+              {categories?.map((funnel) => (
                 <option key={funnel.id} value={funnel.id}>
                   {funnel.name}
                 </option>
@@ -207,7 +189,7 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                       <span className="text-sm text-gray-700">{file.name}</span>
-                      <span className="text-xs text-gray-500">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      <span className="text-xs text-gray-500">({formatFileSize(file.size)})</span>
                     </div>
                     <button
                       type="button"
@@ -235,10 +217,10 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             </button>
             <button
               type="submit"
-              disabled={createAppealMutation.isPending}
+              disabled={createAppeal.isPending}
               className="flex-1 px-6 py-3 bg-red-400 hover:bg-red-500 text-white rounded-xl transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {createAppealMutation.isPending ? 'Создание...' : 'Создать обращение'}
+              {createAppeal.isPending ? 'Создание...' : 'Создать обращение'}
             </button>
           </div>
         </form>

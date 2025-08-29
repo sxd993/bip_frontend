@@ -17,11 +17,6 @@ export const getCurrentDealsApi = async () => {
     return response.data;
 };
 
-export const getDealsHistoryApi = async () => {
-    const response = await client.get('/deals/history');
-    return response.data;
-};
-
 // API для получения воронок и стадий
 export const getDealStagesApi = async () => {
     const response = await client.get('/deals/stages');
