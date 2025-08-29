@@ -67,7 +67,7 @@ const ReviewsCarousel = () => {
               {reviews.map((review, index) => (
                 <div className="flex-[0_0_100%] min-w-0" key={index}>
                   <div className="mx-4">
-                    <div className="bg-white border-2 border-red-200 p-8 md:p-12 text-center flex flex-col justify-center rounded-3xl">
+                    <div className="bg-white border-2 border-red-200 p-8 md:p-12 text-center flex flex-col justify-center rounded-3xl min-h-[350px]">
                       <div className="mb-6">
                         <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6 italic font-light">"{review.text}"</p>
                       </div>
