@@ -13,7 +13,7 @@ export const createAppealApi = async (data) => {
 };
 
 export const getCurrentDealsApi = async () => {
-    const response = await client.get('/deals/current');
+    const response = await client.get('/deals/get-deals');
     return response.data;
 };
 
