@@ -137,7 +137,7 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
               <option value="">Выберите категорию</option>
               {categories?.map((funnel) => (
                 <option key={funnel.id} value={funnel.id}>
-                  {funnel.name}
+                  {funnel.title}
                 </option>
               ))}
             </select>
