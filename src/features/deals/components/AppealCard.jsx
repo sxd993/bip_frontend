@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import ReplyModal from './ReplyModal';
+
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('ru-RU', {
@@ -11,6 +14,7 @@ const formatDate = (dateString) => {
   };
   
   const AppealCard = ({ appeal }) => {
+    const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
     const getStatusColor = () => {
       const colorMap = {
         'green': 'bg-green-100 text-green-800',
@@ -19,6 +23,11 @@ const formatDate = (dateString) => {
         'blue': 'bg-blue-100 text-blue-800'
       };
       return colorMap[appeal.status_color] || 'bg-gray-100 text-gray-800';
+    };
+
+    // Обработчик для кнопки "Ответить"
+    const handleReply = () => {
+      setIsReplyModalOpen(true);
     };
   
     return (
@@ -47,6 +56,29 @@ const formatDate = (dateString) => {
             </div>
           </div>
         )}
+
+        {/* Кнопка "Ответить" - показывается только если can_reply = true */}
+        {appeal.can_reply && (
+          <div className="mt-6 pt-4 border-t-2 border-gray-100">
+            <button
+              onClick={handleReply}
+              className="w-full bg-red-400 hover:bg-red-500 text-white px-4 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              Ответить
+            </button>
+          </div>
+        )}
+
+        {/* Модальное окно для ответа */}
+        <ReplyModal
+          isOpen={isReplyModalOpen}
+          onClose={() => setIsReplyModalOpen(false)}
+          appealId={appeal.id}
+          appealData={appeal}
+        />
       </div>
     );
   };
