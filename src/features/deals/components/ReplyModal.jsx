@@ -1,128 +1,75 @@
-import { useState, useEffect } from 'react';
-import { getAppealDetailsApi, sendReplyApi, downloadFileApi, getFileViewUrlApi } from '../api/dealsApi';
-import { useLatestDealFiles } from '../hooks/useDealFiles';
-import { filesToBase64, validateFileSize } from '../utils/fileUtils';
+import { useDealFiles } from '../hooks/reply-deals/useDealFiles';
+import { useFileManager } from '../hooks/reply-deals/useFileManager';
+import { useReplyModal } from '../hooks/reply-deals/useReplyModal';
+import { downloadFileApi, getFileViewUrlApi } from '../api/dealsApi';
+import { formatFileSize } from '../utils';
+import { MESSAGE_CONSTRAINTS } from '../constants';
 
-const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
-  const [message, setMessage] = useState('');
-  const [attachedFiles, setAttachedFiles] = useState([]);
-  const [appealMessage, setAppealMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState(null);
-  
-  // Используем новый хук для получения файлов
-  const { files: dealFiles, isLoading: filesLoading } = useLatestDealFiles(appealId);
+export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
+  const { files: dealFiles, isLoading: filesLoading } = useDealFiles(appealId, true);
+  const {
+    attachedFiles,
+    fileErrors,
+    addFiles,
+    removeFile,
+    clearFiles,
+    getBase64Files
+  } = useFileManager();
 
-  // Загрузка данных обращения при открытии модального окна
-  useEffect(() => {
-    if (isOpen && appealId) {
-      loadAppealData();
-    }
-  }, [isOpen, appealId]);
-
-  const loadAppealData = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Получаем только детали обращения (файлы загружаются через хук)
-      const appealDetails = await getAppealDetailsApi(appealId);
-      setAppealMessage(appealDetails.message || '');
-      
-    } catch (error) {
-      console.error('Ошибка загрузки данных обращения:', error);
-      setAppealMessage('');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    message,
+    setMessage,
+    appealMessage,
+    isLoading,
+    showConfirmation,
+    setShowConfirmation,
+    isSuccess,
+    error,
+    validateMessage,
+    submitReply,
+    reset
+  } = useReplyModal(appealId);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    
-    // Валидация размера файлов (максимум 10MB)
-    const invalidFiles = files.filter(file => !validateFileSize(file, 10));
-    if (invalidFiles.length > 0) {
-      alert(`Некоторые файлы превышают максимальный размер 10MB: ${invalidFiles.map(f => f.name).join(', ')}`);
-      return;
-    }
-    
-    setAttachedFiles(prev => [...prev, ...files]);
-  };
-
-  const removeFile = (index) => {
-    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
+    addFiles(files);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!message.trim()) {
-      setError('Пожалуйста, введите сообщение');
-      return;
-    }
 
-    if (message.length > 1500) {
-      setError('Сообщение не должно превышать 1500 символов');
-      return;
-    }
+    if (!validateMessage()) return;
 
-    // Показываем подтверждение
     setShowConfirmation(true);
   };
 
   const confirmSubmit = async () => {
     try {
-      setIsLoading(true);
-      setError(null);
-      
-      // Конвертируем файлы в base64
-      const base64Files = await filesToBase64(attachedFiles);
-      
-      // Отправляем ответ через новый API
-      const response = await sendReplyApi(appealId, message.trim(), base64Files);
-      
-      if (response.success) {
-        setIsSuccess(true);
-        // Автоматически закрываем через 2 секунды
-        setTimeout(() => {
-          handleClose();
-        }, 2000);
-      } else {
-        setError('Ошибка отправки ответа');
+      const base64Files = await getBase64Files();
+      const success = await submitReply(base64Files);
+
+      if (success) {
+        setTimeout(() => handleClose(), 2000);
       }
-      
     } catch (error) {
-      console.error('Ошибка отправки ответа:', error);
-      setError('Ошибка отправки ответа. Попробуйте еще раз.');
-    } finally {
-      setIsLoading(false);
-      setShowConfirmation(false);
+      console.error('Ошибка при подготовке файлов:', error);
     }
   };
 
   const cancelSubmit = () => {
     setShowConfirmation(false);
-    setError(null);
   };
 
   const handleClose = () => {
-    setMessage('');
-    setAttachedFiles([]);
-    setAppealMessage('');
-    setShowConfirmation(false);
-    setIsSuccess(false);
-    setError(null);
+    reset();
+    clearFiles();
     onClose();
   };
 
   const downloadDocument = async (documentId, fileName) => {
     try {
-      // Если у документа есть прямая ссылка для скачивания
       const doc = dealFiles.find(d => d.id === documentId);
-      if (doc && doc.url) {
-        // Используем прямую ссылку
+      if (doc?.url) {
         const link = document.createElement('a');
         link.href = doc.url;
         link.download = fileName || doc.name || 'document';
@@ -132,11 +79,8 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
         document.body.removeChild(link);
         return;
       }
-      
-      // Если нет прямой ссылки, используем API
+
       const blob = await downloadFileApi(documentId);
-      
-      // Создаем ссылку для скачивания
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -148,31 +92,6 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     } catch (error) {
       console.error('Ошибка скачивания документа:', error);
       alert('Ошибка при скачивании файла');
-    }
-  };
-
-  const openDocument = async (documentId, fileName) => {
-    try {
-      // Если у документа есть прямая ссылка для просмотра
-      const doc = dealFiles.find(d => d.id === documentId);
-      if (doc && doc.url) {
-        // Открываем файл в новой вкладке
-        window.open(doc.url, '_blank');
-        return;
-      }
-      
-      // Если нет прямой ссылки, получаем через API
-      const fileInfo = await getFileViewUrlApi(documentId);
-      
-      if (fileInfo.url) {
-        // Открываем файл в новой вкладке
-        window.open(fileInfo.url, '_blank');
-      } else {
-        alert('Не удалось получить ссылку для просмотра файла');
-      }
-    } catch (error) {
-      console.error('Ошибка открытия документа:', error);
-      alert('Ошибка при открытии файла');
     }
   };
 
@@ -189,7 +108,9 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
             </svg>
           </div>
           <h2 className="text-lg font-semibold text-gray-800 mb-2">Ответ отправлен!</h2>
-          <p className="text-gray-600 text-sm mb-3">Ваш ответ успешно отправлен и будет обработан в ближайшее время.</p>
+          <p className="text-gray-600 text-sm mb-3">
+            Ваш ответ успешно отправлен и будет обработан в ближайшее время.
+          </p>
           <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-green-500 mx-auto"></div>
         </div>
       </div>
@@ -202,8 +123,10 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-xl max-w-sm w-full p-5 border border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800 mb-3">Подтверждение отправки</h2>
-          <p className="text-gray-600 text-sm mb-4">Вы уверены, что хотите отправить ответ на обращение?</p>
-          
+          <p className="text-gray-600 text-sm mb-4">
+            Вы уверены, что хотите отправить ответ на обращение?
+          </p>
+
           <div className="space-y-2 mb-4">
             <div className="bg-gray-50 p-2 rounded-lg">
               <p className="text-xs text-gray-700 font-medium">Сообщение:</p>
@@ -223,7 +146,7 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
               </div>
             )}
           </div>
-          
+
           <div className="flex gap-2">
             <button
               onClick={cancelSubmit}
@@ -244,6 +167,7 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     );
   }
 
+  // Основной UI модального окна
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl max-w-xl w-full max-h-[85vh] overflow-hidden border border-gray-200">
@@ -260,7 +184,7 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
           </button>
         </div>
 
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4 overflow-y-auto max-h-[calc(85vh-140px)]">
           {/* Отображение ошибок */}
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -273,11 +197,29 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
             </div>
           )}
 
+          {/* Отображение ошибок файлов */}
+          {fileErrors.length > 0 && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+              <div className="flex items-start">
+                <svg className="w-4 h-4 text-red-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p className="text-red-700 text-sm font-medium mb-1">Ошибки файлов:</p>
+                  {fileErrors.map((error, index) => (
+                    <p key={index} className="text-red-600 text-xs">• {error}</p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Информация для пользователя */}
           <div>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">Информация по обращению:</h3>
             <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 min-h-[50px] flex items-center">
               <p className="text-gray-700 text-sm">
-                {isLoading ? 'Загрузка...' : (appealMessage || 'Во вложении новая инфа для пользователя')}
+                {isLoading ? 'Загрузка...' : (appealMessage || 'Информация недоступна')}
               </p>
             </div>
           </div>
@@ -291,29 +233,21 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
               <div className="space-y-1">
                 {dealFiles.map((doc, index) => (
                   <div key={doc.id || index} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
-                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <div className="flex-1">
-                      <span className="text-sm text-blue-600 underline cursor-pointer" onClick={() => openDocument(doc.id, doc.name)}>
-                        {doc.name}
-                      </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-gray-800 truncate">{doc.name}</p>
                       {doc.size && (
-                        <div className="text-xs text-gray-500">
-                          {(doc.size / 1024).toFixed(1)} KB
-                        </div>
+                        <p className="text-xs text-gray-500">
+                          {formatFileSize(doc.size)}
+                        </p>
                       )}
                     </div>
-                    <div className="flex gap-1">
-                      <button
-                        onClick={() => openDocument(doc.id, doc.name)}
-                        className="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 rounded"
-                      >
-                        Открыть
-                      </button>
+                    <div className="flex gap-1 flex-shrink-0">
                       <button
                         onClick={() => downloadDocument(doc.id, doc.name)}
-                        className="text-green-600 hover:text-green-800 text-xs px-2 py-1 rounded"
+                        className="text-green-600 hover:text-green-800 text-xs px-2 py-1 rounded transition-colors"
                       >
                         Скачать
                       </button>
@@ -332,39 +266,58 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Поле сообщения */}
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ваш ответ:
+              </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Введите сообщение с пояснениями"
                 className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-red-500 focus:border-transparent min-h-[100px]"
                 rows={4}
-                maxLength={1500}
+                maxLength={MESSAGE_CONSTRAINTS.MAX_LENGTH}
               />
-              <div className="text-right text-sm text-gray-500 mt-1">
-                {message.length}/1500 символов
+              <div className="flex justify-between text-sm text-gray-500 mt-1">
+                <span>Минимум {MESSAGE_CONSTRAINTS.MIN_LENGTH} символ</span>
+                <span>{message.length}/{MESSAGE_CONSTRAINTS.MAX_LENGTH}</span>
               </div>
             </div>
 
             {/* Прикрепление файлов */}
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Прикрепить файлы:
+              </label>
               <input
                 type="file"
                 multiple
                 onChange={handleFileChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm"
-                placeholder="Прикрепить файлы..."
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
               />
-              
+              <p className="text-xs text-gray-500 mt-1">
+                Максимум 10MB на файл. Поддерживаемые форматы: PDF, DOC, DOCX, JPG, PNG
+              </p>
+
               {/* Список прикрепленных файлов */}
               {attachedFiles.length > 0 && (
                 <div className="mt-2 space-y-1">
+                  <p className="text-sm font-medium text-gray-700">Прикрепленные файлы:</p>
                   {attachedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                      <span className="text-sm text-gray-700 truncate">{file.name}</span>
+                    <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                        </svg>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm text-gray-700 truncate">{file.name}</p>
+                          <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+                        </div>
+                      </div>
                       <button
                         type="button"
                         onClick={() => removeFile(index)}
-                        className="text-red-500 hover:text-red-700 ml-2"
+                        className="text-red-500 hover:text-red-700 ml-2 flex-shrink-0"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -377,7 +330,7 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
             </div>
 
             {/* Кнопка отправки */}
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-4 border-t border-gray-200">
               <button
                 type="submit"
                 disabled={isLoading || !message.trim()}
@@ -386,10 +339,15 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
                 {isLoading ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    Отправка...
+                    Подготовка...
                   </>
                 ) : (
-                  'Отправить'
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    Отправить ответ
+                  </>
                 )}
               </button>
             </div>
@@ -399,5 +357,3 @@ const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     </div>
   );
 };
-
-export default ReplyModal;
