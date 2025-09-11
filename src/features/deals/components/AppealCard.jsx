@@ -20,20 +20,30 @@ const AppealCard = ({ appeal }) => {
   };
 
   return (
-    <div className="bg-white border-2 border-gray-100 rounded-2xl p-6 hover:border-red-200 transition-colors duration-200">
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-        <div className="flex-1">
-          <h4 className="text-lg font-semibold text-gray-800 mb-3">{appeal.title}</h4>
-          <div className="flex flex-wrap gap-3 text-sm text-gray-500">
-            <span className="bg-gray-100 px-3 py-1 rounded-lg">#{appeal.id}</span>
-            <span>{formatDate(appeal.created_at)}</span>
+    <div className="bg-white border-2 border-gray-100 rounded-2xl px-6 py-4 hover:border-red-200 transition-colors duration-200">
+      <div className='flex flex-col justify-around'>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="flex-1">
+            <h4 className="text-lg font-semibold text-gray-800 mb-3">{appeal.title}</h4>
+            <div className="flex flex-wrap gap-3 text-sm text-gray-500">
+              <span className="bg-gray-100 px-3 py-1 rounded-lg">#{appeal.id}</span>
+              <span>{formatDate(appeal.created_at)}</span>
+            </div>
+          </div>
+          <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor()}`}>
+            {appeal.status_icon && <span className="mr-2">{appeal.status_icon}</span>}
+            <span>{appeal.stage_name}</span>
           </div>
         </div>
-        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor()}`}>
-          {appeal.status_icon && <span className="mr-2">{appeal.status_icon}</span>}
-          <span>{appeal.stage_name}</span>
-        </div>
+        {/* Cтатусы */}
+        {appeal?.info && (
+          <div className="mt-2 flex flex-col">
+            <div>Статус обращения: {appeal.info.status}</div>
+            <div>Дата последнего изменения {formatDate(appeal.info.date)}</div>
+          </div>
+        )}
       </div>
+
 
       {appeal.opportunity && Number(appeal.opportunity) > 0 && (
         <div className="mt-6 pt-4 border-t-2 border-gray-100">
@@ -45,6 +55,7 @@ const AppealCard = ({ appeal }) => {
           </div>
         </div>
       )}
+
 
       {/* Кнопка "Ответить" - показывается только если can_reply = true */}
       {appeal.can_reply && (
@@ -60,6 +71,7 @@ const AppealCard = ({ appeal }) => {
           </button>
         </div>
       )}
+
 
       {/* Модальное окно для ответа */}
       <ReplyModal
