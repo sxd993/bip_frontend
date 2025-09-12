@@ -8,22 +8,21 @@ const Register = ({ currentStage, setCurrentStage }) => {
   const [legalType, setLegalType] = useState('director');
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 md:px-6">
-      <div className="max-w-2xl w-full space-y-8">
-        <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
-          <div className="text-center mb-8">
-            <h3 className="text-3xl md:text-4xl font-semibold text-gray-800">Регистрация</h3>
-            <p className="text-gray-600 mt-3 text-lg">Создайте аккаунт для доступа к юридическим услугам</p>
-          </div>
+    <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
+      <div className="text-center mb-10">
+        <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Регистрация</h3>
+        </div>
+      </div>
           
           <div className="flex justify-center mb-8">
-            <div className="flex bg-gray-100 rounded-xl p-1">
+            <div className="flex bg-red-100 rounded-2xl p-1">
               <button
                 type="button"
-                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
                   userType === 'physical'
-                    ? 'bg-white text-gray-800 border-2 border-gray-200'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'bg-red-500 text-white'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                 }`}
                 onClick={() => setUserType('physical')}
               >
@@ -31,10 +30,10 @@ const Register = ({ currentStage, setCurrentStage }) => {
               </button>
               <button
                 type="button"
-                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
                   userType === 'legal'
-                    ? 'bg-white text-gray-800 border-2 border-gray-200'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'bg-red-500 text-white'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                 }`}
                 onClick={() => setUserType('legal')}
               >
@@ -46,13 +45,13 @@ const Register = ({ currentStage, setCurrentStage }) => {
           {/* Если выбрано юр. лицо, показываем дополнительный выбор */}
           {userType === 'legal' && (
             <div className="flex justify-center mb-8">
-              <div className="flex bg-gray-100 rounded-xl p-1">
+              <div className="flex bg-red-100 rounded-2xl p-1">
                 <button
                   type="button"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                     legalType === 'director'
-                      ? 'bg-white text-gray-800 border-2 border-gray-200'
-                      : 'text-gray-600 hover:text-gray-800'
+                      ? 'bg-red-500 text-white'
+                      : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                   }`}
                   onClick={() => setLegalType('director')}
                 >
@@ -60,10 +59,10 @@ const Register = ({ currentStage, setCurrentStage }) => {
                 </button>
                 <button
                   type="button"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                     legalType === 'employee'
-                      ? 'bg-white text-gray-800 border-2 border-gray-200'
-                      : 'text-gray-600 hover:text-gray-800'
+                      ? 'bg-red-500 text-white'
+                      : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                   }`}
                   onClick={() => setLegalType('employee')}
                 >
@@ -80,7 +79,7 @@ const Register = ({ currentStage, setCurrentStage }) => {
             {userType === 'legal' && legalType === 'employee' && <EmployeeRegister />}
           </div>
 
-          <div className="text-center mt-8 pt-6 border-t-2 border-gray-100">
+          <div className="text-center mt-8 pt-6 border-t-2 border-red-100">
             <button
               type="button"
               onClick={() => setCurrentStage('login')}
@@ -89,8 +88,6 @@ const Register = ({ currentStage, setCurrentStage }) => {
               Уже есть аккаунт? Войти
             </button>
           </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AppealsSection from '../../deals/components/AppealsSection';
 
 export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompany, isLoadingEmployees }) => {
+    const [activeSection, setActiveSection] = useState('employee');
     const [isOpenEmployers, setIsOpenEmployers] = useState(false);
     const [showToken, setShowToken] = useState(false);
     const [copiedToken, setCopiedToken] = useState(false);
@@ -15,161 +16,237 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
     };
 
     return (
-        <div className="min-h-screen bg-white py-8 px-4">
-            <div className="max-w-6xl mx-auto space-y-8">
-                <div className="bg-white border-2 border-gray-100 rounded-3xl p-8 md:p-12">
-                    <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 mb-12 text-center">Личный кабинет юридического лица</h1>
-
-                    {/* Данные пользователя */}
-                    <div className="mb-12">
-                        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-8">Данные сотрудника</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                <span className="block text-sm font-medium text-gray-600 mb-2">ФИО</span>
-                                <span className="text-lg text-gray-800">{user.last_name} {user.first_name} {user.second_name}</span>
-                            </div>
-                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                <span className="block text-sm font-medium text-gray-600 mb-2">Роль</span>
-                                <span className="text-lg text-gray-800">{user.role}</span>
-                            </div>
-                            {user.position && (
-                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                    <span className="block text-sm font-medium text-gray-600 mb-2">Должность</span>
-                                    <span className="text-lg text-gray-800">{user.position}</span>
-                                </div>
-                            )}
-                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                <span className="block text-sm font-medium text-gray-600 mb-2">Номер телефона</span>
-                                <span className="text-lg text-gray-800">{user.phone}</span>
-                            </div>
-                            <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                <span className="block text-sm font-medium text-gray-600 mb-2">Электронная почта</span>
-                                <span className="text-lg text-gray-800">{user.email}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Данные компании */}
-                    <div className="mb-12">
-                        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-8">Данные компании</h2>
-                        {isLoadingCompany ? (
-                            <div className="text-gray-600 text-center py-8">Загрузка данных компании...</div>
-                        ) : companyData ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                    <span className="block text-sm font-medium text-gray-600 mb-2">Название компании</span>
-                                    <span className="text-lg text-gray-800">{companyData.name}</span>
-                                </div>
-                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                    <span className="block text-sm font-medium text-gray-600 mb-2">ИНН</span>
-                                    <span className="text-lg text-gray-800">{companyData.inn}</span>
-                                </div>
-                                <div className="border-2 border-gray-100 p-6 rounded-2xl hover:border-red-200 transition-colors duration-200">
-                                    <span className="block text-sm font-medium text-gray-600 mb-2">Количество сотрудников</span>
-                                    <span className="text-lg text-gray-800">{companyData.employees_count}</span>
-                                </div>
-                                <div className="border-2 border-red-200 bg-red-50 p-8 rounded-2xl">
-                                    <span className="block text-sm font-medium text-gray-600 mb-3">Баланс компании</span>
-                                    <span className="text-3xl font-bold text-red-600">{companyData.balance} ₽</span>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="text-gray-600 text-center py-8">Данные компании недоступны</div>
+        <div className="py-24 bg-white">
+            <div className="max-w-6xl mx-auto px-4 md:px-6">
+                <div className="text-center mb-16">
+                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">Личный кабинет юридического лица</h1>
+                    <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
+                    <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">Управление компанией и сотрудниками</p>
+                </div>
+                
+                <div className="bg-white border-2 border-red-200 rounded-3xl overflow-hidden mb-8">
+                    {/* Вкладки */}
+                    <div className="flex border-b-2 border-red-200">
+                        <button
+                            type="button"
+                            className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
+                                activeSection === 'employee'
+                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                            }`}
+                            onClick={() => setActiveSection('employee')}
+                        >
+                            Сотрудник
+                        </button>
+                        <button
+                            type="button"
+                            className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
+                                activeSection === 'company'
+                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                            }`}
+                            onClick={() => setActiveSection('company')}
+                        >
+                            Компания
+                        </button>
+                        {user.role === 'Руководитель' && (
+                            <button
+                                type="button"
+                                className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
+                                    activeSection === 'employees'
+                                        ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                        : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                                }`}
+                                onClick={() => setActiveSection('employees')}
+                            >
+                                Сотрудники
+                            </button>
                         )}
+                        <button
+                            type="button"
+                            className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
+                                activeSection === 'appeals'
+                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                            }`}
+                            onClick={() => setActiveSection('appeals')}
+                        >
+                            Обращения
+                        </button>
                     </div>
 
-                    {/* Токен приглашения - только для руководителя */}
-                    {user.role === 'Руководитель' && companyData?.invite_token && (
-                        <div className="mb-8">
-                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Токен приглашения</h2>
-                            <p className="text-gray-600 mb-4">
-                                Передайте этот токен сотрудникам для регистрации в компании
-                            </p>
-                            <div className="bg-gray-50 p-6 rounded-lg">
-                                {showToken ? (
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                                        <code className="bg-gray-200 px-4 py-2 rounded font-mono text-sm break-all">{companyData.invite_token}</code>
-                                        <button
-                                            className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition-colors duration-200"
-                                            onClick={handleCopyToken}
-                                        >
-                                            {copiedToken ? '✓ Скопировано' : 'Копировать'}
-                                        </button>
+                    {/* Содержимое вкладок */}
+                    <div className="p-8 md:p-12">
+                        {activeSection === 'employee' && (
+                            <div>
+                                <div className="text-center mb-8">
+                                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+                                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Данные сотрудника</h2>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                        <span className="block text-sm font-medium text-gray-600 mb-2">ФИО</span>
+                                        <span className="text-lg text-gray-800">{user.last_name} {user.first_name} {user.second_name}</span>
+                                    </div>
+                                    <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                        <span className="block text-sm font-medium text-gray-600 mb-2">Роль</span>
+                                        <span className="text-lg text-gray-800">{user.role}</span>
+                                    </div>
+                                    {user.position && (
+                                        <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                            <span className="block text-sm font-medium text-gray-600 mb-2">Должность</span>
+                                            <span className="text-lg text-gray-800">{user.position}</span>
+                                        </div>
+                                    )}
+                                    <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                        <span className="block text-sm font-medium text-gray-600 mb-2">Номер телефона</span>
+                                        <span className="text-lg text-gray-800">{user.phone}</span>
+                                    </div>
+                                    <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                        <span className="block text-sm font-medium text-gray-600 mb-2">Электронная почта</span>
+                                        <span className="text-lg text-gray-800">{user.email}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeSection === 'company' && (
+                            <div>
+                                <div className="text-center mb-8">
+                                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+                                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Данные компании</h2>
+                                    </div>
+                                </div>
+                                {isLoadingCompany ? (
+                                    <div className="text-gray-600 text-center py-8">Загрузка данных компании...</div>
+                                ) : companyData ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                            <span className="block text-sm font-medium text-gray-600 mb-2">Название компании</span>
+                                            <span className="text-lg text-gray-800">{companyData.name}</span>
+                                        </div>
+                                        <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                            <span className="block text-sm font-medium text-gray-600 mb-2">ИНН</span>
+                                            <span className="text-lg text-gray-800">{companyData.inn}</span>
+                                        </div>
+                                        <div className="border-2 border-gray-100 p-6 rounded-2xl">
+                                            <span className="block text-sm font-medium text-gray-600 mb-2">Количество сотрудников</span>
+                                            <span className="text-lg text-gray-800">{companyData.employees_count}</span>
+                                        </div>
                                     </div>
                                 ) : (
-                                    <button
-                                        className="bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors duration-200"
-                                        onClick={() => setShowToken(true)}
-                                    >
-                                        Показать токен
-                                    </button>
+                                    <div className="text-gray-600 text-center py-8">Данные компании недоступны</div>
+                                )}
+
+                                {/* Токен приглашения - только для руководителя */}
+                                {user.role === 'Руководитель' && companyData?.invite_token && (
+                                    <div className="mt-8">
+                                        <div className="text-center mb-8">
+                                            <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+                                                <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Токен приглашения</h2>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white border-2 border-red-200 rounded-3xl p-6">
+                                            <p className="text-gray-600 mb-6 text-center">
+                                                Передайте этот токен сотрудникам для регистрации в компании
+                                            </p>
+                                            {showToken ? (
+                                                <div className="space-y-4">
+                                                    <div className="bg-red-50 border-2 border-red-100 rounded-2xl p-4">
+                                                        <code className="font-mono text-sm break-all text-gray-800">{companyData.invite_token}</code>
+                                                    </div>
+                                                    <div className="flex justify-center">
+                                                        <button
+                                                            className="bg-red-500 text-white px-6 py-3 rounded-3xl hover:bg-red-600 transition-colors duration-300 font-bold"
+                                                            onClick={handleCopyToken}
+                                                        >
+                                                            {copiedToken ? '✓ Скопировано' : 'Копировать токен'}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="flex justify-center">
+                                                    <button
+                                                        className="bg-red-500 text-white px-6 py-3 rounded-3xl hover:bg-red-600 transition-colors duration-300 font-bold"
+                                                        onClick={() => setShowToken(true)}
+                                                    >
+                                                        Показать токен
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 )}
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {/* Балансы */}
-                    <div className="mb-8">
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Отслеживание баланса</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
-                            <div className="bg-gradient-to-r from-pink-50 to-pink-100 p-6 rounded-lg border border-pink-200">
-                                <span className="block text-sm font-medium text-gray-600 mb-2">Личный баланс</span>
-                                <span className="text-3xl font-bold text-pink-600">{user.balance} ₽</span>
+                        {activeSection === 'employees' && user.role === 'Руководитель' && (
+                            <div>
+                                <div className="text-center mb-8">
+                                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+                                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Управление сотрудниками</h2>
+                                    </div>
+                                </div>
+                                
+                                <button
+                                    className="w-full flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 rounded-2xl transition-colors duration-300 border-2 border-red-200 mb-6"
+                                    onClick={() => setIsOpenEmployers((prev) => !prev)}
+                                >
+                                    <span className="text-lg font-medium text-gray-800">Список сотрудников</span>
+                                    <span className="text-red-600">{isOpenEmployers ? '▲' : '▼'}</span>
+                                </button>
+
+                                {isOpenEmployers && (
+                                    <div>
+                                        {isLoadingEmployees ? (
+                                            <div className="text-gray-600 text-center py-8">Загрузка списка сотрудников...</div>
+                                        ) : employeesData?.employees ? (
+                                            <div>
+                                                <div className="mb-6">
+                                                    <h3 className="text-xl font-semibold text-gray-800">Всего сотрудников: {employeesData.total_count}</h3>
+                                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
+                                                    {employeesData.employees.map((employee) => (
+                                                        <div key={employee.id} className="bg-red-50 p-4 rounded-2xl border-2 border-red-200">
+                                                            <div className="font-semibold text-gray-800 mb-2">
+                                                                {employee.full_name}
+                                                            </div>
+                                                            <div className="space-y-1 mb-3">
+                                                                <span className="inline-block bg-red-200 text-red-800 text-xs px-2 py-1 rounded-full">{employee.role}</span>
+                                                                {employee.position && (
+                                                                    <span className="block text-sm text-gray-600">{employee.position}</span>
+                                                                )}
+                                                            </div>
+                                                            <div className="text-sm text-gray-600 space-y-1">
+                                                                <div>{employee.phone}</div>
+                                                                <div>{employee.email}</div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="text-gray-600 text-center py-8">Нет сотрудников</div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                        )}
+
+                        {activeSection === 'appeals' && (
+                            <div>
+                                <div className="text-center mb-8">
+                                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+                                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Обращения</h2>
+                                    </div>
+                                </div>
+                                <AppealsSection user={user} />
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {/* Раздел обращений компании */}
-                <AppealsSection user={user} />
-
-                {/* Управление сотрудниками - только для руководителя */}
-                {user.role === 'Руководитель' && (
-                    <div className="bg-white rounded-lg shadow-lg p-8">
-                        <button
-                            className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
-                            onClick={() => setIsOpenEmployers((prev) => !prev)}
-                        >
-                            <span className="text-lg font-medium text-gray-800">Список сотрудников</span>
-                            <span className="text-gray-600">{isOpenEmployers ? '▲' : '▼'}</span>
-                        </button>
-
-                        {isOpenEmployers && (
-                            <div className="mt-6">
-                                {isLoadingEmployees ? (
-                                    <div className="text-gray-600 text-center py-8">Загрузка списка сотрудников...</div>
-                                ) : employeesData?.employees ? (
-                                    <div>
-                                        <div className="mb-6">
-                                            <h3 className="text-xl font-semibold text-gray-800">Всего сотрудников: {employeesData.total_count}</h3>
-                                        </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
-                                            {employeesData.employees.map((employee) => (
-                                                <div key={employee.id} className="bg-gray-50 p-4 rounded-lg">
-                                                    <div className="font-semibold text-gray-800 mb-2">
-                                                        {employee.full_name}
-                                                    </div>
-                                                    <div className="space-y-1 mb-3">
-                                                        <span className="inline-block bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full">{employee.role}</span>
-                                                        {employee.position && (
-                                                            <span className="block text-sm text-gray-600">{employee.position}</span>
-                                                        )}
-                                                    </div>
-                                                    <div className="text-sm text-gray-600 space-y-1">
-                                                        <div>{employee.phone}</div>
-                                                        <div>{employee.email}</div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="text-gray-600 text-center py-8">Нет сотрудников</div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )}
             </div>
         </div>
     );

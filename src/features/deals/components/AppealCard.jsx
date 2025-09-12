@@ -20,7 +20,7 @@ const AppealCard = ({ appeal }) => {
   };
 
   return (
-    <div className="bg-white border-2 border-gray-100 rounded-2xl px-6 py-4 hover:border-red-200 transition-colors duration-200">
+    <div className="bg-white border-2 border-red-200 rounded-3xl px-6 py-6">
       <div className='flex flex-col justify-around'>
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div className="flex-1">
@@ -46,10 +46,10 @@ const AppealCard = ({ appeal }) => {
 
 
       {appeal.opportunity && Number(appeal.opportunity) > 0 && (
-        <div className="mt-6 pt-4 border-t-2 border-gray-100">
+        <div className="mt-6 pt-4 border-t-2 border-red-100">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-gray-600">Сумма сделки:</span>
-            <span className="text-lg font-bold text-green-600">
+            <span className="text-lg font-bold text-red-600">
               {Number(appeal.opportunity).toLocaleString('ru-RU')} ₽
             </span>
           </div>
@@ -59,10 +59,10 @@ const AppealCard = ({ appeal }) => {
 
       {/* Кнопка "Ответить" - показывается только если can_reply = true */}
       {appeal.can_reply && (
-        <div className="mt-6 pt-4 border-t-2 border-gray-100">
+        <div className="mt-6 pt-4 border-t-2 border-red-100">
           <button
             onClick={handleReply}
-            className="w-full bg-red-400 hover:bg-red-500 text-white px-4 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
+            className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-3xl transition-colors duration-300 flex items-center justify-center gap-2 font-bold"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />

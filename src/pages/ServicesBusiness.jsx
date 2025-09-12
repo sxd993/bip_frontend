@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const serviceData = {
   legal: {
@@ -39,6 +40,7 @@ const serviceData = {
 const ServicesBusiness = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleServiceClick = (service) => {
     if (selectedService?.id === service.id) {
@@ -50,38 +52,49 @@ const ServicesBusiness = () => {
     }
   };
 
+  const handleConsultationClick = () => {
+    navigate('/personal-account');
+  };
+
   return (
-    <div className="py-20 bg-white">
+    <div className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 mb-6">{serviceData.legal.title}</h1>
-          <p className="text-lg md:text-xl text-gray-600">Профессиональные юридические услуги для вашего бизнеса</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">{serviceData.legal.title}</h1>
+          <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
+          <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">Профессиональные юридические услуги для вашего бизнеса</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
           {/* Services Menu */}
           <div>
-            <div className="bg-white border-2 border-gray-100 rounded-3xl p-8 hover:border-red-200 transition-colors duration-300">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-8">Выберите категорию услуг</h2>
-              <div className="space-y-4">
+            <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
+              <div className="text-center mb-10">
+                <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Выберите услугу</h2>
+                </div>
+              </div>
+              <div className="space-y-5">
                 {serviceData.legal.services
                   .sort((a, b) => parseInt(a.position) - parseInt(b.position))
                   .map((service) => (
                     <button
                       key={service.id}
-                      className={`w-full text-left p-6 rounded-2xl border-2 transition-all duration-200 ${
+                      className={`w-full text-left p-4 border-2 rounded-2xl transition-all duration-300 group ${
                         selectedService?.id === service.id
-                          ? 'border-red-200 bg-red-50'
-                          : 'border-gray-100 hover:border-red-200'
+                          ? 'border-red-300 bg-red-50'
+                          : 'border-gray-200 hover:border-red-300 hover:bg-red-50'
                       }`}
                       onClick={() => handleServiceClick(service)}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <span className="w-10 h-10 bg-red-400 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                            {service.position}
-                          </span>
-                          <span className="font-medium text-gray-800 text-lg">{service.name}</span>
+                          <div className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            selectedService?.id === service.id
+                              ? 'bg-red-500'
+                              : 'bg-red-400 group-hover:bg-red-500'
+                          }`}></div>
+                          <span className="text-gray-800 font-semibold text-base md:text-lg tracking-wide">{service.name}</span>
                         </div>
                         <span className={`text-red-400 transition-transform duration-200 ${
                           selectedService?.id === service.id ? 'rotate-90' : ''
@@ -101,12 +114,13 @@ const ServicesBusiness = () => {
           <div className={`transition-all duration-300 ${
             isPanelOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
           }`}>
-            <div className="bg-white border-2 border-gray-100 rounded-3xl p-8 h-full hover:border-red-200 transition-colors duration-300">
+            <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12 h-full">
               {isPanelOpen && selectedService ? (
                 <div className="space-y-8">
-                  <div className="border-b-2 border-gray-100 pb-6">
-                    <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">{selectedService.name}</h3>
-                    <p className="text-gray-600 text-lg">Подробная информация об услугах в данной категории</p>
+                  <div className="text-center mb-8">
+                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50 mb-4">
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{selectedService.name}</h3>
+                    </div>
                   </div>
                   
                   <div className="space-y-6">
@@ -119,7 +133,10 @@ const ServicesBusiness = () => {
                   </div>
                   
                   <div className="pt-6">
-                    <button className="w-full bg-red-400 hover:bg-red-500 text-white font-semibold py-4 px-8 rounded-xl transition-colors duration-200">
+                    <button 
+                      onClick={handleConsultationClick}
+                      className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-8 rounded-3xl transition-colors duration-300"
+                    >
                       Получить консультацию
                     </button>
                   </div>

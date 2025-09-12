@@ -11,6 +11,7 @@ import { Contacts } from './pages/Contacts';
 import { Auth } from './pages/Auth';
 import ServicesPrivate from './pages/ServicesPrivate';
 import ServicesBusiness from './pages/ServicesBusiness';
+import UnderDevelopment from './pages/UnderDevelopment';
 
 // Утилиты
 import { ProtectedRoute } from './utils/ProtectedRoute';
@@ -21,7 +22,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-white text-gray-800">
       <Header />
-      <main className="flex-1 pt-20">
+      <main className="flex-1 pt-10">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
@@ -29,6 +30,13 @@ const App = () => {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
           <Route path="/ServicesBusiness" element={<ServicesBusiness />} />
+          <Route path="/press-center" element={<UnderDevelopment />} />
+          <Route path="/press-center/news" element={<UnderDevelopment />} />
+          <Route path="/press-center/publications" element={<UnderDevelopment />} />
+          <Route path="/calculator" element={<UnderDevelopment />} />
+          <Route path="/certificate-verification" element={<UnderDevelopment />} />
+          <Route path="/certification-of-evidence" element={<UnderDevelopment />} />
+          <Route path="/about" element={<UnderDevelopment />} />
           <Route
             path="/personal-account"
             element={

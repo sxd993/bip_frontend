@@ -28,13 +28,12 @@ const Login = ({ currentStage, setCurrentStage }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 md:px-6">
-      <div className="max-w-md w-full space-y-8">
-        <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-semibold text-gray-800">Вход в систему</h2>
-            <p className="text-gray-600 mt-3 text-lg">Войдите в личный кабинет для доступа к услугам</p>
-          </div>
+    <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
+      <div className="text-center mb-10">
+        <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Вход в систему</h2>
+        </div>
+      </div>
           
           <form onSubmit={handleSubmit} className="space-y-8">
             <div>
@@ -75,7 +74,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
             
             <button
               type="submit"
-              className="w-full bg-red-400 hover:bg-red-500 text-white font-semibold py-4 px-8 rounded-xl transition-colors duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-8 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={mutation.isPending}
             >
               {mutation.isPending ? 'Вход...' : 'Войти'}
@@ -91,8 +90,6 @@ const Login = ({ currentStage, setCurrentStage }) => {
               </button>
             </div>
           </form>
-        </div>
-      </div>
     </div>
   );
 };

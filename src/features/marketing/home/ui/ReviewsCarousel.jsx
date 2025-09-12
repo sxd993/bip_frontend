@@ -47,8 +47,9 @@ const ReviewsCarousel = () => {
     <div className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-semibold text-gray-800 mb-6">Отзывы наших клиентов</h2>
-          <p className="text-lg md:text-xl text-gray-600">Доверие клиентов - наша главная ценность</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">Отзывы наших клиентов</h2>
+          <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
+          <p className="text-xl md:text-2xl text-gray-600">Доверие клиентов - наша главная ценность</p>
         </div>
         
         <div className="relative">

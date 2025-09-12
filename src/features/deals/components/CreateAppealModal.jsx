@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreateAppeal, useAppealCategories } from '../hooks/useAppeals';
+import { Modal } from '../../../shared/ui/Modal';
 
 const CreateAppealModal = ({ isOpen, onClose }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -108,42 +109,27 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  if (!isOpen) return null;
-  console.log()
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="relative w-full max-w-2xl mx-4 md:mx-0 bg-white border-2 border-gray-100 rounded-3xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b-2 border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800">Создать обращение</h2>
-          <button
-            className="text-gray-400 hover:text-gray-700 text-2xl font-bold transition-colors duration-200 focus:outline-none rounded-full p-1"
-            onClick={handleClose}
-            aria-label="Закрыть модальное окно"
-
-          >
-            ×
-          </button>
-        </div>
-
-        {isSuccess ? (
-          <div className="px-6 py-16 flex flex-col items-center justify-center text-center">
-            <div className="w-20 h-20 rounded-full border-2 border-red-300 flex items-center justify-center mb-4">
-              <svg className="w-12 h-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <p className="text-gray-800 text-lg">Обращение создано</p>
+    <Modal isOpen={isOpen} onClose={handleClose} title="Создать обращение">
+      {isSuccess ? (
+        <div className="px-4 py-8 flex flex-col items-center justify-center text-center">
+          <div className="w-16 h-16 rounded-full border-2 border-red-500 flex items-center justify-center mb-3 bg-red-50">
+            <svg className="w-10 h-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-5 space-y-6">
+          <p className="text-gray-800 text-lg font-bold">Обращение создано</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)} className="px-4 py-4 space-y-4">
             {/* Категория */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Категория обращения *
               </label>
               <select
                 {...register('category_id', { required: 'Выберите категорию' })}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 focus:outline-none focus:border-red-400 transition-colors duration-200"
+                className="w-full px-3 py-2 border border-gray-200 rounded-2xl bg-white text-gray-900 focus:outline-none focus:border-red-500 transition-colors duration-200"
                 disabled={categoriesLoading}
               >
                 <option value="">Выберите категорию</option>
@@ -160,13 +146,13 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
 
             {/* Заголовок */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Заголовок обращения *
               </label>
               <input
                 type="text"
                 {...register('title', { required: 'Введите заголовок' })}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-400 transition-colors duration-200"
+                className="w-full px-3 py-2 border border-gray-200 rounded-2xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors duration-200"
                 placeholder="Краткое описание проблемы"
               />
               {errors.title && (
@@ -176,13 +162,13 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
 
             {/* Комментарий */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Подробное описание *
               </label>
               <textarea
                 {...register('comment', { required: 'Введите описание' })}
-                rows={4}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-400 transition-colors duration-200 resize-none"
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-200 rounded-2xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors duration-200 resize-none"
                 placeholder="Опишите вашу проблему подробно..."
               />
               {errors.comment && (
@@ -192,10 +178,10 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
 
             {/* Загрузка файлов */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Прикрепить файлы (макс. 10MB каждый)
               </label>
-              <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-red-300 transition-colors duration-200">
+              <div className="border border-dashed border-gray-200 rounded-2xl p-4 text-center hover:border-red-300 transition-colors duration-200">
                 <input
                   type="file"
                   multiple
@@ -205,11 +191,11 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
                 <label htmlFor="file-upload" className="cursor-pointer">
-                  <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-8 h-8 mx-auto mb-2 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
-                  <p className="text-gray-600 mb-2">Нажмите для выбора файлов</p>
-                  <p className="text-sm text-gray-500">PDF, DOC, DOCX, JPG, PNG до 10MB</p>
+                  <p className="text-red-600 mb-1 font-medium text-sm">Нажмите для выбора файлов</p>
+                  <p className="text-xs text-red-500">PDF, DOC, DOCX, JPG, PNG до 10MB</p>
                 </label>
               </div>
             </div>
@@ -217,23 +203,23 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             {/* Список выбранных файлов */}
             {selectedFiles.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-3">Выбранные файлы:</h4>
-                <div className="space-y-2">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Выбранные файлы:</h4>
+                <div className="space-y-1">
                   {selectedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border-2 border-gray-100 rounded-xl">
-                      <div className="flex items-center space-x-3">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div key={index} className="flex items-center justify-between p-2 bg-red-50 border border-red-100 rounded-2xl">
+                      <div className="flex items-center space-x-2">
+                        <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        <span className="text-sm text-gray-700">{file.name}</span>
-                        <span className="text-xs text-gray-500">({formatFileSize(file.size)})</span>
+                        <span className="text-xs text-gray-700 truncate">{file.name}</span>
+                        <span className="text-xs text-red-500">({formatFileSize(file.size)})</span>
                       </div>
                       <button
                         type="button"
                         onClick={() => removeFile(index)}
-                        className="text-red-400 hover:text-red-600 transition-colors duration-200"
+                        className="text-red-500 hover:text-red-700 transition-colors duration-200"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
@@ -244,26 +230,25 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             )}
 
             {/* Кнопки */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t-2 border-gray-100">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-100">
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:border-gray-300 transition-colors duration-200 font-medium"
+                className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 rounded-3xl hover:border-gray-300 transition-colors duration-200 font-medium"
               >
                 Отмена
               </button>
               <button
                 type="submit"
                 disabled={createAppeal.isPending}
-                className="flex-1 px-6 py-3 bg-red-400 hover:bg-red-500 text-white rounded-xl transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl transition-colors duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {createAppeal.isPending ? 'Создание...' : 'Создать обращение'}
               </button>
             </div>
           </form>
         )}
-      </div>
-    </div>
+    </Modal>
   );
 };
 

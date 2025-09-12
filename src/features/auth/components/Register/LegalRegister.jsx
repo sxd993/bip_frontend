@@ -134,7 +134,7 @@ export const LegalRegister = () => {
       <button 
         type="submit" 
         disabled={mutation.isPending}
-        className="w-full flex justify-center py-4 px-8 border border-transparent rounded-xl shadow-sm text-lg font-semibold text-white bg-red-400 hover:bg-red-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        className="w-full flex justify-center py-4 px-8 border border-transparent rounded-3xl text-lg font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
       >
         {mutation.isPending ? 'Регистрация...' : 'Зарегистрировать организацию'}
       </button>
