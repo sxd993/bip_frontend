@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDealFilesApi, getLatestDealFilesApi } from '../../api/dealsApi';
+import { getDealFilesApi, getLatestDealFilesApi } from '../api/dealsApi';
 
 export const useDealFiles = (dealId, latest = false) => {
   const [files, setFiles] = useState([]);

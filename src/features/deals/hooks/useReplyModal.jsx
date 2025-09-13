@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { getAppealDetailsApi, sendReplyApi } from '../../api/dealsApi';
-import { MESSAGE_CONSTRAINTS } from '../../constants';
+import { getAppealDetailsApi, sendReplyApi } from '../api/dealsApi';
+import { MESSAGE_CONSTRAINTS } from '../constants';
 
 export const useReplyModal = (appealId) => {
   const [message, setMessage] = useState('');
   const [appealMessage, setAppealMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(null);
 
@@ -41,6 +40,8 @@ export const useReplyModal = (appealId) => {
   };
 
   const submitReply = async (base64Files) => {
+    if (!validateMessage()) return false;
+
     try {
       setIsLoading(true);
       setError(null);
@@ -60,14 +61,12 @@ export const useReplyModal = (appealId) => {
       return false;
     } finally {
       setIsLoading(false);
-      setShowConfirmation(false);
     }
   };
 
   const reset = () => {
     setMessage('');
     setAppealMessage('');
-    setShowConfirmation(false);
     setIsSuccess(false);
     setError(null);
   };
@@ -83,8 +82,6 @@ export const useReplyModal = (appealId) => {
     setMessage,
     appealMessage,
     isLoading,
-    showConfirmation,
-    setShowConfirmation,
     isSuccess,
     error,
     validateMessage,
