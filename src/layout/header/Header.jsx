@@ -11,7 +11,7 @@ const Header = () => {
   const location = useLocation();
   const headerRef = useRef(null);
   const hasLeftViewport = useRef(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +56,7 @@ const Header = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth < 768);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -98,9 +98,13 @@ const Header = () => {
         onClose={() => setIsMenuOpen(false)}
       />
       
-      {showWelcomeImage && location.pathname === '/' && !isMobile && (
-        <div className="relative h-screen bg-gradient-to-r from-gray-900 to-gray-700 overflow-hidden">
-          <img src='https://s3.twcstorage.ru/d90a9000-bip/shapka/shapka.svg' alt="Welcome Banner" className="w-full h-full object-cover opacity-80" />
+      {showWelcomeImage && location.pathname === '/' && (
+        <div className="relative h-screen overflow-hidden">
+          <img 
+            src='https://s3.twcstorage.ru/d90a9000-bip/shapka/shapka.svg' 
+            alt="Welcome Banner" 
+            className={`w-full h-full object-cover ${isMobile ? 'object-contain' : 'object-cover'}`} 
+          />
         </div>
       )}
     </>

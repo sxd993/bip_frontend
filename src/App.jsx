@@ -16,9 +16,13 @@ import UnderDevelopment from './pages/UnderDevelopment';
 // Авторизация
 import { AuthGuard } from './shared/lib/auth/AuthGuard';
 
+// Компоненты
+import ScrollToTop from './shared/components/ScrollToTop';
+
 const App = () => {
   return (
     <div className="min-h-screen bg-white text-gray-800">
+      <ScrollToTop />
       <Header />
       <main className="flex-1 pt-10">
         <Routes>
