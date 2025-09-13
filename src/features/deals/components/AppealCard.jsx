@@ -1,9 +1,22 @@
 import { useState } from 'react';
-import { formatDate } from '../utils';
 import { ReplyModal } from './ReplyModal';
+
+// Локальная функция форматирования даты
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit', 
+    year: 'numeric'
+  }) + ' в ' + date.toLocaleTimeString('ru-RU', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
 
 const AppealCard = ({ appeal }) => {
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
+  
   const getStatusColor = () => {
     const colorMap = {
       'green': 'bg-green-100 text-green-800',
@@ -14,7 +27,6 @@ const AppealCard = ({ appeal }) => {
     return colorMap[appeal.status_color] || 'bg-gray-100 text-gray-800';
   };
 
-  // Обработчик для кнопки "Ответить"
   const handleReply = () => {
     setIsReplyModalOpen(true);
   };
@@ -35,7 +47,7 @@ const AppealCard = ({ appeal }) => {
             <span>{appeal.stage_name}</span>
           </div>
         </div>
-        {/* Cтатусы */}
+        
         {appeal?.info && (
           <div className="mt-2 flex flex-col">
             <div>Статус обращения: {appeal.info.status}</div>
@@ -43,7 +55,6 @@ const AppealCard = ({ appeal }) => {
           </div>
         )}
       </div>
-
 
       {appeal.opportunity && Number(appeal.opportunity) > 0 && (
         <div className="mt-6 pt-4 border-t-2 border-red-100">
@@ -56,8 +67,6 @@ const AppealCard = ({ appeal }) => {
         </div>
       )}
 
-
-      {/* Кнопка "Ответить" - показывается только если can_reply = true */}
       {appeal.can_reply && (
         <div className="mt-6 pt-4 border-t-2 border-red-100">
           <button
@@ -72,8 +81,6 @@ const AppealCard = ({ appeal }) => {
         </div>
       )}
 
-
-      {/* Модальное окно для ответа */}
       <ReplyModal
         isOpen={isReplyModalOpen}
         onClose={() => setIsReplyModalOpen(false)}
