@@ -2,33 +2,20 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreateAppeal, useAppealCategories } from '../hooks/useAppeals';
 import { Modal } from '../../../shared/ui/Modal';
+import { formatFileSize } from '../utils';
 
 const CreateAppealModal = ({ isOpen, onClose }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
   const { data: categories, isLoading: categoriesLoading } = useAppealCategories();
   const createAppeal = useCreateAppeal();
-  const { register, handleSubmit, formState: { errors }, reset, watch } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
       category_id: '',
       title: '',
       comment: ''
     }
   });
-
-  // Слежение за данными формы
-  const watchedFields = watch();
-
-  useEffect(() => {
-    console.log('Текущие значения формы:', watchedFields);
-  }, [watchedFields]);
-
-  // Также можно отслеживать файлы
-  useEffect(() => {
-    console.log('Выбранные файлы:', selectedFiles);
-  }, [selectedFiles]);
-
-  console.log(categories)
   const fileToBase64 = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -93,9 +80,6 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const formatFileSize = (bytes) => {
-    return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-  };
 
   // При открытии модалки сбрасываем экран успеха и очищаем форму
   useEffect(() => {

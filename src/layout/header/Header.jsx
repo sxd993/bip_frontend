@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import logo from '../../assets/logo.png';
-import shapka from '../../assets/shapka.svg';
 import { NavLink, useLocation } from 'react-router-dom';
 import NavBar from './NavBar';
 import MobileMenuButton from './MobileMenuButton';
@@ -79,7 +77,7 @@ const Header = () => {
             {/* Логотип */}
             <div className="flex-shrink-0">
               <NavLink to="/" className="flex items-center">
-                <img src={logo} alt="Logo" className="h-12 w-auto" />
+                <img src='https://s3.twcstorage.ru/d90a9000-bip/logo/logo.avif' alt="Logo" className="h-12 w-auto" />
               </NavLink>
             </div>
             
@@ -102,7 +100,7 @@ const Header = () => {
       
       {showWelcomeImage && location.pathname === '/' && !isMobile && (
         <div className="relative h-screen bg-gradient-to-r from-gray-900 to-gray-700 overflow-hidden">
-          <img src={shapka} alt="Welcome Banner" className="w-full h-full object-cover opacity-80" />
+          <img src='https://s3.twcstorage.ru/d90a9000-bip/shapka/shapka.svg' alt="Welcome Banner" className="w-full h-full object-cover opacity-80" />
         </div>
       )}
     </>

@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Layout
-import Header from './ui/Header/Header';
-import Footer from './ui/Footer/Footer';
+import Header from './layout/header/Header';
+import Footer from './layout/footer/Footer';
 
 // Страницы
 import { Home } from './pages/Home'
@@ -13,12 +13,10 @@ import ServicesPrivate from './pages/ServicesPrivate';
 import ServicesBusiness from './pages/ServicesBusiness';
 import UnderDevelopment from './pages/UnderDevelopment';
 
-// Утилиты
-import { ProtectedRoute } from './utils/ProtectedRoute';
-
+// Авторизация
+import { AuthGuard } from './shared/lib/auth/AuthGuard';
 
 const App = () => {
-
   return (
     <div className="min-h-screen bg-white text-gray-800">
       <Header />
@@ -40,9 +38,9 @@ const App = () => {
           <Route
             path="/personal-account"
             element={
-              <ProtectedRoute>
+              <AuthGuard>
                 <Account />
-              </ProtectedRoute>
+              </AuthGuard>
             }
           />
         </Routes>
