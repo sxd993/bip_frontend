@@ -1,16 +1,15 @@
-// src/features/deals/components/CreateAppealModal.jsx
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useCreateAppeal, useAppealCategories } from '../hooks/useAppeals';
+import { useAppealCategories } from '../hooks/useAppeals';
+import { createAppealApi } from '../api/dealsApi';
 import { Modal } from '../../../shared/ui/Modal';
 import { useFileUpload } from '../../../shared/hooks/useFileUpload';
+import { useApiMutation } from '../../../shared/hooks/useApiMutation';
 import FileUploadSection from '../../../shared/components/FileUploadSection';
 import SuccessScreen from '../../../shared/components/SuccessScreen';
 
 const CreateAppealModal = ({ isOpen, onClose }) => {
-  const [isSuccess, setIsSuccess] = useState(false);
   const { data: categories, isLoading: categoriesLoading } = useAppealCategories();
-  const createAppeal = useCreateAppeal();
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
@@ -29,6 +28,16 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     getBase64Files
   } = useFileUpload();
 
+  // Используем общий хук для API мутаций
+  const createAppealMutation = useApiMutation(createAppealApi, {
+    successMessage: 'Обращение успешно создано!',
+    errorMessage: 'Ошибка при создании обращения',
+    invalidateQueries: [['appeals']], // Обновляем список обращений
+    modalOptions: {
+      onSuccessTimeout: 2000
+    }
+  });
+
   const onSubmit = async (data) => {
     if (!data.title.trim() || !data.comment.trim() || !data.category_id) {
       return;
@@ -37,31 +46,31 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     try {
       const base64Files = await getBase64Files();
       
-      await createAppeal.mutateAsync({
+      const result = await createAppealMutation.executeAsync({
         category_id: data.category_id,
         title: data.title,
         comment: data.comment,
         files: base64Files
       });
 
-      setIsSuccess(true);
-      reset();
-      clearFiles();
+      if (result.success) {
+        reset();
+        clearFiles();
+      }
     } catch (error) {
       console.error('Ошибка создания обращения:', error);
-      alert('Ошибка при создании обращения');
     }
   };
 
-  // При открытии модалки сбрасываем экран успеха
+  // При открытии модалки сбрасываем состояния
   useEffect(() => {
     if (isOpen) {
-      setIsSuccess(false);
+      createAppealMutation.reset();
     }
   }, [isOpen]);
 
   const handleClose = () => {
-    setIsSuccess(false);
+    createAppealMutation.reset();
     reset();
     clearFiles();
     onClose();
@@ -69,13 +78,25 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Создать обращение">
-      {isSuccess ? (
+      {createAppealMutation.isSuccess ? (
         <SuccessScreen 
           title="Обращение создано"
           description="Ваше обращение успешно создано и будет обработано в ближайшее время."
         />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="px-4 py-4 space-y-4">
+          {/* Отображение ошибок */}
+          {createAppealMutation.isError && (
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-2">
+              <div className="flex items-center">
+                <svg className="w-4 h-4 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-red-700 text-sm">{createAppealMutation.errorMessage}</p>
+              </div>
+            </div>
+          )}
+
           {/* Категория */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -149,10 +170,10 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             </button>
             <button
               type="submit"
-              disabled={createAppeal.isPending}
+              disabled={createAppealMutation.isLoading}
               className="flex-1 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl transition-colors duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {createAppeal.isPending ? 'Создание...' : 'Создать обращение'}
+              {createAppealMutation.isLoading ? 'Создание...' : 'Создать обращение'}
             </button>
           </div>
         </form>
