@@ -21,7 +21,7 @@ export const Account = () => {
   
 
   if (userLoading) {
-    return <Loading />;
+    return <Loading size="large" text="Загрузка данных пользователя..." className="min-h-screen" />;
   }
 
   if (error) {

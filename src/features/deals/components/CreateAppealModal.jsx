@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useAppealCategories } from '../hooks/useAppeals';
 import { createAppealApi } from '../api/dealsApi';
 import { Modal } from '../../../shared/ui/Modal';
+import { Loading } from '../../../shared/ui/Loading';
 import { useFileUpload } from '../../../shared/hooks/useFileUpload';
 import { useApiMutation } from '../../../shared/hooks/useApiMutation';
 import FileUploadSection from '../../../shared/components/FileUploadSection';
@@ -78,7 +79,9 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Создать обращение">
-      {createAppealMutation.isSuccess ? (
+      {categoriesLoading ? (
+        <Loading size="medium" text="Загрузка категорий..." className="py-8" />
+      ) : createAppealMutation.isSuccess ? (
         <SuccessScreen 
           title="Обращение создано"
           description="Ваше обращение успешно создано и будет обработано в ближайшее время."

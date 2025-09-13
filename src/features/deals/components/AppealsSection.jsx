@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAppeals } from '../hooks/useAppeals';
 import AppealCard from './AppealCard';
 import CreateAppealModal from './CreateAppealModal';
+import { Loading } from '../../../shared/ui/Loading';
 
 const AppealsSection = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,8 +11,8 @@ const AppealsSection = ({ user }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+      <div className="py-12">
+        <Loading size="medium" text="Загрузка обращений..." className="min-h-[200px]" />
       </div>
     );
   }

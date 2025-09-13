@@ -1,23 +1,25 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 
 // Layout
 import Header from './layout/header/Header';
 import Footer from './layout/footer/Footer';
 
-// Страницы
-import { Home } from './pages/Home'
-import { Account } from './pages/Account';
-import { Contacts } from './pages/Contacts';
-import { Auth } from './pages/Auth';
-import ServicesPrivate from './pages/ServicesPrivate';
-import ServicesBusiness from './pages/ServicesBusiness';
-import UnderDevelopment from './pages/UnderDevelopment';
+// Компоненты
+import ScrollToTop from './shared/components/ScrollToTop';
+import { Loading } from './shared/ui/Loading';
 
 // Авторизация
 import { AuthGuard } from './shared/lib/auth/AuthGuard';
 
-// Компоненты
-import ScrollToTop from './shared/components/ScrollToTop';
+// Lazy loading для страниц
+const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
+const Account = lazy(() => import('./pages/Account').then(module => ({ default: module.Account })));
+const Contacts = lazy(() => import('./pages/Contacts').then(module => ({ default: module.Contacts })));
+const Auth = lazy(() => import('./pages/Auth').then(module => ({ default: module.Auth })));
+const ServicesPrivate = lazy(() => import('./pages/ServicesPrivate'));
+const ServicesBusiness = lazy(() => import('./pages/ServicesBusiness'));
+const UnderDevelopment = lazy(() => import('./pages/UnderDevelopment'));
 
 const App = () => {
   return (
@@ -25,29 +27,31 @@ const App = () => {
       <ScrollToTop />
       <Header />
       <main className="flex-1 pt-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
-          <Route path="/auth/:stage" element={<Auth />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
-          <Route path="/ServicesBusiness" element={<ServicesBusiness />} />
-          <Route path="/press-center" element={<UnderDevelopment />} />
-          <Route path="/press-center/news" element={<UnderDevelopment />} />
-          <Route path="/press-center/publications" element={<UnderDevelopment />} />
-          <Route path="/calculator" element={<UnderDevelopment />} />
-          <Route path="/certificate-verification" element={<UnderDevelopment />} />
-          <Route path="/certification-of-evidence" element={<UnderDevelopment />} />
-          <Route path="/about" element={<UnderDevelopment />} />
-          <Route
-            path="/personal-account"
-            element={
-              <AuthGuard>
-                <Account />
-              </AuthGuard>
-            }
-          />
-        </Routes>
+        <Suspense fallback={<Loading size="large" text="Загрузка страницы..." className="min-h-screen" />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
+            <Route path="/auth/:stage" element={<Auth />} />
+            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
+            <Route path="/ServicesBusiness" element={<ServicesBusiness />} />
+            <Route path="/press-center" element={<UnderDevelopment />} />
+            <Route path="/press-center/news" element={<UnderDevelopment />} />
+            <Route path="/press-center/publications" element={<UnderDevelopment />} />
+            <Route path="/calculator" element={<UnderDevelopment />} />
+            <Route path="/certificate-verification" element={<UnderDevelopment />} />
+            <Route path="/certification-of-evidence" element={<UnderDevelopment />} />
+            <Route path="/about" element={<UnderDevelopment />} />
+            <Route
+              path="/personal-account"
+              element={
+                <AuthGuard>
+                  <Account />
+                </AuthGuard>
+              }
+            />
+          </Routes>
+        </Suspense>
       </main>
       <Footer />
     </div>

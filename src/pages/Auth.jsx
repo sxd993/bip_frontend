@@ -16,7 +16,7 @@ export const Auth = () => {
         }
     }, [isLoading, user, navigate]);
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <Loading size="large" text="Проверка авторизации..." className="min-h-screen" />;
 
     // ошибка загрузки (кроме 401)  
     if (error) return <div>Ошибка загрузки данных</div>;

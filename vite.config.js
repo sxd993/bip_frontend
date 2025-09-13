@@ -8,4 +8,18 @@ export default defineConfig({
   server: {
     allowedHosts: ['https://sxd993-bip-backend-028d.twc1.net'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Разделяем vendor библиотеки
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          query: ['@tanstack/react-query'],
+          ui: ['embla-carousel-react'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000, // Увеличиваем лимит предупреждения
+  },
 })
