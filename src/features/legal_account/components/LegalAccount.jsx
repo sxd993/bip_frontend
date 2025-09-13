@@ -3,7 +3,6 @@ import AppealsSection from '../../deals/components/AppealsSection';
 
 export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompany, isLoadingEmployees }) => {
     const [activeSection, setActiveSection] = useState('employee');
-    const [isOpenEmployers, setIsOpenEmployers] = useState(false);
     const [showToken, setShowToken] = useState(false);
     const [copiedToken, setCopiedToken] = useState(false);
 
@@ -26,10 +25,10 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                 
                 <div className="bg-white border-2 border-red-200 rounded-3xl overflow-hidden mb-8">
                     {/* Вкладки */}
-                    <div className="flex border-b-2 border-red-200">
+                    <div className="flex border-b-2 border-red-200 overflow-x-auto">
                         <button
                             type="button"
-                            className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
+                            className={`flex-1 px-3 py-3 font-medium text-sm ${
                                 activeSection === 'employee'
                                     ? 'bg-red-500 text-white border-b-2 border-red-500'
                                     : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
@@ -40,7 +39,18 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
+                            className={`flex-1 px-3 py-3 font-medium text-sm ${
+                                activeSection === 'appeals'
+                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                            }`}
+                            onClick={() => setActiveSection('appeals')}
+                        >
+                            Обращения
+                        </button>
+                        <button
+                            type="button"
+                            className={`flex-1 px-3 py-3 font-medium text-sm ${
                                 activeSection === 'company'
                                     ? 'bg-red-500 text-white border-b-2 border-red-500'
                                     : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
@@ -52,27 +62,16 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                         {user.role === 'Руководитель' && (
                             <button
                                 type="button"
-                                className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
+                                className={`flex-1 px-3 py-3 font-medium text-sm ${
                                     activeSection === 'employees'
                                         ? 'bg-red-500 text-white border-b-2 border-red-500'
                                         : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                                 }`}
                                 onClick={() => setActiveSection('employees')}
                             >
-                                Сотрудники
+                                Управление
                             </button>
                         )}
-                        <button
-                            type="button"
-                            className={`flex-1 px-4 py-4 font-medium transition-all duration-300 text-sm ${
-                                activeSection === 'appeals'
-                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                            }`}
-                            onClick={() => setActiveSection('appeals')}
-                        >
-                            Обращения
-                        </button>
                     </div>
 
                     {/* Содержимое вкладок */}
@@ -108,6 +107,14 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                                         <span className="text-lg text-gray-800">{user.email}</span>
                                     </div>
                                 </div>
+                            </div>
+                        )}
+
+                        {activeSection === 'appeals' && (
+                            <div>
+                                <div className="text-center mb-8">
+                                </div>
+                                <AppealsSection user={user} />
                             </div>
                         )}
 
@@ -189,59 +196,37 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                                     </div>
                                 </div>
                                 
-                                <button
-                                    className="w-full flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 rounded-2xl transition-colors duration-300 border-2 border-red-200 mb-6"
-                                    onClick={() => setIsOpenEmployers((prev) => !prev)}
-                                >
-                                    <span className="text-lg font-medium text-gray-800">Список сотрудников</span>
-                                    <span className="text-red-600">{isOpenEmployers ? '▲' : '▼'}</span>
-                                </button>
 
-                                {isOpenEmployers && (
+                                {isLoadingEmployees ? (
+                                    <div className="text-gray-600 text-center py-8">Загрузка списка сотрудников...</div>
+                                ) : employeesData?.employees ? (
                                     <div>
-                                        {isLoadingEmployees ? (
-                                            <div className="text-gray-600 text-center py-8">Загрузка списка сотрудников...</div>
-                                        ) : employeesData?.employees ? (
-                                            <div>
-                                                <div className="mb-6">
-                                                    <h3 className="text-xl font-semibold text-gray-800">Всего сотрудников: {employeesData.total_count}</h3>
+                                        <div className="mb-6">
+                                            <h4 className="text-lg font-medium text-gray-700">Всего сотрудников: {employeesData.total_count}</h4>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {employeesData.employees.map((employee) => (
+                                                <div key={employee.id} className="bg-red-50 p-4 rounded-2xl border-2 border-red-200">
+                                                    <div className="font-semibold text-gray-800 mb-2">
+                                                        {employee.full_name}
+                                                    </div>
+                                                    <div className="space-y-1 mb-3">
+                                                        <span className="inline-block bg-red-200 text-red-800 text-xs px-2 py-1 rounded-full">{employee.role}</span>
+                                                        {employee.position && (
+                                                            <span className="block text-sm text-gray-600">{employee.position}</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="text-sm text-gray-600 space-y-1">
+                                                        <div>{employee.phone}</div>
+                                                        <div>{employee.email}</div>
+                                                    </div>
                                                 </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
-                                                    {employeesData.employees.map((employee) => (
-                                                        <div key={employee.id} className="bg-red-50 p-4 rounded-2xl border-2 border-red-200">
-                                                            <div className="font-semibold text-gray-800 mb-2">
-                                                                {employee.full_name}
-                                                            </div>
-                                                            <div className="space-y-1 mb-3">
-                                                                <span className="inline-block bg-red-200 text-red-800 text-xs px-2 py-1 rounded-full">{employee.role}</span>
-                                                                {employee.position && (
-                                                                    <span className="block text-sm text-gray-600">{employee.position}</span>
-                                                                )}
-                                                            </div>
-                                                            <div className="text-sm text-gray-600 space-y-1">
-                                                                <div>{employee.phone}</div>
-                                                                <div>{employee.email}</div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="text-gray-600 text-center py-8">Нет сотрудников</div>
-                                        )}
+                                            ))}
+                                        </div>
                                     </div>
+                                ) : (
+                                    <div className="text-gray-600 text-center py-8">Нет сотрудников</div>
                                 )}
-                            </div>
-                        )}
-
-                        {activeSection === 'appeals' && (
-                            <div>
-                                <div className="text-center mb-8">
-                                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
-                                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Обращения</h2>
-                                    </div>
-                                </div>
-                                <AppealsSection user={user} />
                             </div>
                         )}
                     </div>

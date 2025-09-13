@@ -157,13 +157,13 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      <button 
-        type="submit" 
-        disabled={registerMutation.isLoading}
-        className="w-full flex justify-center py-4 px-8 border border-transparent rounded-xl shadow-sm text-lg font-semibold text-white bg-red-400 hover:bg-red-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-      >
-        {registerMutation.isLoading ? 'Регистрация...' : 'Присоединиться к компании'}
-      </button>
+        <button
+          type="submit" 
+          disabled={registerMutation.isLoading}
+          className="w-full max-w-xs mx-auto flex justify-center py-2 px-4 md:py-3 md:px-6 border border-transparent rounded-3xl text-sm md:text-base font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
+        >
+          {registerMutation.isLoading ? 'Регистрация...' : 'Присоединиться к компании'}
+        </button>
     </form>
   );
 };

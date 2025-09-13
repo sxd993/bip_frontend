@@ -80,7 +80,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
         
         <button
           type="submit"
-          className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-8 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full max-w-xs mx-auto flex justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
           disabled={loginMutation.isLoading}
         >
           {loginMutation.isLoading ? 'Вход...' : 'Войти'}
@@ -90,9 +90,10 @@ const Login = ({ currentStage, setCurrentStage }) => {
           <button
             type="button"
             onClick={() => setCurrentStage('register')}
-            className="text-red-600 hover:text-red-700 font-medium transition-colors duration-200"
+            className="font-medium transition-colors duration-200"
           >
-            Нет аккаунта? Зарегистрироваться
+            <span className="text-gray-600">Нет аккаунта? </span>
+            <span className="text-red-600 hover:text-red-700">Зарегистрироваться</span>
           </button>
         </div>
       </form>

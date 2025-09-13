@@ -21,10 +21,10 @@ export const PhysicalAccount = ({ user, isLoading }) => {
                 
                 <div className="bg-white border-2 border-red-200 rounded-3xl overflow-hidden">
                     {/* Вкладки */}
-                    <div className="flex border-b-2 border-red-200">
+                    <div className="flex border-b-2 border-red-200 overflow-x-auto">
                         <button
                             type="button"
-                            className={`flex-1 px-6 py-4 font-medium transition-all duration-300 ${
+                            className={`flex-1 px-4 py-3 text-sm font-medium ${
                                 activeSection === 'personal'
                                     ? 'bg-red-500 text-white border-b-2 border-red-500'
                                     : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
@@ -35,7 +35,7 @@ export const PhysicalAccount = ({ user, isLoading }) => {
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 px-6 py-4 font-medium transition-all duration-300 ${
+                            className={`flex-1 px-4 py-3 text-sm font-medium ${
                                 activeSection === 'appeals'
                                     ? 'bg-red-500 text-white border-b-2 border-red-500'
                                     : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
@@ -71,13 +71,10 @@ export const PhysicalAccount = ({ user, isLoading }) => {
                                 </div>
                             </div>
                         )}
-                        
+
                         {activeSection === 'appeals' && (
                             <div>
                                 <div className="text-center mb-8">
-                                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
-                                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Обращения</h2>
-                                    </div>
                                 </div>
                                 <AppealsSection user={user} />
                             </div>

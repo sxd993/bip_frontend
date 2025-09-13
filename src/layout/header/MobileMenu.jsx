@@ -1,7 +1,29 @@
 import { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { logoutApi } from '../../features/auth/api/loginApi';
+import { useUser } from '../../shared/hooks/useUser';
 
 const MobileMenu = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { user } = useUser();
+
+  const mutation = useMutation({
+    mutationFn: logoutApi,
+    onSuccess: () => {
+      queryClient.setQueryData(['user'], null);
+      queryClient.invalidateQueries(['user']);
+      navigate('/auth/login');
+      onClose(); // Закрываем меню после выхода
+    },
+  });
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    mutation.mutate();
+  };
+
   // Блокируем скролл на body когда меню открыто
   useEffect(() => {
     if (isOpen) {
@@ -40,6 +62,16 @@ const MobileMenu = ({ isOpen, onClose }) => {
         
         <div className="flex-1 py-6 px-6 flex flex-col justify-center items-center space-y-8">
           <NavLink
+            to="/"
+            onClick={onClose}
+            className="text-gray-900 hover:text-red-600 font-medium transition-colors duration-200 text-2xl"
+          >
+            Главная
+          </NavLink>
+          
+          <div className="w-16 h-0.5 bg-red-500"></div>
+          
+          <NavLink
             to="/press-center"
             onClick={onClose}
             className="text-gray-900 hover:text-red-600 font-medium transition-colors duration-200 text-2xl"
@@ -66,6 +98,19 @@ const MobileMenu = ({ isOpen, onClose }) => {
           >
             Личный кабинет
           </NavLink>
+
+          {/* Кнопка выхода для авторизованных пользователей */}
+          {user && (
+            <>
+              <div className="w-16 h-0.5 bg-red-500"></div>
+              <button 
+                onClick={handleLogout}
+                className="text-gray-900 hover:text-red-600 font-medium transition-colors duration-200 text-2xl"
+              >
+                Выйти
+              </button>
+            </>
+          )}
         </div>
         
         <div className="p-6 border-t border-gray-200 text-center">
