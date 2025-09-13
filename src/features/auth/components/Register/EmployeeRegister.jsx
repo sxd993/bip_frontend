@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { registerEmployeeApi } from '../../api/registerApi';
 import { useApiMutation } from '../../../../shared/hooks/useApiMutation';
 import { validationRules } from '../../../../shared/utils/validators';
-import { normalizePhoneForServer } from '../../utils/phoneUtils';
+import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
 import { Loading } from '../../../../shared/ui/Loading';
 

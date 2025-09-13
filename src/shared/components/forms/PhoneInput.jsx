@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { formatPhoneForDisplay } from '../../utils/formatters';
+import { handlePhoneInput, handlePhoneKeyDown } from '../../utils/formatters';
 
 const PhoneInput = forwardRef(({ 
   value = '+7 ',
@@ -8,35 +8,11 @@ const PhoneInput = forwardRef(({
   error,
   ...props 
 }, ref) => {
-  const handlePhoneInput = (e) => {
-    let raw = e.target.value.replace(/\D/g, '');
-
-    if (raw.length === 0) {
-      setValue('phone', '+7 ');
-      return;
-    }
-
-    if (raw.startsWith('8')) {
-      raw = '7' + raw.slice(1);
-    } else if (raw.length === 10 && !raw.startsWith('7')) {
-      raw = '7' + raw;
-    }
-
-    if (raw.length > 11) {
-      raw = raw.slice(0, 11);
-    }
-
-    const displayValue = formatPhoneForDisplay(raw);
-    setValue('phone', displayValue);
+  const onPhoneChange = (e) => {
+    handlePhoneInput(e, setValue);
     
     if (onChange) {
       onChange(e);
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.target.selectionStart <= 3 && (e.key === 'Backspace' || e.key === 'Delete')) {
-      e.preventDefault();
     }
   };
 
@@ -48,8 +24,8 @@ const PhoneInput = forwardRef(({
       ref={ref}
       type="tel"
       value={value}
-      onChange={handlePhoneInput}
-      onKeyDown={handleKeyDown}
+      onChange={onPhoneChange}
+      onKeyDown={handlePhoneKeyDown}
       className={`${baseClasses} ${errorClasses}`}
       {...props}
     />

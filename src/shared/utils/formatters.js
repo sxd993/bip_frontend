@@ -53,3 +53,44 @@ export const formatDate = (dateString) => {
     
     return formatted;
   };
+  
+  export const normalizePhoneForServer = (phone) => {
+    const digitsOnly = phone.replace(/\D/g, '');
+    let normalizedPhone = digitsOnly;
+  
+    if (digitsOnly.length === 10) {
+      normalizedPhone = '7' + digitsOnly;
+    } else if (digitsOnly.startsWith('8')) {
+      normalizedPhone = '7' + digitsOnly.slice(1);
+    }
+  
+    return normalizedPhone;
+  };
+  
+  export const handlePhoneInput = (e, setValue) => {
+    let raw = e.target.value.replace(/\D/g, '');
+  
+    if (raw.length === 0) {
+      setValue('phone', '+7 ');
+      return;
+    }
+  
+    if (raw.startsWith('8')) {
+      raw = '7' + raw.slice(1);
+    } else if (raw.length === 10 && !raw.startsWith('7')) {
+      raw = '7' + raw;
+    }
+  
+    if (raw.length > 11) {
+      raw = raw.slice(0, 11);
+    }
+  
+    const displayValue = formatPhoneForDisplay(raw);
+    setValue('phone', displayValue);
+  };
+  
+  export const handlePhoneKeyDown = (e) => {
+    if (e.target.selectionStart <= 3 && (e.key === 'Backspace' || e.key === 'Delete')) {
+      e.preventDefault();
+    }
+  };
