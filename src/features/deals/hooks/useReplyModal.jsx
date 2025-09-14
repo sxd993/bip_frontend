@@ -1,101 +1,101 @@
-import { useState, useEffect } from 'react';
-import { getAppealDetailsApi, sendReplyApi } from '../api/dealsApi';
-import { MESSAGE_CONSTRAINTS } from '../constants';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getAppealDetailsApi, sendReplyApi, getDealFilesApi, getLatestDealFilesApi } from '../api/dealsApi';
 
 export const useReplyModal = (appealId) => {
   const [message, setMessage] = useState('');
-  const [appealMessage, setAppealMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const queryClient = useQueryClient();
+  
+  const normalizedAppealId = appealId?.toString();
+  const isValidAppealId = Boolean(normalizedAppealId && normalizedAppealId !== 'undefined' && normalizedAppealId !== 'null');
 
-  const loadAppealData = async () => {
-    if (!appealId) return;
+  // Загрузка деталей обращения
+  const appealDetailsQuery = useQuery({
+    queryKey: ['appealDetails', normalizedAppealId],
+    queryFn: () => getAppealDetailsApi(normalizedAppealId),
+    enabled: isValidAppealId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 1
+  });
 
-    try {
-      setIsLoading(true);
-      setError(null);
-      
-      const appealDetails = await getAppealDetailsApi(appealId);
-      setAppealMessage(appealDetails.message || '');
-    } catch (error) {
-      console.error('Ошибка загрузки данных обращения:', error);
-      setAppealMessage('');
-      setError('Ошибка загрузки данных обращения');
-    } finally {
-      setIsLoading(false);
+  // Загрузка файлов сделки  
+  const dealFilesQuery = useQuery({
+    queryKey: ['dealFiles', normalizedAppealId, true],
+    queryFn: async () => {
+      const response = await getLatestDealFilesApi(normalizedAppealId);
+      return response?.files || [];
+    },
+    enabled: isValidAppealId,
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+    retry: 1
+  });
+
+  // Отправка ответа
+  const sendReplyMutation = useMutation({
+    mutationFn: ({ message, files }) => sendReplyApi(normalizedAppealId, message, files),
+    onSuccess: () => {
+      // Инвалидируем все связанные запросы
+      queryClient.invalidateQueries(['appeals']);
+      queryClient.invalidateQueries(['dealFiles', normalizedAppealId]);
+      queryClient.invalidateQueries(['appealDetails', normalizedAppealId]);
     }
-  };
+  });
 
-  const validateMessage = () => {
+  // Обработчики
+  const handleSubmit = async (attachedFiles) => {
     if (!message.trim()) {
-      setError('Пожалуйста, введите сообщение');
-      return false;
+      throw new Error('Введите сообщение');
     }
 
-    if (message.length > MESSAGE_CONSTRAINTS.MAX_LENGTH) {
-      setError(`Сообщение не должно превышать ${MESSAGE_CONSTRAINTS.MAX_LENGTH} символов`);
-      return false;
+    if (message.length > 1500) {
+      throw new Error('Сообщение слишком длинное (макс. 1500 символов)');
     }
-
-    setError(null);
-    return true;
-  };
-
-  const submitReply = async (base64Files) => {
-    if (!validateMessage()) return false;
 
     try {
-      setIsLoading(true);
-      setError(null);
-      
-      const response = await sendReplyApi(appealId, message.trim(), base64Files);
-      
-      if (response.success) {
-        setIsSuccess(true);
-        return true;
-      } else {
-        setError('Ошибка отправки ответа');
-        return false;
-      }
+      await sendReplyMutation.mutateAsync({
+        message: message.trim(),
+        files: attachedFiles
+      });
+      return true;
     } catch (error) {
-      console.error('Ошибка отправки ответа:', error);
-      setError('Ошибка отправки ответа. Попробуйте еще раз.');
-      return false;
-    } finally {
-      setIsLoading(false);
+      throw error;
     }
   };
 
   const reset = () => {
     setMessage('');
-    setAppealMessage('');
-    setIsSuccess(false);
-    setError(null);
-    setIsLoading(false);
+    sendReplyMutation.reset();
   };
 
-  useEffect(() => {
-    if (appealId) {
-      setAppealMessage('');
-      setError(null);
-      setIsSuccess(false);
-      
-      loadAppealData();
-    } else {
-      reset();
-    }
-  }, [appealId]);
-
+  // Объединенное состояние загрузки
+  const isLoading = appealDetailsQuery.isLoading || dealFilesQuery.isLoading || sendReplyMutation.isPending;
+  
+  // Объединенные ошибки
+  const error = appealDetailsQuery.error || dealFilesQuery.error || sendReplyMutation.error;
+  
   return {
+    // Данные
+    appealMessage: appealDetailsQuery.data?.message,
+    files: dealFilesQuery.data || [],
+    
+    // Состояния
+    isLoading,
+    isSuccess: sendReplyMutation.isSuccess,
+    error,
+    
+    // UI состояние
     message,
     setMessage,
-    appealMessage,
-    isLoading,
-    isSuccess,
-    error,
-    validateMessage,
-    submitReply,
-    reset
+    
+    // Действия
+    handleSubmit,
+    reset,
+    
+    // Дополнительно для более тонкого контроля
+    isSubmitting: sendReplyMutation.isPending,
+    isLoadingDetails: appealDetailsQuery.isLoading,
+    isLoadingFiles: dealFilesQuery.isLoading
   };
 };

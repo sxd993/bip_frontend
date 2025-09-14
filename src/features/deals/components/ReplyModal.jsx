@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useDealFiles } from '../hooks/useDealFiles';
 import { useReplyModal } from '../hooks/useReplyModal';
 import { Modal } from '../../../shared/ui/Modal';
 import SuccessScreen from '../../../shared/components/SuccessScreen';
@@ -73,16 +71,25 @@ const FilesList = ({ files, isLoading }) => {
   );
 };
 
-export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
-  const { files: dealFiles, isLoading: filesLoading } = useDealFiles(appealId, true);
+export const ReplyModal = ({ isOpen, onClose, appealId }) => {
   const {
-    message,
-    setMessage,
+    // Данные
     appealMessage,
-    isLoading,
+    files,
+    
+    // Состояния
     isSuccess,
     error,
-    submitReply,
+    isLoadingDetails,
+    isLoadingFiles,
+    isSubmitting,
+    
+    // UI
+    message,
+    setMessage,
+    
+    // Действия  
+    handleSubmit,
     reset
   } = useReplyModal(appealId);
 
@@ -91,14 +98,12 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     onClose();
   };
 
-  const handleSubmit = async (message, attachedFiles) => {
+  const handleFormSubmit = async (message, attachedFiles) => {
     try {
-      const success = await submitReply(attachedFiles);
-      if (success) {
-        setTimeout(() => handleClose(), 2000);
-      }
+      await handleSubmit(attachedFiles);
+      setTimeout(() => handleClose(), 2000);
     } catch (error) {
-      console.error('Ошибка при отправке ответа:', error);
+      // Ошибка уже в состоянии хука
     }
   };
 
@@ -122,7 +127,9 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
               <svg className="w-4 h-4 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-red-700 text-sm">{error}</p>
+              <p className="text-red-700 text-sm">
+                {error?.response?.data?.message || error?.message || 'Произошла ошибка'}
+              </p>
             </div>
           </div>
         )}
@@ -130,7 +137,7 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
         <div>
           <h3 className="text-sm font-medium text-gray-700 mb-1">Информация по обращению:</h3>
           <div className="bg-red-50 p-2 rounded-2xl border border-red-100 min-h-[40px] flex items-center">
-            {isLoading ? (
+            {isLoadingDetails ? (
               <div className="flex items-center">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-500 mr-2"></div>
                 <p className="text-gray-600 text-sm">Загрузка информации...</p>
@@ -143,14 +150,14 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
           </div>
         </div>
 
-        <FilesList files={dealFiles} isLoading={filesLoading} />
+        <FilesList files={files} isLoading={isLoadingFiles} />
 
         <ReplyForm
           message={message}
           setMessage={setMessage}
-          onSubmit={handleSubmit}
+          onSubmit={handleFormSubmit}
           onCancel={handleClose}
-          isLoading={isLoading}
+          isLoading={isSubmitting}
         />
       </div>
     </Modal>
