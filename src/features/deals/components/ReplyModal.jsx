@@ -74,7 +74,7 @@ const FilesList = ({ files, isLoading }) => {
 };
 
 export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
-  const { files: dealFiles, isLoading: filesLoading, refetch: refetchFiles } = useDealFiles(appealId, true);
+  const { files: dealFiles, isLoading: filesLoading } = useDealFiles(appealId, true);
   const {
     message,
     setMessage,
@@ -85,12 +85,6 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     submitReply,
     reset
   } = useReplyModal(appealId);
-
-  useEffect(() => {
-    if (isOpen && appealId) {
-      refetchFiles();
-    }
-  }, [isOpen, appealId, refetchFiles]);
 
   const handleClose = () => {
     reset();
