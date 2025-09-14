@@ -1,162 +1,88 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-const serviceData = {
-  physical: {
-    title: 'Услуги для частных лиц',
-    services: [
-      {
-        id: 1,
-        position: 1,
-        name: 'Семейное право',
-        subServices: [
-          { id: 1, name: 'Развод', description: 'Юридическое сопровождение процедуры расторжения брака' },
-          { id: 2, name: 'Раздел имущества', description: 'Споры о разделе совместно нажитого имущества' },
-          { id: 3, name: 'Алименты', description: 'Взыскание и оспаривание алиментных обязательств' }
-        ]
-      },
-      {
-        id: 2,
-        position: 2,
-        name: 'Жилищное право',
-        subServices: [
-          { id: 4, name: 'Приватизация', description: 'Оформление приватизации жилых помещений' },
-          { id: 5, name: 'Выселение', description: 'Защита от незаконного выселения' }
-        ]
-      },
-      {
-        id: 3,
-        position: 3,
-        name: 'Наследственное право',
-        subServices: [
-          { id: 6, name: 'Вступление в наследство', description: 'Оформление наследственных прав' },
-          { id: 7, name: 'Споры о наследстве', description: 'Разрешение наследственных споров' }
-        ]
-      }
-    ]
-  }
-};
+import { Disclosure } from "@headlessui/react";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { motion, AnimatePresence } from "framer-motion";
+import { servicePrivateData } from "../shared/constants/service-private";
+import { useNavigate } from "react-router-dom";
 
 const ServicesPrivate = () => {
-  const [selectedService, setSelectedService] = useState(null);
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleServiceClick = (service) => {
-    if (selectedService?.id === service.id) {
-      setSelectedService(null);
-      setIsPanelOpen(false);
-    } else {
-      setSelectedService(service);
-      setIsPanelOpen(true);
-    }
-  };
-
   const handleConsultationClick = () => {
-    navigate('/personal-account');
+    navigate("/personal-account");
   };
 
   return (
     <div className="py-24 bg-white">
-      <div className="max-w-6xl mx-auto px-4 md:px-6">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">{serviceData.physical.title}</h1>
+      <div className="max-w-3xl mx-auto px-4 md:px-6">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+            {servicePrivateData.physical.title}
+          </h1>
           <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
-          <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">Защита ваших прав и интересов в различных жизненных ситуациях</p>
+          <p className="text-xl text-gray-600 font-light leading-relaxed">
+            Защита ваших прав и интересов в различных жизненных ситуациях
+          </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
-          {/* Services Menu */}
-          <div>
-            <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
-              <div className="text-center mb-10">
-                <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Выберите услугу</h2>
-                </div>
-              </div>
-              <div className="space-y-5">
-                {serviceData.physical.services
-                  .sort((a, b) => parseInt(a.position) - parseInt(b.position))
-                  .map((service) => (
-                    <button
-                      key={service.id}
-                      className={`w-full text-left p-4 border-2 rounded-2xl transition-all duration-300 group ${
-                        selectedService?.id === service.id
-                          ? 'border-red-300 bg-red-50'
-                          : 'border-gray-200 hover:border-red-300 hover:bg-red-50'
-                      }`}
-                      onClick={() => handleServiceClick(service)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                            selectedService?.id === service.id
-                              ? 'bg-red-500'
-                              : 'bg-red-400 group-hover:bg-red-500'
-                          }`}></div>
-                          <span className="text-gray-800 font-semibold text-base md:text-lg tracking-wide">{service.name}</span>
-                        </div>
-                        <span className={`text-red-400 transition-transform duration-200 ${
-                          selectedService?.id === service.id ? 'rotate-90' : ''
-                        }`}>
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </span>
-                      </div>
-                    </button>
-                  ))}
-              </div>
-            </div>
-          </div>
 
-          {/* Service Details Panel */}
-          <div className={`transition-all duration-300 ${
-            isPanelOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
-          }`}>
-            <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12 h-full">
-              {isPanelOpen && selectedService ? (
-                <div className="space-y-8">
-                  <div className="text-center mb-8">
-                    <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50 mb-4">
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{selectedService.name}</h3>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    {selectedService.subServices.map((subService) => (
-                      <div key={subService.id} className="border-l-4 border-red-400 pl-6 py-4">
-                        <h4 className="font-semibold text-gray-800 mb-3 text-lg">{subService.name}</h4>
-                        <p className="text-gray-600 leading-relaxed text-base">{subService.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="pt-6">
-                    <button 
-                      onClick={handleConsultationClick}
-                      className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-8 rounded-3xl transition-colors duration-300"
-                    >
-                      Получить консультацию
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center text-gray-500">
-                    <svg className="w-16 h-16 mx-auto mb-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <p className="text-lg">Выберите категорию услуг для просмотра деталей</p>
-                  </div>
+        <div className="space-y-6">
+          {servicePrivateData.physical.services.map((service) => (
+            <Disclosure key={service.id}>
+              {({ open }) => (
+                <div className="border-2 border-red-200 rounded-2xl overflow-hidden">
+                  {/* Заголовок услуги */}
+                  <Disclosure.Button className="flex w-full justify-between items-center px-6 py-4 text-left text-lg font-semibold text-gray-900 hover:bg-red-50 transition">
+                    <span>{service.name}</span>
+                    <ChevronRightIcon
+                      className={`h-6 w-6 text-red-400 transition-transform duration-300 ${open ? "rotate-90" : ""
+                        }`}
+                    />
+                  </Disclosure.Button>
+
+                  {/* Подуслуги с анимацией */}
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 bg-red-50/50">
+                          <div className="space-y-4 mt-4">
+                            {service.subServices.map((sub) => (
+                              <div
+                                key={sub.id}
+                                className="border-l-4 border-red-400 pl-4"
+                              >
+                                <h4 className="text-gray-800 font-semibold mb-1">
+                                  {sub.name}
+                                </h4>
+                                <p className="text-gray-600">{sub.description}</p>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="pt-6">
+                            <button
+                              onClick={handleConsultationClick}
+                              className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-2xl transition-colors duration-300"
+                            >
+                              Получить консультацию
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               )}
-            </div>
-          </div>
+            </Disclosure>
+          ))}
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default ServicesPrivate;
