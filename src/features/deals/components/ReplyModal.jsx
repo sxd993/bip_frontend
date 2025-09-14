@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDealFiles } from '../hooks/useDealFiles';
 import { useReplyModal } from '../hooks/useReplyModal';
 import { Modal } from '../../../shared/ui/Modal';
@@ -6,7 +7,6 @@ import ReplyForm from './ReplyForm';
 import { downloadFileApi } from '../api/dealsApi';
 import { formatFileSize } from '../../../shared/utils/formatters';
 
-// Компонент списка файлов
 const FilesList = ({ files, isLoading }) => {
   const downloadDocument = async (documentId, fileName) => {
     try {
@@ -73,9 +73,8 @@ const FilesList = ({ files, isLoading }) => {
   );
 };
 
-// Основной компонент ReplyModal
 export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
-  const { files: dealFiles, isLoading: filesLoading } = useDealFiles(appealId, true);
+  const { files: dealFiles, isLoading: filesLoading, refetch: refetchFiles } = useDealFiles(appealId, true);
   const {
     message,
     setMessage,
@@ -86,6 +85,12 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     submitReply,
     reset
   } = useReplyModal(appealId);
+
+  useEffect(() => {
+    if (isOpen && appealId) {
+      refetchFiles();
+    }
+  }, [isOpen, appealId, refetchFiles]);
 
   const handleClose = () => {
     reset();
@@ -103,7 +108,6 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     }
   };
 
-  // Экран успеха
   if (isSuccess) {
     return (
       <Modal isOpen={isOpen} onClose={handleClose} title="Ответ отправлен" size="sm">
@@ -115,11 +119,9 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
     );
   }
 
-  // Основной интерфейс
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Ответ на обращение" size="lg">
       <div className="px-4 py-3 space-y-3">
-        {/* Отображение ошибок */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-2">
             <div className="flex items-center">
@@ -131,20 +133,24 @@ export const ReplyModal = ({ isOpen, onClose, appealId, appealData }) => {
           </div>
         )}
 
-        {/* Информация по обращению */}
         <div>
           <h3 className="text-sm font-medium text-gray-700 mb-1">Информация по обращению:</h3>
           <div className="bg-red-50 p-2 rounded-2xl border border-red-100 min-h-[40px] flex items-center">
-            <p className="text-gray-700 text-sm">
-              {isLoading ? 'Загрузка...' : (appealMessage || 'Информация недоступна')}
-            </p>
+            {isLoading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-500 mr-2"></div>
+                <p className="text-gray-600 text-sm">Загрузка информации...</p>
+              </div>
+            ) : (
+              <p className="text-gray-700 text-sm">
+                {appealMessage || 'Информация недоступна'}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Список документов */}
         <FilesList files={dealFiles} isLoading={filesLoading} />
 
-        {/* Форма ответа */}
         <ReplyForm
           message={message}
           setMessage={setMessage}

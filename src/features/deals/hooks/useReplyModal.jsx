@@ -14,11 +14,14 @@ export const useReplyModal = (appealId) => {
 
     try {
       setIsLoading(true);
+      setError(null);
+      
       const appealDetails = await getAppealDetailsApi(appealId);
       setAppealMessage(appealDetails.message || '');
     } catch (error) {
       console.error('Ошибка загрузки данных обращения:', error);
       setAppealMessage('');
+      setError('Ошибка загрузки данных обращения');
     } finally {
       setIsLoading(false);
     }
@@ -69,11 +72,18 @@ export const useReplyModal = (appealId) => {
     setAppealMessage('');
     setIsSuccess(false);
     setError(null);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     if (appealId) {
+      setAppealMessage('');
+      setError(null);
+      setIsSuccess(false);
+      
       loadAppealData();
+    } else {
+      reset();
     }
   }, [appealId]);
 
