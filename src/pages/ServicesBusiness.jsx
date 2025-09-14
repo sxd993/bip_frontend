@@ -2,8 +2,15 @@ import { Disclosure } from "@headlessui/react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 import { serviceBusinessData } from "../shared/constants/service-business";
+import { useNavigate } from "react-router-dom";
 
 const ServicesBusiness = () => {
+  const navigate = useNavigate();
+
+  const handleConsultationClick = () => {
+    navigate("/personal-account");
+  };
+
   return (
     <div className="py-24 bg-white">
       <div className="max-w-3xl mx-auto px-4 md:px-6">
@@ -54,6 +61,15 @@ const ServicesBusiness = () => {
                                 </p>
                               </div>
                             ))}
+                          </div>
+
+                          <div className="pt-6">
+                            <button
+                              onClick={handleConsultationClick}
+                              className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-2xl transition-colors duration-300"
+                            >
+                              Получить консультацию
+                            </button>
                           </div>
                         </div>
                       </motion.div>
