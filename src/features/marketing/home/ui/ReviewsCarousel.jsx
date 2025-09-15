@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, memo } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 
 const reviews = [
@@ -9,10 +9,32 @@ const reviews = [
   { text: "Профессионализм и ответственность на высшем уровне. Спасибо за качественную работу!", author: "Дмитрий Волков", company: "ИП 'КонсалтингПро'" },
 ]
 
+const ReviewsSlide = memo(function ReviewsSlide({ review, index }) {
+  return (
+    <div className="flex-[0_0_100%] min-w-0" key={index}>
+      <div className="mx-4">
+        <div className="bg-white border-2 border-red-200 p-8 md:p-12 text-center flex flex-col justify-center rounded-3xl min-h-[350px]">
+          <div className="mb-6">
+            <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6 italic font-light">"{review.text}"</p>
+          </div>
+          <div className="border-t-2 border-gray-100 pt-6 mt-auto">
+            <div className="font-semibold text-gray-800 text-lg md:text-xl">{review.author}</div>
+            <div className="text-gray-600 text-base md:text-lg mt-2">{review.company}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+})
+
 const ReviewsCarousel = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true })
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const [scrollSnaps, setScrollSnaps] = useState([])
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    draggable: false,
+    containScroll: 'trimSnaps',
+    skipSnaps: true,
+    duration: 20
+  })
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev()
@@ -22,26 +44,12 @@ const ReviewsCarousel = () => {
     if (emblaApi) emblaApi.scrollNext()
   }, [emblaApi])
 
-  const scrollTo = useCallback((index) => {
-    if (emblaApi) emblaApi.scrollTo(index)
-  }, [emblaApi])
-
-  const onInit = useCallback((emblaApi) => {
-    setScrollSnaps(emblaApi.scrollSnapList())
+  const preventInteraction = useCallback((event) => {
+    // Предотвращаем нативный скролл/свайпы
+    event.preventDefault()
+    event.stopPropagation()
   }, [])
 
-  const onSelect = useCallback((emblaApi) => {
-    setSelectedIndex(emblaApi.selectedScrollSnap())
-  }, [])
-
-  useEffect(() => {
-    if (!emblaApi) return
-
-    onInit(emblaApi)
-    onSelect(emblaApi)
-    emblaApi.on('reInit', onInit)
-    emblaApi.on('select', onSelect)
-  }, [emblaApi, onInit, onSelect])
 
   return (
     <div className="py-20 bg-white">
@@ -63,22 +71,17 @@ const ReviewsCarousel = () => {
             </svg>
           </button>
 
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex">
+          <div 
+            className="overflow-hidden" 
+            ref={emblaRef}
+            onTouchStart={preventInteraction}
+            onTouchMove={preventInteraction}
+            onPointerDown={preventInteraction}
+            onWheel={preventInteraction}
+          >
+            <div className="flex will-change-transform transform-gpu">
               {reviews.map((review, index) => (
-                <div className="flex-[0_0_100%] min-w-0" key={index}>
-                  <div className="mx-4">
-                    <div className="bg-white border-2 border-red-200 p-8 md:p-12 text-center flex flex-col justify-center rounded-3xl min-h-[350px]">
-                      <div className="mb-6">
-                        <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6 italic font-light">"{review.text}"</p>
-                      </div>
-                      <div className="border-t-2 border-gray-100 pt-6 mt-auto">
-                        <div className="font-semibold text-gray-800 text-lg md:text-xl">{review.author}</div>
-                        <div className="text-gray-600 text-base md:text-lg mt-2">{review.company}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ReviewsSlide review={review} index={index} key={index} />
               ))}
             </div>
           </div>
@@ -94,19 +97,7 @@ const ReviewsCarousel = () => {
           </button>
         </div>
 
-        <div className="flex justify-center mt-12 gap-3">
-          {scrollSnaps.map((_, index) => (
-            <button
-              key={index}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === selectedIndex 
-                  ? 'bg-red-400' 
-                  : 'bg-gray-300 hover:bg-gray-400'
-              }`}
-              onClick={() => scrollTo(index)}
-            />
-          ))}
-        </div>
+        {/* Индикаторы отключены: управление только стрелками */}
       </div>
     </div>
   )

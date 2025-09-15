@@ -8,8 +8,9 @@ export const Modal = ({
     title, 
     size = "md", 
     showCloseButton = true,
-    closeOnOverlayClick = true,
-    closeOnEscape = true,
+    // Закрытие только по крестику: отключаем кликом по оверлею и ESC
+    closeOnOverlayClick = false,
+    closeOnEscape = false,
     className = ""
 }) => {
     // Размеры модального окна
@@ -22,35 +23,21 @@ export const Modal = ({
     };
 
     useEffect(() => {
-        const handleEscape = (e) => {
-            if (e.key === 'Escape' && closeOnEscape) {
-                onClose();
-            }
-        };
-
+        // Блокируем прокрутку фона, отключаем обработчики ESC (закрытие только по крестику)
         if (isOpen) {
-            document.addEventListener('keydown', handleEscape);
             document.body.style.overflow = 'hidden';
         }
 
         return () => {
-            document.removeEventListener('keydown', handleEscape);
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen, onClose, closeOnEscape]);
+    }, [isOpen]);
 
     if (!isOpen) return null;
-
-    const handleOverlayClick = (e) => {
-        if (e.target === e.currentTarget && closeOnOverlayClick) {
-            onClose();
-        }
-    };
 
     return createPortal(
         <div 
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-300" 
-            onClick={handleOverlayClick}
         >
             <div className={`relative w-full ${sizeClasses[size]} mx-4 md:mx-0 bg-white rounded-3xl max-h-[95vh] overflow-y-auto animate-fadeIn shadow-2xl ${className}`}>
                 {title && (

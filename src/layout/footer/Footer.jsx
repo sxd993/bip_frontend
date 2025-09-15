@@ -67,7 +67,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-slate-600 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-4 md:gap-0">
             <Copyright />
             <SocialLinks />
           </div>
