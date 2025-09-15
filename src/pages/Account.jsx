@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '../shared/hooks/useUser';
 import { useCompanyData, useCompanyEmployees } from '../shared/hooks/useCompanyData';
-import { prefetchAppealCategories } from '../features/deals/hooks/useAppeals';
-import { LegalAccount } from '../features/legal_account/components/LegalAccount';
-import { PhysicalAccount } from '../features/physical_account/components/PhysicalAccount';
+import { prefetchAppealCategories } from '../features/deals/utils/prefetch';
+import { LegalAccount } from '../features/account/legal/components/LegalAccount';
+import { PhysicalAccount } from '../features/account/physical/components/PhysicalAccount';
 import { Loading } from '../shared/ui/Loading';
 
 export const Account = () => {
@@ -18,7 +18,7 @@ export const Account = () => {
     prefetchAppealCategories(queryClient);
   }, [queryClient]);
 
-  
+
 
   if (userLoading) {
     return <Loading size="large" text="Загрузка данных пользователя..." className="min-h-screen" />;

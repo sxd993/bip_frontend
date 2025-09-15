@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { registerLegalEntityApi } from '../../api/registerApi';
+import { registerLegalEntityApi } from '../../../../shared/api/auth/registerApi';
 import { useApiMutation } from '../../../../shared/hooks/useApiMutation';
 import { validationRules } from '../../../../shared/utils/validators';
 import { normalizePhoneForServer } from '../../../../shared/utils/formatters';

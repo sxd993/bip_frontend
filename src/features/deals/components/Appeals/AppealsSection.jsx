@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useAppeals } from '../hooks/useAppeals';
 import AppealCard from './AppealCard';
-import CreateAppealModal from './CreateAppealModal';
-import { Loading } from '../../../shared/ui/Loading';
+import CreateAppealModal from '../CreateAppeal/CreateAppealModal';
+import { useAppeals } from './useAppeals';
+import { Loading } from '../../../../shared/ui/Loading';
 
-const AppealsSection = ({ user }) => {
+const AppealsSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const { data: appeals, isLoading, error } = useAppeals();
 
   if (isLoading) {

@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { ReplyModal } from './ReplyModal';
+import { ReplyModal } from '../Reply/ReplyModal';
 
 // Локальная функция форматирования даты
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('ru-RU', {
     day: '2-digit',
-    month: '2-digit', 
+    month: '2-digit',
     year: 'numeric'
   }) + ' в ' + date.toLocaleTimeString('ru-RU', {
     hour: '2-digit',
@@ -16,7 +16,7 @@ const formatDate = (dateString) => {
 
 const AppealCard = ({ appeal }) => {
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
-  
+
   const getStatusColor = () => {
     const colorMap = {
       'green': 'bg-green-100 text-green-800',
@@ -47,7 +47,7 @@ const AppealCard = ({ appeal }) => {
             <span>{appeal.stage_name}</span>
           </div>
         </div>
-        
+
         {appeal?.info && (
           <div className="mt-2 flex flex-col">
             <div>Статус обращения: {appeal.info.status}</div>

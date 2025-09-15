@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AppealsSection from '../../deals/components/AppealsSection';
+import AppealsSection from '../../../deals/components/Appeals/AppealsSection';
 
 export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompany, isLoadingEmployees }) => {
     const [activeSection, setActiveSection] = useState('employee');
@@ -22,39 +22,36 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                     <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
                     <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">Управление компанией и сотрудниками</p>
                 </div>
-                
+
                 <div className="bg-white border-2 border-red-200 rounded-3xl overflow-hidden mb-8">
                     {/* Вкладки */}
                     <div className="flex border-b-2 border-red-200 overflow-x-auto">
                         <button
                             type="button"
-                            className={`flex-1 px-3 py-3 font-medium text-sm ${
-                                activeSection === 'employee'
-                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                            }`}
+                            className={`flex-1 px-3 py-3 font-medium text-sm ${activeSection === 'employee'
+                                ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                                }`}
                             onClick={() => setActiveSection('employee')}
                         >
                             Сотрудник
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 px-3 py-3 font-medium text-sm ${
-                                activeSection === 'appeals'
-                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                            }`}
+                            className={`flex-1 px-3 py-3 font-medium text-sm ${activeSection === 'appeals'
+                                ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                                }`}
                             onClick={() => setActiveSection('appeals')}
                         >
                             Обращения
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 px-3 py-3 font-medium text-sm ${
-                                activeSection === 'company'
-                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                            }`}
+                            className={`flex-1 px-3 py-3 font-medium text-sm ${activeSection === 'company'
+                                ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                                }`}
                             onClick={() => setActiveSection('company')}
                         >
                             Компания
@@ -62,11 +59,10 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                         {user.role === 'Руководитель' && (
                             <button
                                 type="button"
-                                className={`flex-1 px-3 py-3 font-medium text-sm ${
-                                    activeSection === 'employees'
-                                        ? 'bg-red-500 text-white border-b-2 border-red-500'
-                                        : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                                }`}
+                                className={`flex-1 px-3 py-3 font-medium text-sm ${activeSection === 'employees'
+                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                                    }`}
                                 onClick={() => setActiveSection('employees')}
                             >
                                 Управление
@@ -114,7 +110,7 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                             <div>
                                 <div className="text-center mb-8">
                                 </div>
-                                <AppealsSection user={user} />
+                                <AppealsSection />
                             </div>
                         )}
 
@@ -195,7 +191,7 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                                         <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Управление сотрудниками</h2>
                                     </div>
                                 </div>
-                                
+
 
                                 {isLoadingEmployees ? (
                                     <div className="text-gray-600 text-center py-8">Загрузка списка сотрудников...</div>

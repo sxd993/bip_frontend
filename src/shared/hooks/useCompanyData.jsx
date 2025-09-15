@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCompanyInfoApi, getCompanyEmployeesApi } from "../api/companyApi";
+import { getCompanyInfoApi, getCompanyEmployeesApi } from "../api/account/companyApi";
 import { useUser } from "../hooks/useUser";
 
 export const useCompanyData = () => {
     const { user } = useUser();
-    
+
     return useQuery({
         queryKey: ['companyData'],
         queryFn: getCompanyInfoApi,
@@ -16,7 +16,7 @@ export const useCompanyData = () => {
 
 export const useCompanyEmployees = () => {
     const { user } = useUser();
-    
+
     return useQuery({
         queryKey: ['companyEmployees'],
         queryFn: getCompanyEmployeesApi,

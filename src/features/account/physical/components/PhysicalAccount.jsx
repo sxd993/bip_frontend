@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import AppealsSection from '../../deals/components/AppealsSection';
-import { Loading } from '../../../shared/ui/Loading';
+import { Loading } from '../../../../shared/ui/Loading';
+import AppealsSection from '../../../deals/components/Appeals/AppealsSection';
 
 export const PhysicalAccount = ({ user, isLoading }) => {
     const [activeSection, setActiveSection] = useState('personal');
-    
+
     if (isLoading) {
         return <Loading />
     }
-    
+
 
     return (
         <div className="py-24 bg-white">
@@ -18,28 +18,26 @@ export const PhysicalAccount = ({ user, isLoading }) => {
                     <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
                     <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">Управление вашими данными и услугами</p>
                 </div>
-                
+
                 <div className="bg-white border-2 border-red-200 rounded-3xl overflow-hidden">
                     {/* Вкладки */}
                     <div className="flex border-b-2 border-red-200 overflow-x-auto">
                         <button
                             type="button"
-                            className={`flex-1 px-4 py-3 text-sm font-medium ${
-                                activeSection === 'personal'
-                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                            }`}
+                            className={`flex-1 px-4 py-3 text-sm font-medium ${activeSection === 'personal'
+                                ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                                }`}
                             onClick={() => setActiveSection('personal')}
                         >
                             Персональные данные
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 px-4 py-3 text-sm font-medium ${
-                                activeSection === 'appeals'
-                                    ? 'bg-red-500 text-white border-b-2 border-red-500'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                            }`}
+                            className={`flex-1 px-4 py-3 text-sm font-medium ${activeSection === 'appeals'
+                                ? 'bg-red-500 text-white border-b-2 border-red-500'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                                }`}
                             onClick={() => setActiveSection('appeals')}
                         >
                             Обращения
@@ -76,7 +74,7 @@ export const PhysicalAccount = ({ user, isLoading }) => {
                             <div>
                                 <div className="text-center mb-8">
                                 </div>
-                                <AppealsSection user={user} />
+                                <AppealsSection />
                             </div>
                         )}
                     </div>

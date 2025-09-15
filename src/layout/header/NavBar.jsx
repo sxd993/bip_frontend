@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logoutApi } from '../../features/auth/api/loginApi';
+import { logoutApi } from '../../shared/api/auth/loginApi';
 import { useUser } from '../../shared/hooks/useUser';
 
 const NavBar = () => {

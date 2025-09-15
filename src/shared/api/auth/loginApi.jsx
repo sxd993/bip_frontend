@@ -1,4 +1,4 @@
-import { client } from '../../../shared/api/client';
+import { client } from '../client';
 
 export const loginApi = async (data) => {
     const response = await client.post('/auth/login', data);

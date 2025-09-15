@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { registerPhysicalPersonApi } from '../../api/registerApi';
+import { registerPhysicalPersonApi } from '../../../../shared/api/auth/registerApi';
 import { useApiMutation } from '../../../../shared/hooks/useApiMutation';
 import { validationRules } from '../../../../shared/utils/validators';
 import { normalizePhoneForServer } from '../../../../shared/utils/formatters';

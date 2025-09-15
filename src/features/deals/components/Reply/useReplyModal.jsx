@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAppealDetailsApi, sendReplyApi } from '../api/replyApi';
+import { getAppealDetailsApi, sendReplyApi } from '../../../../shared/api/deals/replyApi';
 
 export const useReplyModal = (appealId) => {
   const [message, setMessage] = useState('');
   const queryClient = useQueryClient();
-  
+
   const normalizedAppealId = appealId?.toString();
   const isValidAppealId = Boolean(normalizedAppealId && normalizedAppealId !== 'undefined' && normalizedAppealId !== 'null');
 
-  // Один запрос для всех данных (теперь включает файлы)
   const appealDetailsQuery = useQuery({
     queryKey: ['appealDetails', normalizedAppealId],
     queryFn: () => getAppealDetailsApi(normalizedAppealId),
@@ -57,20 +56,20 @@ export const useReplyModal = (appealId) => {
     // Данные из объединенного запроса
     appealMessage: appealDetailsQuery.data?.message,
     files: appealDetailsQuery.data?.files || [],
-    
+
     // Состояния
     isLoading: appealDetailsQuery.isLoading,
     isSuccess: sendReplyMutation.isSuccess,
     error: appealDetailsQuery.error || sendReplyMutation.error,
-    
+
     // UI состояние
     message,
     setMessage,
-    
+
     // Действия
     handleSubmit,
     reset,
-    
+
     // Для совместимости с существующим кодом
     isSubmitting: sendReplyMutation.isPending,
     isLoadingDetails: appealDetailsQuery.isLoading,

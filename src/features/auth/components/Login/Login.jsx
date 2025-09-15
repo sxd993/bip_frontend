@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { loginApi } from '../../api/loginApi';
+import { loginApi } from '../../../../shared/api/auth/loginApi';
 import { useApiMutation } from '../../../../shared/hooks/useApiMutation';
 import { FormField, TextInput } from '../../../../shared/components/forms';
 

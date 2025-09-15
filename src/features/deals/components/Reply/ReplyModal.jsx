@@ -1,9 +1,9 @@
-import { useReplyModal } from '../hooks/useReplyModal';
-import { Modal } from '../../../shared/ui/Modal';
-import SuccessScreen from '../../../shared/components/SuccessScreen';
+import { useReplyModal } from './useReplyModal';
+import { Modal } from '../../../../shared/ui/Modal';
+import SuccessScreen from '../../../../shared/components/SuccessScreen';
 import ReplyForm from './ReplyForm';
-import { downloadFileApi } from '../api/replyApi';
-import { formatFileSize } from '../../../shared/utils/formatters';
+import { downloadFileApi } from '../../../../shared/api/deals/replyApi';
+import { formatFileSize } from '../../../../shared/utils/formatters';
 
 const FilesList = ({ files, isLoading }) => {
   const downloadDocument = async (documentId, fileName) => {
@@ -77,18 +77,18 @@ export const ReplyModal = ({ isOpen, onClose, appealId }) => {
     // Данные
     appealMessage,
     files,
-    
+
     // Состояния
     isSuccess,
     error,
     isLoadingDetails,
     isLoadingFiles,
     isSubmitting,
-    
+
     // UI
     message,
     setMessage,
-    
+
     // Действия  
     handleSubmit,
     reset
@@ -112,7 +112,7 @@ export const ReplyModal = ({ isOpen, onClose, appealId }) => {
   if (isSuccess) {
     return (
       <Modal isOpen={isOpen} onClose={handleClose} title="Ответ отправлен" size="sm">
-        <SuccessScreen 
+        <SuccessScreen
           title="Ответ отправлен!"
           description="Ваш ответ успешно отправлен и будет обработан в ближайшее время."
         />
