@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAppealDetailsApi, sendReplyApi, getDealFilesApi, getLatestDealFilesApi } from '../api/dealsApi';
+import { getAppealDetailsApi, sendReplyApi } from '../api/replyApi';
 
 export const useReplyModal = (appealId) => {
   const [message, setMessage] = useState('');
@@ -9,7 +9,7 @@ export const useReplyModal = (appealId) => {
   const normalizedAppealId = appealId?.toString();
   const isValidAppealId = Boolean(normalizedAppealId && normalizedAppealId !== 'undefined' && normalizedAppealId !== 'null');
 
-  // Загрузка деталей обращения
+  // Один запрос для всех данных (теперь включает файлы)
   const appealDetailsQuery = useQuery({
     queryKey: ['appealDetails', normalizedAppealId],
     queryFn: () => getAppealDetailsApi(normalizedAppealId),
@@ -19,31 +19,15 @@ export const useReplyModal = (appealId) => {
     retry: 1
   });
 
-  // Загрузка файлов сделки  
-  const dealFilesQuery = useQuery({
-    queryKey: ['dealFiles', normalizedAppealId, true],
-    queryFn: async () => {
-      const response = await getLatestDealFilesApi(normalizedAppealId);
-      return response?.files || [];
-    },
-    enabled: isValidAppealId,
-    staleTime: 2 * 60 * 1000,
-    gcTime: 5 * 60 * 1000,
-    retry: 1
-  });
-
   // Отправка ответа
   const sendReplyMutation = useMutation({
     mutationFn: ({ message, files }) => sendReplyApi(normalizedAppealId, message, files),
     onSuccess: () => {
-      // Инвалидируем все связанные запросы
       queryClient.invalidateQueries(['appeals']);
-      queryClient.invalidateQueries(['dealFiles', normalizedAppealId]);
       queryClient.invalidateQueries(['appealDetails', normalizedAppealId]);
     }
   });
 
-  // Обработчики
   const handleSubmit = async (attachedFiles) => {
     if (!message.trim()) {
       throw new Error('Введите сообщение');
@@ -69,21 +53,15 @@ export const useReplyModal = (appealId) => {
     sendReplyMutation.reset();
   };
 
-  // Объединенное состояние загрузки
-  const isLoading = appealDetailsQuery.isLoading || dealFilesQuery.isLoading || sendReplyMutation.isPending;
-  
-  // Объединенные ошибки
-  const error = appealDetailsQuery.error || dealFilesQuery.error || sendReplyMutation.error;
-  
   return {
-    // Данные
+    // Данные из объединенного запроса
     appealMessage: appealDetailsQuery.data?.message,
-    files: dealFilesQuery.data || [],
+    files: appealDetailsQuery.data?.files || [],
     
     // Состояния
-    isLoading,
+    isLoading: appealDetailsQuery.isLoading,
     isSuccess: sendReplyMutation.isSuccess,
-    error,
+    error: appealDetailsQuery.error || sendReplyMutation.error,
     
     // UI состояние
     message,
@@ -93,9 +71,9 @@ export const useReplyModal = (appealId) => {
     handleSubmit,
     reset,
     
-    // Дополнительно для более тонкого контроля
+    // Для совместимости с существующим кодом
     isSubmitting: sendReplyMutation.isPending,
     isLoadingDetails: appealDetailsQuery.isLoading,
-    isLoadingFiles: dealFilesQuery.isLoading
+    isLoadingFiles: false // Файлы теперь загружаются вместе с деталями
   };
 };
