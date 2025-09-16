@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAppealCategories } from '../Appeals/useAppeals';
-import { createAppealApi } from '../../../../shared/api/deals/dealsApi';
-import { useFileUpload } from '../../../../shared/hooks/useFileUpload';
+import { useAppealCategories } from './useAppeals';
+import { createAppealApi } from '../../../shared/api/deals/dealsApi';
+import { useFileUpload } from '../../../shared/hooks/useFileUpload';
 
 const FORM_DEFAULTS = {
     category_id: '',

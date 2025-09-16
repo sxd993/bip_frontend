@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Loading } from '../../../../shared/ui/Loading';
-import AppealsSection from '../../../deals/components/Appeals/AppealsSection';
+import AppealsSection from '../../../deals/ui/Appeals/AppealsSection';
 
 export const PhysicalAccount = ({ user, isLoading }) => {
     const [activeSection, setActiveSection] = useState('personal');

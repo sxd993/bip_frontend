@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AppealsSection from '../../../deals/components/Appeals/AppealsSection';
+import AppealsSection from '../../../deals/ui/Appeals/AppealsSection';
 
 export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompany, isLoadingEmployees }) => {
     const [activeSection, setActiveSection] = useState('employee');

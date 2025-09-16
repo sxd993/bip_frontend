@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AppealCard from './AppealCard';
 import CreateAppealModal from '../CreateAppeal/CreateAppealModal';
-import { useAppeals } from './useAppeals';
+import { useAppeals } from '../../hooks/useAppeals';
 import { Loading } from '../../../../shared/ui/Loading';
 
 const AppealsSection = () => {

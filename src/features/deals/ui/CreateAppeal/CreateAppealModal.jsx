@@ -2,7 +2,7 @@ import { Modal } from '../../../../shared/ui/Modal';
 import { Loading } from '../../../../shared/ui/Loading';
 import FileUploadSection from '../../../../shared/components/FileUploadSection';
 import SuccessScreen from '../../../../shared/components/SuccessScreen';
-import { useCreateAppealForm } from './useCreateAppealForm';
+import { useCreateAppealForm } from '../../hooks/useCreateAppealForm';
 
 const CreateAppealModal = ({ isOpen, onClose }) => {
   const {

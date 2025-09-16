@@ -1,4 +1,4 @@
-import { useReplyModal } from './useReplyModal';
+import { useReplyModal } from '../../hooks/useReplyModal';
 import { Modal } from '../../../../shared/ui/Modal';
 import SuccessScreen from '../../../../shared/components/SuccessScreen';
 import ReplyForm from './ReplyForm';
