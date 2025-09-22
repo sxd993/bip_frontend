@@ -18,12 +18,6 @@ export const Account = () => {
     prefetchAppealCategories(queryClient);
   }, [queryClient]);
 
-
-
-  if (userLoading) {
-    return <Loading size="large" text="Загрузка данных пользователя..." className="min-h-screen" />;
-  }
-
   if (error) {
     return <div>Ошибка загрузки данных пользователя</div>;
   }

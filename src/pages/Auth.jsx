@@ -3,7 +3,6 @@ import Login from '../features/auth/components/Login/Login';
 import { useState, useEffect } from 'react';
 import { useUser } from '../shared/hooks/useUser';
 import { useNavigate } from 'react-router-dom';
-import { Loading } from '../shared/ui/Loading';
 
 export const Auth = () => {
     const [currentStage, setCurrentStage] = useState("login");
@@ -16,9 +15,10 @@ export const Auth = () => {
         }
     }, [isLoading, user, navigate]);
 
-    if (isLoading) return <Loading size="large" text="Проверка авторизации..." className="min-h-screen" />;
-
-    // ошибка загрузки (кроме 401)  
+   if (isLoading) {
+    return <>ЗАЛУПА</>
+   }
+   
     if (error) return <div>Ошибка загрузки данных</div>;
 
     // если пользователь не авторизован, показываем форму
@@ -30,7 +30,7 @@ export const Auth = () => {
                     <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
                     <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">Войдите в систему или создайте новый аккаунт</p>
                 </div>
-                
+
                 <div className="max-w-2xl mx-auto">
                     {currentStage === 'login' ? (
                         <Login currentStage={currentStage} setCurrentStage={setCurrentStage} />

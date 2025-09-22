@@ -11,12 +11,13 @@ import { Loading } from './shared/ui/Loading';
 
 // Авторизация
 import { AuthGuard } from './shared/lib/auth/AuthGuard';
+import { Account } from './pages/Account';
+import { Auth } from './pages/Auth';
+
 
 // Lazy loading для страниц
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
-const Account = lazy(() => import('./pages/Account').then(module => ({ default: module.Account })));
 const Contacts = lazy(() => import('./pages/Contacts').then(module => ({ default: module.Contacts })));
-const Auth = lazy(() => import('./pages/Auth').then(module => ({ default: module.Auth })));
 const ServicesPrivate = lazy(() => import('./pages/ServicesPrivate'));
 const ServicesBusiness = lazy(() => import('./pages/ServicesBusiness'));
 const UnderDevelopment = lazy(() => import('./pages/UnderDevelopment'));

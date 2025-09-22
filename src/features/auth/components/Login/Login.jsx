@@ -4,7 +4,7 @@ import { loginApi } from '../../../../shared/api/auth/loginApi';
 import { useApiMutation } from '../../../../shared/hooks/useApiMutation';
 import { FormField, TextInput } from '../../../../shared/components/forms';
 
-const Login = ({ currentStage, setCurrentStage }) => {
+const Login = ({ currentStage, setCurrentStage, isLoading }) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,7 +27,27 @@ const Login = ({ currentStage, setCurrentStage }) => {
       password
     });
   };
+  if (isLoading) {
+    return (
+      <div className="py-24 bg-white min-h-screen">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+              Авторизация
+            </h1>
+            <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
+            <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">
+              Войдите в систему или создайте новый аккаунт
+            </p>
+          </div>
 
+          <div className="max-w-2xl mx-auto">
+            <div className="h-64 bg-gray-100 rounded-xl animate-pulse" />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
       <div className="text-center mb-10">
@@ -35,7 +55,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Вход в систему</h2>
         </div>
       </div>
-          
+
       <form onSubmit={handleSubmit} className="space-y-8">
         {loginMutation.isError && (
           <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
@@ -54,7 +74,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
             required
           />
         </FormField>
-        
+
         <FormField label="Пароль" required>
           <TextInput
             type="password"
@@ -64,7 +84,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
             required
           />
         </FormField>
-        
+
         <button
           type="submit"
           className="w-full max-w-xs mx-auto flex justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
@@ -72,7 +92,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
         >
           {loginMutation.isPending ? 'Вход...' : 'Войти'}
         </button>
-        
+
         <div className="text-center">
           <button
             type="button"
