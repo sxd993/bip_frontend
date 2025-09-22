@@ -11,26 +11,20 @@ const Login = ({ currentStage, setCurrentStage }) => {
   const queryClient = useQueryClient();
 
   const loginMutation = useApiMutation(loginApi, {
-    successMessage: 'Успешный вход в систему',
-    errorMessage: 'Произошла ошибка при входе',
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], data.user);
-      queryClient.invalidateQueries(['user']);
       window.location.href = '/personal-account';
     }
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!emailOrPhone.trim() || !password.trim()) {
-      loginMutation.showError('Заполните все поля');
-      return;
-    }
 
-    loginMutation.executeAsync({ 
-      email_or_phone: emailOrPhone, 
-      password 
+    if (!emailOrPhone.trim() || !password.trim()) return;
+
+    await loginMutation.executeAsync({
+      email_or_phone: emailOrPhone,
+      password
     });
   };
 
@@ -43,18 +37,15 @@ const Login = ({ currentStage, setCurrentStage }) => {
       </div>
           
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Отображение ошибок */}
         {loginMutation.isError && (
           <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
-            <p className="text-red-600 text-sm text-center">{loginMutation.errorMessage}</p>
+            <p className="text-red-600 text-sm text-center">
+              {loginMutation.error?.response?.data?.message || 'Ошибка при входе'}
+            </p>
           </div>
         )}
 
-        {/* Поле логина */}
-        <FormField 
-          label="Логин" 
-          required
-        >
+        <FormField label="Логин" required>
           <TextInput
             type="text"
             value={emailOrPhone}
@@ -64,11 +55,7 @@ const Login = ({ currentStage, setCurrentStage }) => {
           />
         </FormField>
         
-        {/* Поле пароля */}
-        <FormField 
-          label="Пароль" 
-          required
-        >
+        <FormField label="Пароль" required>
           <TextInput
             type="password"
             value={password}
@@ -81,9 +68,9 @@ const Login = ({ currentStage, setCurrentStage }) => {
         <button
           type="submit"
           className="w-full max-w-xs mx-auto flex justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
-          disabled={loginMutation.isLoading}
+          disabled={loginMutation.isPending}
         >
-          {loginMutation.isLoading ? 'Вход...' : 'Войти'}
+          {loginMutation.isPending ? 'Вход...' : 'Войти'}
         </button>
         
         <div className="text-center">
