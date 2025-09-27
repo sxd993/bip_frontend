@@ -111,6 +111,7 @@ export const PhysicalRegister = () => {
       <FormField 
         label="Отчество" 
         error={errors.second_name}
+        required
       >
         <TextInput
           {...register('second_name')}
