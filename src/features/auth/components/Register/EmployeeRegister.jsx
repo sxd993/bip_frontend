@@ -4,24 +4,28 @@ import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
 import { Loading } from '../../../../shared/ui/Loading';
 import { useAuth } from '../../hooks/useAuth';
+import { registerEmployeeApi } from '../../../../shared/api/auth/registerApi';
 
 export const EmployeeRegister = () => {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
   const phoneValue = watch('phone');
 
-  const { registerMutation } = useAuth();
+  const { registerMutation, isRegisterPending, registerError } = useAuth();
 
   const onSubmit = (data) => {
     const payload = {
       ...data,
       phone: normalizePhoneForServer(data.phone),
     };
-    registerMutation.mutate(payload);
+
+    registerMutation.mutate({
+      registerFn: registerEmployeeApi,
+      payload: payload
+    });
   };
 
-  if (registerMutation.isLoading) return <Loading />;
+  if (isRegisterPending) return <Loading />;
 
-  // Показываем success экран
   if (registerMutation.isSuccess) {
     return (
       <div className="text-center py-8">
@@ -38,14 +42,7 @@ export const EmployeeRegister = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      {/* Отображение ошибок */}
-      {registerMutation.isError && (
-        <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
-          <p className="text-red-600 text-sm text-center">{registerMutation.errorMessage || 'Ошибка регистрации'}</p>
-        </div>
-      )}
 
-      {/* Токен компании */}
       <FormField label="Токен компании" error={errors.company_token} required>
         <TextInput
           {...register('company_token', validationRules.companyToken)}
@@ -54,7 +51,6 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      {/* Имя */}
       <FormField label="Имя" error={errors.first_name} required>
         <TextInput
           {...register('first_name', validationRules.required('Имя'))}
@@ -62,7 +58,6 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      {/* Фамилия */}
       <FormField label="Фамилия" error={errors.last_name} required>
         <TextInput
           {...register('last_name', validationRules.required('Фамилия'))}
@@ -70,7 +65,6 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      {/* Отчество */}
       <FormField label="Отчество" error={errors.second_name}>
         <TextInput
           {...register('second_name')}
@@ -78,7 +72,6 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      {/* Должность */}
       <FormField label="Должность в компании" error={errors.position} required>
         <TextInput
           {...register('position', validationRules.required('Должность'))}
@@ -87,7 +80,6 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      {/* Номер телефона */}
       <FormField label="Номер телефона" error={errors.phone} required>
         <PhoneInput
           {...register('phone', validationRules.phone)}
@@ -97,7 +89,6 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      {/* Email */}
       <FormField label="Email" error={errors.email} required>
         <TextInput
           {...register('email', validationRules.email)}
@@ -106,7 +97,6 @@ export const EmployeeRegister = () => {
         />
       </FormField>
 
-      {/* Пароль */}
       <FormField label="Пароль" error={errors.password} required>
         <TextInput
           {...register('password', validationRules.password())}
@@ -114,13 +104,19 @@ export const EmployeeRegister = () => {
           error={errors.password}
         />
       </FormField>
-
+      {registerMutation.isError && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
+          <p className="text-red-600 text-sm text-center">
+            {registerError}
+          </p>
+        </div>
+      )}
       <button
         type="submit"
-        disabled={registerMutation.isLoading}
+        disabled={isRegisterPending}
         className="w-full max-w-xs mx-auto flex justify-center py-2 px-4 md:py-3 md:px-6 border border-transparent rounded-3xl text-sm md:text-base font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
       >
-        {registerMutation.isLoading ? 'Регистрация...' : 'Присоединиться к компании'}
+        {isRegisterPending ? 'Регистрация...' : 'Присоединиться к компании'}
       </button>
     </form>
   );

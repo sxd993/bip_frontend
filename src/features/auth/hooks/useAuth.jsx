@@ -1,6 +1,5 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { loginApi } from '../../../shared/api/auth/loginApi';
-import { normalizePhoneForServer } from '../../../shared/utils/formatters';
 import { useNavigate } from 'react-router-dom';
 
 export const useAuth = () => {
@@ -12,29 +11,32 @@ export const useAuth = () => {
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], data.user);
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      navigate('/personal-account');
     },
   });
 
-  const registerMutation = async (registerFn, payload) => {
-    const normalizedPayload = {
-      ...payload,
-      phone: normalizePhoneForServer(payload.phone),
-    };
-    
-    await registerFn(normalizedPayload);
-    loginMutation.mutate({
-      email_or_phone: normalizedPayload.phone,
-      password: normalizedPayload.password,
-    });
-  };
+  const registerMutation = useMutation({
+    mutationFn: ({ registerFn, payload }) => registerFn(payload),
+    onSuccess: (data) => {
+      // Если бэк возвращает пользователя после регистрации
+      if (data?.user) {
+        queryClient.setQueryData(['user'], data.user);
+        queryClient.invalidateQueries({ queryKey: ['user'] });
+        navigate('/personal-account');
+      }
+      // Если нет - показываем success экран без редиректа
+    },
+  });
 
   return {
-    // Состояния для логина
+    // Логин
     loginMutation,
     loginError: loginMutation.error,
     isLoginPending: loginMutation.isPending,
 
-    // Состояния для регистрации
+    // Регистрация
     registerMutation,
+    registerError: registerMutation.error?.response?.data?.error,
+    isRegisterPending: registerMutation.isPending,
   };
 };
