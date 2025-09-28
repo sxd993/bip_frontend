@@ -1,32 +1,23 @@
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { loginApi } from '../../../../shared/api/auth/loginApi';
-import { useApiMutation } from '../../../../shared/hooks/useApiMutation';
 import { FormField, TextInput } from '../../../../shared/components/forms';
+import { useAuth } from '../../hooks/useAuth';
 
-const Login = ({ currentStage, setCurrentStage, isLoading }) => {
+const Login = ({ setCurrentStage, isLoading }) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
+  const { loginMutation, isLoginPending } = useAuth();
 
-  const queryClient = useQueryClient();
-
-  const loginMutation = useApiMutation(loginApi, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user'], data.user);
-      window.location.href = '/personal-account';
-    }
-  });
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!emailOrPhone.trim() || !password.trim()) return;
 
-    await loginMutation.executeAsync({
+    loginMutation.mutate({
       email_or_phone: emailOrPhone,
-      password
+      password,
     });
   };
+
+  console.log(isLoginPending)
   if (isLoading) {
     return (
       <div className="py-24 bg-white min-h-screen">
@@ -48,6 +39,7 @@ const Login = ({ currentStage, setCurrentStage, isLoading }) => {
       </div>
     );
   }
+
   return (
     <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
       <div className="text-center mb-10">
@@ -60,7 +52,7 @@ const Login = ({ currentStage, setCurrentStage, isLoading }) => {
         {loginMutation.isError && (
           <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
             <p className="text-red-600 text-sm text-center">
-              {loginMutation.error?.response?.data?.message || 'Ошибка при входе'}
+              {loginMutation.errorMessage || 'Ошибка при входе'}
             </p>
           </div>
         )}
@@ -87,10 +79,13 @@ const Login = ({ currentStage, setCurrentStage, isLoading }) => {
 
         <button
           type="submit"
-          className="w-full max-w-xs mx-auto flex justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
-          disabled={loginMutation.isPending}
+          className="w-full max-w-xs mx-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+          disabled={isLoginPending}
         >
-          {loginMutation.isPending ? 'Вход...' : 'Войти'}
+          {isLoginPending && (
+            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          )}
+          {isLoginPending ? 'Вход...' : 'Войти'}
         </button>
 
         <div className="text-center">

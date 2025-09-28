@@ -1,38 +1,27 @@
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { registerLegalEntityApi } from '../../../../shared/api/auth/registerApi';
-import { useApiMutation } from '../../../../shared/hooks/useApiMutation';
 import { validationRules } from '../../../../shared/utils/validators';
 import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
 import { Loading } from '../../../../shared/ui/Loading';
+import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export const LegalRegister = () => {
-  const navigate = useNavigate();
-  
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
   const phoneValue = watch('phone');
 
-  const registerMutation = useApiMutation(registerLegalEntityApi, {
-    successMessage: 'Регистрация юридического лица успешна!',
-    errorMessage: 'Ошибка регистрации',
-    onSuccess: (data) => {
-      setTimeout(() => navigate('/personal-account'), 2000);
-    }
-  });
+  const { registerMutation } = useAuth();
 
   const onSubmit = (data) => {
-    const formData = {
+    const payload = {
       ...data,
       phone: normalizePhoneForServer(data.phone),
     };
-
-    registerMutation.executeAsync(formData);
+    registerMutation.mutate(payload);
   };
 
   if (registerMutation.isLoading) return <Loading />;
 
-  // Показываем success экран
   if (registerMutation.isSuccess) {
     return (
       <div className="text-center py-8">
@@ -49,19 +38,14 @@ export const LegalRegister = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      {/* Отображение ошибок */}
       {registerMutation.isError && (
         <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
-          <p className="text-red-600 text-sm text-center">{registerMutation.errorMessage}</p>
+          <p className="text-red-600 text-sm text-center">{registerMutation.errorMessage || 'Ошибка регистрации'}</p>
         </div>
       )}
 
       {/* Название организации */}
-      <FormField 
-        label="Название организации" 
-        error={errors.company_name}
-        required
-      >
+      <FormField label="Название организации" error={errors.company_name} required>
         <TextInput
           {...register('company_name', validationRules.required('Название организации'))}
           error={errors.company_name}
@@ -69,11 +53,7 @@ export const LegalRegister = () => {
       </FormField>
 
       {/* ИНН */}
-      <FormField 
-        label="ИНН" 
-        error={errors.inn}
-        required
-      >
+      <FormField label="ИНН" error={errors.inn} required>
         <TextInput
           {...register('inn', validationRules.inn)}
           error={errors.inn}
@@ -81,11 +61,7 @@ export const LegalRegister = () => {
       </FormField>
 
       {/* Имя руководителя */}
-      <FormField 
-        label="Имя руководителя" 
-        error={errors.employee_first_name}
-        required
-      >
+      <FormField label="Имя руководителя" error={errors.employee_first_name} required>
         <TextInput
           {...register('employee_first_name', validationRules.required('Имя руководителя'))}
           error={errors.employee_first_name}
@@ -93,11 +69,7 @@ export const LegalRegister = () => {
       </FormField>
 
       {/* Фамилия руководителя */}
-      <FormField 
-        label="Фамилия руководителя" 
-        error={errors.employee_second_name}
-        required
-      >
+      <FormField label="Фамилия руководителя" error={errors.employee_second_name} required>
         <TextInput
           {...register('employee_second_name', validationRules.required('Фамилия руководителя'))}
           error={errors.employee_second_name}
@@ -105,11 +77,7 @@ export const LegalRegister = () => {
       </FormField>
 
       {/* Отчество руководителя */}
-      <FormField 
-        label="Отчество руководителя" 
-        error={errors.employee_last_name}
-        required
-      >
+      <FormField label="Отчество руководителя" error={errors.employee_last_name} required>
         <TextInput
           {...register('employee_last_name', validationRules.required('Отчество руководителя'))}
           error={errors.employee_last_name}
@@ -117,11 +85,7 @@ export const LegalRegister = () => {
       </FormField>
 
       {/* Номер телефона */}
-      <FormField 
-        label="Номер телефона" 
-        error={errors.phone}
-        required
-      >
+      <FormField label="Номер телефона" error={errors.phone} required>
         <PhoneInput
           {...register('phone', validationRules.phone)}
           value={phoneValue || '+7 '}
@@ -131,11 +95,7 @@ export const LegalRegister = () => {
       </FormField>
 
       {/* Email */}
-      <FormField 
-        label="Email" 
-        error={errors.email}
-        required
-      >
+      <FormField label="Email" error={errors.email} required>
         <TextInput
           {...register('email', validationRules.email)}
           type="email"
@@ -144,11 +104,7 @@ export const LegalRegister = () => {
       </FormField>
 
       {/* Пароль */}
-      <FormField 
-        label="Пароль" 
-        error={errors.password}
-        required
-      >
+      <FormField label="Пароль" error={errors.password} required>
         <TextInput
           {...register('password', validationRules.password())}
           type="password"
@@ -156,13 +112,13 @@ export const LegalRegister = () => {
         />
       </FormField>
 
-        <button
-          type="submit" 
-          disabled={registerMutation.isLoading}
-          className="w-full max-w-xs mx-auto flex justify-center py-2 px-4 md:py-3 md:px-6 border border-transparent rounded-3xl text-sm md:text-base font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
-        >
-          {registerMutation.isLoading ? 'Регистрация...' : 'Зарегистрировать организацию'}
-        </button>
+      <button
+        type="submit"
+        disabled={registerMutation.isLoading}
+        className="w-full max-w-xs mx-auto flex justify-center py-2 px-4 md:py-3 md:px-6 border border-transparent rounded-3xl text-sm md:text-base font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
+      >
+        {registerMutation.isLoading ? 'Регистрация...' : 'Зарегистрировать организацию'}
+      </button>
     </form>
   );
 };

@@ -3,11 +3,11 @@ import { client } from "../client";
 export const getUser = async () => {
     try {
         const response = await client.get("/user/get-info");
-        return response.data; // пользователь авторизован
+        return response.data;
     } catch (err) {
         if (err.response?.status === 401) {
-            return null; // не авторизован
+            return null;
         }
-        throw err; // другая ошибка
+        throw err;
     }
 }
