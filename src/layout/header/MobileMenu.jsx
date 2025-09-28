@@ -1,27 +1,15 @@
 import { useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logoutApi } from '../../shared/api/auth/loginApi';
+import { NavLink } from 'react-router-dom';
 import { useUser } from '../../shared/hooks/useUser';
+import { useLogout } from '../../shared/hooks/useLogout';
 
 const MobileMenu = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { user } = useUser();
-
-  const mutation = useMutation({
-    mutationFn: logoutApi,
-    onSuccess: () => {
-      queryClient.setQueryData(['user'], null);
-      queryClient.invalidateQueries(['user']);
-      navigate('/auth/login');
-      onClose(); // Закрываем меню после выхода
-    },
-  });
+  const { logoutMutation } = useLogout();
 
   const handleLogout = (e) => {
     e.preventDefault();
-    mutation.mutate();
+    logoutMutation.mutate();
   };
 
   // Блокируем скролл на body когда меню открыто
@@ -42,9 +30,8 @@ const MobileMenu = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   return (
-    <div className={`md:hidden fixed top-0 right-0 h-full w-full bg-white transform transition-transform duration-300 ease-in-out z-[60] ${
-      isOpen ? 'translate-x-0' : 'translate-x-full'
-    }`}>
+    <div className={`md:hidden fixed top-0 right-0 h-full w-full bg-white transform transition-transform duration-300 ease-in-out z-[60] ${isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
       <div className="h-full flex flex-col">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h3 className="text-2xl font-bold text-gray-900">Меню</h3>
@@ -59,7 +46,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
             </div>
           </button>
         </div>
-        
+f
         <div className="flex-1 py-6 px-6 flex flex-col justify-center items-center space-y-8">
           <NavLink
             to="/"
@@ -68,9 +55,9 @@ const MobileMenu = ({ isOpen, onClose }) => {
           >
             Главная
           </NavLink>
-          
+
           <div className="w-16 h-0.5 bg-red-500"></div>
-          
+
           <NavLink
             to="/press-center"
             onClick={onClose}
@@ -78,9 +65,9 @@ const MobileMenu = ({ isOpen, onClose }) => {
           >
             Пресс-центр
           </NavLink>
-          
+
           <div className="w-16 h-0.5 bg-red-500"></div>
-          
+
           <NavLink
             to="/contacts"
             onClick={onClose}
@@ -88,9 +75,9 @@ const MobileMenu = ({ isOpen, onClose }) => {
           >
             Контакты
           </NavLink>
-          
+
           <div className="w-16 h-0.5 bg-red-500"></div>
-          
+
           <NavLink
             to="/personal-account"
             onClick={onClose}
@@ -103,7 +90,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
           {user && (
             <>
               <div className="w-16 h-0.5 bg-red-500"></div>
-              <button 
+              <button
                 onClick={handleLogout}
                 className="text-gray-900 hover:text-red-600 font-medium transition-colors duration-200 text-2xl"
               >
@@ -112,7 +99,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
             </>
           )}
         </div>
-        
+
         <div className="p-6 border-t border-gray-200 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>

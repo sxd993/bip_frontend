@@ -1,30 +1,15 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logoutApi } from '../../shared/api/auth/loginApi';
+import { NavLink } from 'react-router-dom';
+import { useLogout } from '../../shared/hooks/useLogout';
 import { useUser } from '../../shared/hooks/useUser';
 
 const NavBar = () => {
-    const navigate = useNavigate();
-    const queryClient = useQueryClient();
-
-    // useMutation для выхода пользователя
-    const mutation = useMutation({
-        mutationFn: logoutApi, // функция выхода
-        onSuccess: () => {
-            // после успешного логаута очищаем данные пользователя в React Query
-            queryClient.setQueryData(['user'], null);
-            queryClient.invalidateQueries(['user']); // принудительно обновляем запросы, если где-то ещё используется
-            navigate('/auth/login'); // перенаправляем на страницу логина
-        },
-    });
-
-    // получаем текущего пользователя
     const { user } = useUser();
+    const { logoutMutation } = useLogout()
 
-    // обработчик кнопки выхода
+
     const handleLogout = (e) => {
         e.preventDefault();
-        mutation.mutate(); // вызываем мутацию выхода
+        logoutMutation.mutate();
     };
 
     return (

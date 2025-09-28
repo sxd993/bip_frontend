@@ -1,6 +1,7 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { loginApi } from '../../../shared/api/auth/loginApi';
 import { useNavigate } from 'react-router-dom';
+import { getUser } from '../../../shared/api/account/userApi';
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -8,9 +9,14 @@ export const useAuth = () => {
 
   const loginMutation = useMutation({
     mutationFn: loginApi,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user'], data.user);
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+    onSuccess: async () => {
+      try {
+        const userData = await getUser();
+        queryClient.setQueryData(['user'], userData);
+      } catch (error) {
+        console.error('Ошибка получения данных пользователя:', error);
+      }
+
       navigate('/personal-account');
     },
   });
