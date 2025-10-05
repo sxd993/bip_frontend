@@ -46,7 +46,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
             </div>
           </button>
         </div>
-f
+        f
         <div className="flex-1 py-6 px-6 flex flex-col justify-center items-center space-y-8">
           <NavLink
             to="/"
@@ -79,11 +79,11 @@ f
           <div className="w-16 h-0.5 bg-red-500"></div>
 
           <NavLink
-            to="/personal-account"
+            to={user ? "/personal-account" : "/auth/login"}
             onClick={onClose}
             className="text-gray-900 hover:text-red-600 font-medium transition-colors duration-200 text-2xl"
           >
-            Личный кабинет
+            {user ? "Личный кабинет" : "Авторизация"}
           </NavLink>
 
           {/* Кнопка выхода для авторизованных пользователей */}

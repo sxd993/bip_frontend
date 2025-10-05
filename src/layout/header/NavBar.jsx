@@ -34,7 +34,7 @@ const NavBar = () => {
                 to={user ? "/personal-account" : "/auth/login"}
                 className="text-white transition-colors duration-200 font-medium text-lg px-4 py-2 border border-transparent rounded-xl hover:border-red-400"
             >
-                {user ? "Личный кабинет" : "Войти в кабинет"}
+                {user ? "Личный кабинет" : "Авторизация"}
             </NavLink>
 
             {/* Кнопка выхода показывается только если пользователь авторизован */}
