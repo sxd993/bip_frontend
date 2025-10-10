@@ -145,9 +145,11 @@ export const ReplyModal = ({ isOpen, onClose, appealId }) => {
                 <p className="text-gray-600 text-sm">Загрузка информации...</p>
               </div>
             ) : (
-              <p className="text-gray-700 text-sm">
-                {appealMessage || 'Информация недоступна'}
-              </p>
+              <p
+                className="text-gray-700 text-sm"
+                dangerouslySetInnerHTML={{ __html: appealMessage || 'Информация недоступна' }}
+              />
+
             )}
           </div>
         </div>
