@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Modal } from '../../../../shared/ui/Modal';
 import { Loading } from '../../../../shared/ui/Loading';
 import FileUploadSection from '../../../../shared/components/FileUploadSection';
@@ -16,6 +17,18 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
 
   const { isLoading, isSuccess, isSubmitting, error } = states;
   const { handleClose } = actions;
+  
+  const [titleLength, setTitleLength] = useState(0);
+  const [commentLength, setCommentLength] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  // Сброс состояния при закрытии модального окна
+  const handleCloseWithReset = () => {
+    setTitleLength(0);
+    setCommentLength(0);
+    setSelectedCategory('');
+    handleClose();
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Создать обращение">
@@ -30,12 +43,24 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
         <form onSubmit={form.handleSubmit} className="px-4 py-4 space-y-4">
           {/* Блок ошибок */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-2">
-              <div className="flex items-center">
-                <svg className="w-4 h-4 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
+              <div className="flex items-start">
+                <svg className="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p className="text-red-700 text-sm">{errorMessage}</p>
+                <div className="flex-1">
+                  <h4 className="text-red-800 font-medium text-sm mb-1">Ошибка валидации</h4>
+                  <p className="text-red-700 text-sm leading-relaxed">{errorMessage}</p>
+                  {errorMessage.includes('title') && (
+                    <p className="text-red-600 text-xs mt-1">• Заголовок должен содержать минимум 3 символа</p>
+                  )}
+                  {errorMessage.includes('comment') && (
+                    <p className="text-red-600 text-xs mt-1">• Описание должно содержать минимум 10 символов</p>
+                  )}
+                  {errorMessage.includes('category') && (
+                    <p className="text-red-600 text-xs mt-1">• Необходимо выбрать категорию обращения</p>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -47,7 +72,13 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             </label>
             <select
               {...form.register('category_id')}
-              className="w-full px-3 py-2 border border-gray-200 rounded-2xl bg-white text-gray-900 focus:outline-none focus:border-red-500 transition-colors duration-200"
+              onChange={(e) => {
+                form.register('category_id').onChange(e);
+                setSelectedCategory(e.target.value);
+              }}
+              className={`w-full px-3 py-2 border rounded-2xl bg-white text-gray-900 focus:outline-none transition-colors duration-200 ${
+                form.errors.category_id ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-red-500'
+              }`}
             >
               <option value="">Выберите категорию</option>
               {categories?.map((funnel) => (
@@ -69,12 +100,23 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             <input
               type="text"
               {...form.register('title')}
-              className="w-full px-3 py-2 border border-gray-200 rounded-2xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors duration-200"
+              onChange={(e) => {
+                form.register('title').onChange(e);
+                setTitleLength(e.target.value.length);
+              }}
+              className={`w-full px-3 py-2 border rounded-2xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none transition-colors duration-200 ${
+                form.errors.title ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-red-500'
+              }`}
               placeholder="Краткое описание проблемы"
             />
-            {form.errors.title && (
-              <p className="mt-2 text-red-600 text-sm">{form.errors.title.message}</p>
-            )}
+            <div className="mt-1 flex justify-between items-center">
+              {form.errors.title && (
+                <p className="text-red-600 text-sm">{form.errors.title.message}</p>
+              )}
+              <p className={`text-xs ml-auto ${titleLength < 3 ? 'text-red-500' : 'text-gray-500'}`}>
+                {titleLength}/3 минимум
+              </p>
+            </div>
           </div>
 
           {/* Комментарий */}
@@ -84,13 +126,24 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
             </label>
             <textarea
               {...form.register('comment')}
+              onChange={(e) => {
+                form.register('comment').onChange(e);
+                setCommentLength(e.target.value.length);
+              }}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-200 rounded-2xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors duration-200 resize-none"
+              className={`w-full px-3 py-2 border rounded-2xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none transition-colors duration-200 resize-none ${
+                form.errors.comment ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-red-500'
+              }`}
               placeholder="Опишите вашу проблему подробно..."
             />
-            {form.errors.comment && (
-              <p className="mt-2 text-red-600 text-sm">{form.errors.comment.message}</p>
-            )}
+            <div className="mt-1 flex justify-between items-center">
+              {form.errors.comment && (
+                <p className="text-red-600 text-sm">{form.errors.comment.message}</p>
+              )}
+              <p className={`text-xs ml-auto ${commentLength < 10 ? 'text-red-500' : 'text-gray-500'}`}>
+                {commentLength}/10 минимум
+              </p>
+            </div>
           </div>
 
           {/* Загрузка файлов */}
@@ -105,14 +158,14 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
           <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-100">
             <button
               type="button"
-              onClick={handleClose}
+              onClick={handleCloseWithReset}
               className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 rounded-3xl hover:border-gray-300 transition-colors duration-200 font-medium"
             >
               Отмена
             </button>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || titleLength < 3 || commentLength < 10 || !selectedCategory}
               className="flex-1 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl transition-colors duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Создание...' : 'Создать обращение'}

@@ -12,9 +12,23 @@ const FORM_DEFAULTS = {
 };
 
 const VALIDATION_RULES = {
-    category_id: { required: 'Выберите категорию' },
-    title: { required: 'Введите заголовок' },
-    comment: { required: 'Введите описание' }
+    category_id: { 
+        required: 'Выберите категорию обращения' 
+    },
+    title: { 
+        required: 'Введите заголовок обращения',
+        minLength: {
+            value: 3,
+            message: 'Заголовок должен содержать минимум 3 символа'
+        }
+    },
+    comment: { 
+        required: 'Введите подробное описание проблемы',
+        minLength: {
+            value: 10,
+            message: 'Описание должно содержать минимум 10 символов'
+        }
+    }
 };
 
 export const useCreateAppealForm = (isOpen, onClose) => {
@@ -76,7 +90,7 @@ export const useCreateAppealForm = (isOpen, onClose) => {
 
     const handleSuccessClose = () => {
         resetAll();
-        setTimeout(() => onClose(), 2000);
+        setTimeout(() => onClose(), 500);
     };
 
     const resetAll = () => {
@@ -101,7 +115,8 @@ export const useCreateAppealForm = (isOpen, onClose) => {
             register: (field) => register(field, VALIDATION_RULES[field]),
             handleSubmit: handleSubmit(onSubmit),
             errors,
-            reset
+            reset,
+            getValues: form.getValues
         },
         fileUpload,
         categories,
@@ -116,6 +131,6 @@ export const useCreateAppealForm = (isOpen, onClose) => {
             handleClose,
             resetAll
         },
-        errorMessage: error?.response?.data?.message || error?.message || 'Ошибка при создании обращения'
+        errorMessage: error?.response?.data?.error || error?.response?.data?.message || error?.message || 'Ошибка при создании обращения'
     };
 };
