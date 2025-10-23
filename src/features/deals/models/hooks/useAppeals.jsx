@@ -1,5 +1,5 @@
 import { useQuery, } from '@tanstack/react-query';
-import { getDealsApi, getDealStagesApi } from '../../../shared/api/deals/dealsApi';
+import { getDealsApi, getDealStagesApi } from '../../../../shared/api/deals/dealsApi';
 
 export const useAppeals = (refetchInterval = 30000) => {
   return useQuery({

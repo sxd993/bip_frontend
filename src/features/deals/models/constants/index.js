@@ -34,3 +34,29 @@ export const MESSAGE_CONSTRAINTS = {
   MAX_LENGTH: 1500,
   MIN_LENGTH: 1
 };
+
+export const FORM_DEFAULTS = {
+    category_id: '',
+    title: '',
+    comment: ''
+};
+
+export const VALIDATION_RULES = {
+    category_id: { 
+        required: 'Выберите категорию обращения' 
+    },
+    title: { 
+        required: 'Введите заголовок обращения',
+        minLength: {
+            value: 3,
+            message: 'Заголовок должен содержать минимум 3 символа'
+        }
+    },
+    comment: { 
+        required: 'Введите подробное описание проблемы',
+        minLength: {
+            value: 10,
+            message: 'Описание должно содержать минимум 10 символов'
+        }
+    }
+};

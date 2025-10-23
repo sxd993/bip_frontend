@@ -1,6 +1,6 @@
 import { useFileUpload } from '../../../../shared/hooks/useFileUpload';
 import FileUploadSection from '../../../../shared/components/FileUploadSection';
-import { MESSAGE_CONSTRAINTS } from '../../constants';
+import { MESSAGE_CONSTRAINTS } from '../../models/constants';
 
 const ReplyForm = ({ message, setMessage, onSubmit, onCancel, isLoading }) => {
   const {

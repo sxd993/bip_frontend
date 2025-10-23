@@ -1,42 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppealCategories } from './useAppeals';
-import { createAppealApi } from '../../../shared/api/deals/dealsApi';
-import { useFileUpload } from '../../../shared/hooks/useFileUpload';
+import { createAppealApi } from '../../../../shared/api/deals/dealsApi';
+import { useFileUpload } from '../../../../shared/hooks/useFileUpload';
+import { VALIDATION_RULES, FORM_DEFAULTS } from '../constants/index';
 
-const FORM_DEFAULTS = {
-    category_id: '',
-    title: '',
-    comment: ''
-};
 
-const VALIDATION_RULES = {
-    category_id: { 
-        required: 'Выберите категорию обращения' 
-    },
-    title: { 
-        required: 'Введите заголовок обращения',
-        minLength: {
-            value: 3,
-            message: 'Заголовок должен содержать минимум 3 символа'
-        }
-    },
-    comment: { 
-        required: 'Введите подробное описание проблемы',
-        minLength: {
-            value: 10,
-            message: 'Описание должно содержать минимум 10 символов'
-        }
-    }
-};
 
 export const useCreateAppealForm = (isOpen, onClose) => {
     const form = useForm({ defaultValues: FORM_DEFAULTS });
     const { register, handleSubmit, formState: { errors }, reset } = form;
+    const [countdown, setCountdown] = useState(null);
 
     const fileUpload = useFileUpload();
     const { clearFiles, getBase64Files } = fileUpload;
+    const clearFilesRef = useRef(clearFiles);
+
+    useEffect(() => {
+        clearFilesRef.current = clearFiles;
+    }, [clearFiles]);
 
     const { data: categories, isLoading: categoriesLoading } = useAppealCategories();
 
@@ -45,13 +28,19 @@ export const useCreateAppealForm = (isOpen, onClose) => {
         mutationFn: createAppealApi,
         onSuccess: () => {
             queryClient.invalidateQueries(['appeals']);
+            setCountdown(3);
         },
     });
 
+    const {
+        isSuccess,
+        isPending: isSubmitting,
+        isError,
+        error,
+        reset: resetMutation
+    } = createAppealMutation;
+
     const isLoading = categoriesLoading;
-    const isSuccess = createAppealMutation.isSuccess;
-    const isSubmitting = createAppealMutation.isPending;
-    const error = createAppealMutation.error;
 
     const onSubmit = async (data) => {
         if (!data.title.trim() || !data.comment.trim() || !data.category_id) {
@@ -60,19 +49,9 @@ export const useCreateAppealForm = (isOpen, onClose) => {
 
         try {
             const base64Files = await getBase64Files();
-
-            // Убираем поле type которое сервер не принимает
             const cleanFiles = base64Files.map(file => {
                 const { type, ...cleanFile } = file;
-                console.log('Очищенный файл:', cleanFile);
                 return cleanFile;
-            });
-
-            console.log('Отправляем данные:', {
-                category_id: data.category_id,
-                title: data.title,
-                comment: data.comment,
-                files: cleanFiles
             });
 
             await createAppealMutation.mutateAsync({
@@ -81,22 +60,16 @@ export const useCreateAppealForm = (isOpen, onClose) => {
                 comment: data.comment,
                 files: cleanFiles
             });
-
-            handleSuccessClose();
         } catch (error) {
             console.error('Ошибка создания обращения:', error);
         }
     };
 
-    const handleSuccessClose = () => {
-        resetAll();
-        setTimeout(() => onClose(), 500);
-    };
-
     const resetAll = () => {
         reset();
         clearFiles();
-        createAppealMutation.reset();
+        resetMutation();
+        setCountdown(null);
     };
 
     const handleClose = () => {
@@ -106,9 +79,43 @@ export const useCreateAppealForm = (isOpen, onClose) => {
 
     useEffect(() => {
         if (isOpen) {
-            createAppealMutation.reset();
+            resetMutation();
+            setCountdown(null);
         }
-    }, [isOpen, createAppealMutation]);
+    }, [isOpen, resetMutation]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        if (!isSuccess) {
+            return;
+        }
+
+        if (countdown === null) {
+            return;
+        }
+
+        if (countdown === 0) {
+            reset();
+            clearFilesRef.current?.();
+            resetMutation();
+            setCountdown(null);
+            onClose();
+            return;
+        }
+
+        const timer = setTimeout(() => setCountdown((prev) => (prev !== null ? prev - 1 : null)), 1000);
+
+        return () => clearTimeout(timer);
+    }, [isOpen, countdown, isSuccess, onClose, reset, resetMutation]);
+
+    useEffect(() => {
+        if (isError) {
+            setCountdown(null);
+        }
+    }, [isError]);
 
     return {
         form: {
@@ -124,8 +131,10 @@ export const useCreateAppealForm = (isOpen, onClose) => {
             isLoading,
             isSuccess,
             isSubmitting,
+            isError,
             error,
-            categoriesLoading
+            categoriesLoading,
+            countdown
         },
         actions: {
             handleClose,

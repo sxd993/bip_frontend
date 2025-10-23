@@ -1,4 +1,4 @@
-import { useReplyModal } from '../../hooks/useReplyModal';
+import { useReplyModal } from '../../models/hooks/useReplyModal';
 import { Modal } from '../../../../shared/ui/Modal';
 import SuccessScreen from '../../../../shared/components/SuccessScreen';
 import ReplyForm from './ReplyForm';
@@ -98,8 +98,6 @@ export const ReplyModal = ({ isOpen, onClose, appealId }) => {
     reset();
     onClose();
   };
-
-  console.log(appealMessage)
   const handleFormSubmit = async (message, attachedFiles) => {
     try {
       await handleSubmit(attachedFiles);

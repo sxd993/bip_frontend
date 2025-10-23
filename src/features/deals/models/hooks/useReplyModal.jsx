@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAppealDetailsApi, sendReplyApi } from '../../../shared/api/deals/replyApi';
+import { getAppealDetailsApi, sendReplyApi } from '../../../../shared/api/deals/replyApi';
 
 export const useReplyModal = (appealId) => {
   const [message, setMessage] = useState('');

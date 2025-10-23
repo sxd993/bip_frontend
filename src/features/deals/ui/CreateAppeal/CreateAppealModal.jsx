@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from '../../../../shared/ui/Modal';
 import { Loading } from '../../../../shared/ui/Loading';
 import FileUploadSection from '../../../../shared/components/FileUploadSection';
 import SuccessScreen from '../../../../shared/components/SuccessScreen';
-import { useCreateAppealForm } from '../../hooks/useCreateAppealForm';
+import { useCreateAppealForm } from '../../models/hooks/useCreateAppealForm';
 
 const CreateAppealModal = ({ isOpen, onClose }) => {
   const {
@@ -15,12 +15,20 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     errorMessage
   } = useCreateAppealForm(isOpen, onClose);
 
-  const { isLoading, isSuccess, isSubmitting, error } = states;
+  const { isLoading, isSuccess, isSubmitting, isError, error, countdown } = states;
   const { handleClose } = actions;
   
   const [titleLength, setTitleLength] = useState(0);
   const [commentLength, setCommentLength] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('');
+
+  useEffect(() => {
+    if (!isOpen) {
+      setTitleLength(0);
+      setCommentLength(0);
+      setSelectedCategory('');
+    }
+  }, [isOpen]);
 
   // Сброс состояния при закрытии модального окна
   const handleCloseWithReset = () => {
@@ -34,15 +42,47 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Создать обращение">
       {isLoading ? (
         <Loading size="medium" text="Загрузка категорий..." className="py-8" />
+      ) : isSubmitting ? (
+        <Loading size="medium" text="Отправка запроса..." className="py-8" />
       ) : isSuccess ? (
-        <SuccessScreen
-          title="Обращение создано"
-          description="Ваше обращение успешно создано и будет обработано в ближайшее время."
-        />
+        <div className="px-4 py-8 flex flex-col items-center text-center space-y-4">
+          <SuccessScreen
+            title="Заявка создана"
+            description={
+              countdown !== null
+                ? `Модальное окно закроется через ${countdown}...`
+                : 'Модальное окно скоро закроется.'
+            }
+          />
+          <button
+            type="button"
+            onClick={handleCloseWithReset}
+            className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl transition-colors duration-200 font-bold"
+          >
+            Закрыть сейчас
+          </button>
+        </div>
+      ) : isError ? (
+        <div className="px-4 py-8 flex flex-col items-center text-center space-y-4">
+          <div className="w-16 h-16 rounded-full border-2 border-red-500 flex items-center justify-center mb-2 bg-red-50">
+            <svg className="w-10 h-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p className="text-gray-800 text-lg font-bold">Не удалось создать заявку</p>
+          <p className="text-gray-600 text-sm leading-relaxed max-w-md">{errorMessage}</p>
+          <button
+            type="button"
+            onClick={handleCloseWithReset}
+            className="px-6 py-3 border border-gray-200 text-gray-700 rounded-3xl hover:border-gray-300 transition-colors duration-200 font-medium"
+          >
+            Закрыть окно
+          </button>
+        </div>
       ) : (
         <form onSubmit={form.handleSubmit} className="px-4 py-4 space-y-4">
           {/* Блок ошибок */}
-          {error && (
+          {error && !isError && (
             <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
               <div className="flex items-start">
                 <svg className="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
