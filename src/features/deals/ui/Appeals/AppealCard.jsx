@@ -4,6 +4,8 @@ import { formatDate } from '../../../../shared/utils/formatters';
 
 const AppealCard = ({ appeal }) => {
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
+  const statusText = appeal?.info?.status?.trim() || '';
+  const hasStatus = statusText !== '';
 
   const getStatusColor = () => {
     const colorMap = {
@@ -16,21 +18,21 @@ const AppealCard = ({ appeal }) => {
   };
 
   const getInfoStatusTone = () => {
-    const status = appeal?.info?.status?.toLowerCase() || '';
+    const status = statusText.toLowerCase();
 
     if (status.includes('закры') || status.includes('реш')) {
-      return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+      return 'bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-[0_0_0_1px_rgba(16,185,129,0.05)]';
     }
 
     if (status.includes('откл') || status.includes('ошиб')) {
-      return 'bg-red-100 text-red-800 border border-red-200';
+      return 'bg-rose-50 text-rose-700 border border-rose-200 shadow-[0_0_0_1px_rgba(244,63,94,0.08)]';
     }
 
     if (status.includes('ожид') || status.includes('нов')) {
-      return 'bg-amber-100 text-amber-800 border border-amber-200';
+      return 'bg-amber-50 text-amber-700 border border-amber-200 shadow-[0_0_0_1px_rgba(251,191,36,0.08)]';
     }
 
-    return 'bg-blue-100 text-blue-800 border border-blue-200';
+    return 'bg-sky-50 text-sky-700 border border-sky-200 shadow-[0_0_0_1px_rgba(56,189,248,0.08)]';
   };
 
   const handleReply = () => {
@@ -57,17 +59,22 @@ const AppealCard = ({ appeal }) => {
         {appeal?.info && (
           <div className="mt-3 flex flex-col gap-2">
             <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-              <span className="font-medium">Статус обращения:</span>
-              <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 font-semibold ${getInfoStatusTone()}`}>
-                <span className="h-2 w-2 rounded-full bg-current" />
-                {appeal.info.status}
-              </span>
-            </div>
-            {appeal?.info.date && (
-              < div className="text-sm text-gray-500">
-                Дата последнего изменения {formatDate(appeal.info.date)}
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Статус обращения:</span>
+                {hasStatus ? (
+                  <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${getInfoStatusTone()}`}>
+                    {appeal.info.status}
+                  </span>
+                ) : (
+                  <span className="text-gray-400">не указан</span>
+                )}
               </div>
-            )}
+            </div>
+            <div className="text-sm text-gray-500">
+              {appeal?.info.date
+                ? `Дата последнего изменения ${formatDate(appeal.info.date)}`
+                : 'Дата последнего изменения не указана'}
+            </div>
           </div>
         )}
       </div>
