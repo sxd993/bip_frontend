@@ -1,11 +1,29 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Loading } from '../../../../shared/ui/Loading';
 import AppealsSection from '../../../deals/ui/Appeals/AppealsSection';
 import { EditPersonalDataModal } from './EditPersonalDataModal';
 
+const VALID_SECTIONS = ['personal', 'appeals'];
+const DEFAULT_SECTION = 'appeals';
+
 export const PhysicalAccount = ({ user, isLoading }) => {
-    const [activeSection, setActiveSection] = useState('personal');
+    const [searchParams, setSearchParams] = useSearchParams();
+    
+    // Получаем activeSection из URL параметра
+    const activeSection = searchParams.get('tab') || DEFAULT_SECTION;
+    
+    // Валидация: если параметр невалидный, переходим на дефолтный
+    if (!VALID_SECTIONS.includes(activeSection)) {
+        setSearchParams({ tab: DEFAULT_SECTION }, { replace: true });
+    }
+
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    // Функция для смены вкладки через URL
+    const handleTabChange = (section) => {
+        setSearchParams({ tab: section });
+    };
 
     if (isLoading) {
         return <Loading />
@@ -25,21 +43,21 @@ export const PhysicalAccount = ({ user, isLoading }) => {
                     <div className="flex border-b-2 border-red-200 overflow-x-auto">
                         <button
                             type="button"
-                            className={`flex-1 px-4 py-3 text-sm font-medium ${activeSection === 'personal'
-                                ? 'bg-red-500 text-white border-b-2 border-red-500'
+                            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors duration-200 ${activeSection === 'personal'
+                                ? 'bg-red-500 text-white'
                                 : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                                 }`}
-                            onClick={() => setActiveSection('personal')}
+                            onClick={() => handleTabChange('personal')}
                         >
                             Персональные данные
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 px-4 py-3 text-sm font-medium ${activeSection === 'appeals'
-                                ? 'bg-red-500 text-white border-b-2 border-red-500'
+                            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors duration-200 ${activeSection === 'appeals'
+                                ? 'bg-red-500 text-white'
                                 : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                                 }`}
-                            onClick={() => setActiveSection('appeals')}
+                            onClick={() => handleTabChange('appeals')}
                         >
                             Обращения
                         </button>
