@@ -11,7 +11,6 @@ export const PhysicalRegister = () => {
   const phoneValue = watch('phone');
 
   const { registerMutation, isRegisterPending, registerError } = useAuth();
-  console.log(registerError)
 
   const onSubmit = (data) => {
     const payload = {

@@ -24,7 +24,6 @@ const AppealsSection = () => {
     goToPage,
   } = pagination;
 
-  console.log(isLoading)
 
   const shouldShowPagination = totalPages > 1;
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);

@@ -6,8 +6,7 @@ export const useEditPersonalData = () => {
 
   const mutation = useMutation({
     mutationFn: updatePhysicalPersonApi,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user'], data);
+    onSuccess: () => {
       queryClient.invalidateQueries(['user']);
     },
   });
@@ -24,8 +23,7 @@ export const useEditEmployeeData = () => {
 
   const mutation = useMutation({
     mutationFn: updateEmployeeDataApi,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user'], data);
+    onSuccess: () => {
       queryClient.invalidateQueries(['user']);
     },
   });

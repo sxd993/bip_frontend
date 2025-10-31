@@ -1,25 +1,31 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Modal } from '../../../../shared/ui/Modal';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
 import { validationRules } from '../../../../shared/utils/validators';
 import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
 import { useEditEmployeeData } from '../../hooks/useEditPersonalData';
-import { useState } from 'react';
 
 export const EditEmployeeDataModal = ({ isOpen, onClose, user }) => {
-  const { register, handleSubmit, formState: { errors }, setValue, watch, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    reset,
+  } = useForm({
     defaultValues: {
       first_name: user?.first_name || '',
       last_name: user?.last_name || '',
       second_name: user?.second_name || '',
       email: user?.email || '',
       phone: user?.phone || '+7 ',
-    }
+    },
   });
 
   const phoneValue = watch('phone');
   const { mutate, isUpdating, updateError, isSuccess } = useEditEmployeeData();
-  const [successMessage, setSuccessMessage] = useState('');
 
   const onSubmit = (data) => {
     const payload = {
@@ -30,34 +36,47 @@ export const EditEmployeeDataModal = ({ isOpen, onClose, user }) => {
       phone: normalizePhoneForServer(data.phone),
     };
 
-    mutate(payload, {
-      onSuccess: () => {
-        setSuccessMessage('Данные успешно обновлены!');
-        setTimeout(() => {
-          reset();
-          onClose();
-          setSuccessMessage('');
-        }, 1500);
-      }
-    });
+    mutate(payload);
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Редактировать данные сотрудника" size="lg">
       <div className="px-4 py-6 space-y-6">
-        {successMessage && (
+        {isSuccess && (
           <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-4 flex items-center gap-3">
-            <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <svg
+              className="w-5 h-5 text-green-600 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
-            <p className="text-green-700 font-medium text-sm">{successMessage}</p>
+            <p className="text-green-700 font-medium text-sm">
+              Данные успешно обновлены
+            </p>
           </div>
         )}
 
         {updateError && (
           <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 flex items-start gap-3">
-            <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <p className="text-red-700 font-medium text-sm">{updateError}</p>
           </div>

@@ -1,15 +1,27 @@
 import { useState } from 'react';
 import { FormField, TextInput } from '../../../../shared/components/forms';
 import { useAuth } from '../../hooks/useAuth';
+import useCaptcha from '../../hooks/useCaptcha';
 
 const Login = ({ setCurrentStage, isLoading }) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const { loginMutation, isLoginPending } = useAuth();
+  const {
+    value: captchaValue,
+    handleChange: handleCaptchaChange,
+    validate: validateCaptcha,
+    refresh: refreshCaptcha,
+    error: captchaError,
+    isRefreshing: isCaptchaRefreshing,
+    CaptchaCanvas,
+  } = useCaptcha({ length: 6 });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!emailOrPhone.trim() || !password.trim()) return;
+
+    if (!validateCaptcha()) return;
 
     loginMutation.mutate({
       email_or_phone: emailOrPhone,
@@ -17,7 +29,6 @@ const Login = ({ setCurrentStage, isLoading }) => {
     });
   };
 
-  console.log(isLoginPending)
   if (isLoading) {
     return (
       <div className="py-24 bg-white min-h-screen">
@@ -77,6 +88,40 @@ const Login = ({ setCurrentStage, isLoading }) => {
           />
         </FormField>
 
+        <FormField label="Подтвердите, что вы человек" required>
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-center">
+              <div className="inline-flex items-center justify-center rounded-2xl border border-red-200 bg-red-50/40 px-6 py-4 shadow-inner">
+                <CaptchaCanvas reloadColor="#ef4444" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="relative w-full">
+                <TextInput
+                  type="text"
+                  value={captchaValue}
+                  onChange={(e) => handleCaptchaChange(e.target.value)}
+                  placeholder="Введите символы с изображения"
+                  required
+                  className="pr-32"
+                />
+                <button
+                  type="button"
+                  onClick={refreshCaptcha}
+                  className="absolute top-1/2 -translate-y-1/2 right-1.5 px-4 py-1.5 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                  disabled={isCaptchaRefreshing}
+                >
+                  Обновить
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            </div>
+            {captchaError && (
+              <p className="text-sm text-red-600 text-center">{captchaError}</p>
+            )}
+          </div>
+        </FormField>
         <button
           type="submit"
           className="w-full max-w-xs mx-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
