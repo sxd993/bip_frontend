@@ -14,7 +14,6 @@ export const EditEmployeeDataModal = ({ isOpen, onClose, user }) => {
       second_name: user?.second_name || '',
       email: user?.email || '',
       phone: user?.phone || '+7 ',
-      position: user?.position || ''
     }
   });
 
@@ -29,7 +28,6 @@ export const EditEmployeeDataModal = ({ isOpen, onClose, user }) => {
       second_name: data.second_name,
       email: data.email,
       phone: normalizePhoneForServer(data.phone),
-      position: data.position
     };
 
     mutate(payload, {
@@ -105,14 +103,6 @@ export const EditEmployeeDataModal = ({ isOpen, onClose, user }) => {
               value={phoneValue}
               setValue={setValue}
               error={errors.phone}
-            />
-          </FormField>
-
-          <FormField label="Должность" error={errors.position} required>
-            <TextInput
-              {...register('position', validationRules.required('Должность'))}
-              placeholder="Ваша должность в компании"
-              error={errors.position}
             />
           </FormField>
 

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updatePhysicalPersonApi, updateEmployeeDataApi, updateCompanyDataApi } from '../../../shared/api/account/updateApi';
+import { updatePhysicalPersonApi, updateEmployeeDataApi } from '../../../shared/api/account/updateApi';
 
 export const useEditPersonalData = () => {
   const queryClient = useQueryClient();
@@ -27,23 +27,6 @@ export const useEditEmployeeData = () => {
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], data);
       queryClient.invalidateQueries(['user']);
-    },
-  });
-
-  return {
-    ...mutation,
-    isUpdating: mutation.isPending,
-    updateError: mutation.error?.response?.data?.error || mutation.error?.message,
-  };
-};
-
-export const useEditCompanyData = () => {
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: updateCompanyDataApi,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['companyData']);
     },
   });
 

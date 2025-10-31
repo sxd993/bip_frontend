@@ -11,9 +11,3 @@ export const updateEmployeeDataApi = async (data) => {
     const response = await client.put("/user/personal_account/employee/update", data);
     return response.data;
 };
-
-// Для юр. лица - обновление компании (только для руководителя)
-export const updateCompanyDataApi = async (data) => {
-    const response = await client.put("/user/personal_account/company/update", data);
-    return response.data;
-};

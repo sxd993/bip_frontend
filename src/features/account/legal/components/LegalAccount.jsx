@@ -2,7 +2,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import AppealsSection from '../../../deals/ui/Appeals/AppealsSection';
 import { EditEmployeeDataModal } from './EditEmployeeDataModal';
-import { EditCompanyDataModal } from './EditCompanyDataModal';
 
 const VALID_SECTIONS = ['employee', 'appeals', 'company', 'employees'];
 const DEFAULT_SECTION = 'appeals';
@@ -11,7 +10,6 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
     const location = useLocation();
     const navigate = useNavigate();
     const [isEditEmployeeModalOpen, setIsEditEmployeeModalOpen] = useState(false);
-    const [isEditCompanyModalOpen, setIsEditCompanyModalOpen] = useState(false);
     const [showToken, setShowToken] = useState(false);
     const [copiedToken, setCopiedToken] = useState(false);
 
@@ -153,17 +151,6 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                                     <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
                                         <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Данные компании</h2>
                                     </div>
-                                    {user.role === 'Руководитель' && (
-                                        <button
-                                            onClick={() => setIsEditCompanyModalOpen(true)}
-                                            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-3xl transition-colors duration-300 flex items-center gap-2 font-bold text-sm md:text-base"
-                                        >
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                            Редактировать
-                                        </button>
-                                    )}
                                 </div>
                                 {isLoadingCompany ? (
                                     <div className="text-gray-600 text-center py-8">Загрузка данных компании...</div>
@@ -275,12 +262,6 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                 isOpen={isEditEmployeeModalOpen}
                 onClose={() => setIsEditEmployeeModalOpen(false)}
                 user={user}
-            />
-
-            <EditCompanyDataModal 
-                isOpen={isEditCompanyModalOpen}
-                onClose={() => setIsEditCompanyModalOpen(false)}
-                companyData={companyData}
             />
         </div>
     );
