@@ -31,7 +31,7 @@ const App = () => {
         <Suspense fallback={<Loading size="large" text="Загрузка страницы..." className="min-h-screen" />}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/auth/:stage" element={<Auth />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
