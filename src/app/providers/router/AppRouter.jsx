@@ -10,6 +10,9 @@ const Contacts = lazy(() => import('../../../pages/Contacts').then(module => ({ 
 const ServicesPrivate = lazy(() => import('../../../pages/ServicesPrivate'));
 const ServicesBusiness = lazy(() => import('../../../pages/ServicesBusiness'));
 const UnderDevelopment = lazy(() => import('../../../pages/UnderDevelopment'));
+const ConfirmRegister = lazy(() =>
+  import('../../../pages/ConfirmRegister').then(module => ({ default: module.ConfirmRegister }))
+);
 
 export const AppRouter = () => (
   <Suspense fallback={<Loading size="large" text="Загрузка страницы..." className="min-h-screen" />}>
@@ -17,6 +20,7 @@ export const AppRouter = () => (
       <Route path="/" element={<Home />} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/auth/:stage" element={<Auth />} />
+      <Route path="/register/confirm" element={<ConfirmRegister />} />
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
       <Route path="/ServicesBusiness" element={<ServicesBusiness />} />

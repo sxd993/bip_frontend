@@ -1,18 +1,28 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import path from 'path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@app': path.resolve(__dirname, './src/app'),
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@widgets': path.resolve(__dirname, './src/widgets'),
+      '@features': path.resolve(__dirname, './src/features'),
+      '@entities': path.resolve(__dirname, './src/entities'),
+      '@shared': path.resolve(__dirname, './src/shared'),
+    },
+  },
   server: {
-    allowedHosts: ['https://sxd993-bip-backend-028d.twc1.net'],
+    allowedHosts: ['sxd993-bip-backend-028d.twc1.net'],
   },
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
-          // Разделяем vendor библиотеки
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
           query: ['@tanstack/react-query'],
@@ -20,6 +30,6 @@ export default defineConfig({
         },
       },
     },
-    chunkSizeWarningLimit: 1000, // Увеличиваем лимит предупреждения
+    chunkSizeWarningLimit: 1000,
   },
 })

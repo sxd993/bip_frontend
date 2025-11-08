@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { FormField, TextInput } from '../../../../shared/components/forms';
-import { useAuth } from '../../hooks/useAuth';
-import useCaptcha from '../../hooks/useCaptcha';
+import { useLogin } from '../model/useLogin';
+import useCaptcha from '../model/useCaptcha';
 
 const Login = ({ setCurrentStage, isLoading }) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
-  const { loginMutation, isLoginPending } = useAuth();
+  const { login, isPending, isError, errorMessage } = useLogin();
   const {
     value: captchaValue,
     handleChange: handleCaptchaChange,
@@ -23,7 +23,7 @@ const Login = ({ setCurrentStage, isLoading }) => {
 
     if (!validateCaptcha()) return;
 
-    loginMutation.mutate({
+    login({
       email_or_phone: emailOrPhone,
       password,
     });
@@ -60,14 +60,6 @@ const Login = ({ setCurrentStage, isLoading }) => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        {loginMutation.isError && (
-          <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
-            <p className="text-red-600 text-sm text-center">
-              {loginMutation.errorMessage || 'Ошибка при входе'}
-            </p>
-          </div>
-        )}
-
         <FormField label="Логин" required>
           <TextInput
             type="text"
@@ -122,15 +114,23 @@ const Login = ({ setCurrentStage, isLoading }) => {
             )}
           </div>
         </FormField>
+        {isError && (
+          <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+            <p className="text-red-600 text-sm text-center">
+              {errorMessage || 'Ошибка при входе'}
+            </p>
+          </div>
+        )}
+
         <button
           type="submit"
           className="w-full max-w-xs mx-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
-          disabled={isLoginPending}
+          disabled={isPending}
         >
-          {isLoginPending && (
+          {isPending && (
             <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           )}
-          {isLoginPending ? 'Вход...' : 'Войти'}
+          {isPending ? 'Вход...' : 'Войти'}
         </button>
 
         <div className="text-center">
@@ -142,7 +142,9 @@ const Login = ({ setCurrentStage, isLoading }) => {
             <span className="text-gray-600">Нет аккаунта? </span>
             <span className="text-red-600 hover:text-red-700">Зарегистрироваться</span>
           </button>
+
         </div>
+
       </form>
     </div>
   );
