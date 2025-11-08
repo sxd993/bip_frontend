@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { validationRules } from '../../../../shared/utils/validators';
 import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
@@ -6,11 +7,21 @@ import { Loading } from '../../../../shared/ui/Loading';
 import { useAuth } from '../../hooks/useAuth';
 import { registerEmployeeApi } from '../../../../shared/api/auth/registerApi';
 
-export const EmployeeRegister = () => {
+export const EmployeeRegister = ({ prefill }) => {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
   const phoneValue = watch('phone');
 
   const { registerMutation, isRegisterPending, registerError } = useAuth();
+
+  useEffect(() => {
+    if (prefill?.inviteToken) {
+      setValue('company_token', prefill.inviteToken);
+    }
+
+    if (prefill?.email) {
+      setValue('email', prefill.email);
+    }
+  }, [prefill, setValue]);
 
   const onSubmit = (data) => {
     const payload = {

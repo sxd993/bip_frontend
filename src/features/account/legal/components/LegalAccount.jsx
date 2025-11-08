@@ -1,10 +1,14 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import AppealsSection from '../../../deals/ui/Appeals/AppealsSection';
+<<<<<<< HEAD
 import { EditEmployeeDataModal } from './EditEmployeeDataModal';
 
 const VALID_SECTIONS = ['employee', 'appeals', 'company', 'employees'];
 const DEFAULT_SECTION = 'appeals';
+=======
+import InviteEmployeeModal from './InviteEmployeeModal';
+>>>>>>> 1643c12456cf1e8f1308b3e1a18ba303adcca8e9
 
 export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompany, isLoadingEmployees }) => {
     const location = useLocation();
@@ -12,6 +16,7 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
     const [isEditEmployeeModalOpen, setIsEditEmployeeModalOpen] = useState(false);
     const [showToken, setShowToken] = useState(false);
     const [copiedToken, setCopiedToken] = useState(false);
+    const [isInviteModalOpen, setInviteModalOpen] = useState(false);
 
     // Получаем активную вкладку из URL параметра
     const params = new URLSearchParams(location.search);
@@ -39,6 +44,7 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
     };
 
     return (
+        <>
         <div className="py-24 bg-white">
             <div className="max-w-6xl mx-auto px-4 md:px-6">
                 <div className="text-center mb-16">
@@ -222,6 +228,23 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                                     </div>
                                 </div>
 
+<<<<<<< HEAD
+=======
+                                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                                    <p className="text-gray-600">
+                                        Отправьте приглашение, чтобы сотрудник получил письмо с анкетой и присоединился по ссылке.
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setInviteModalOpen(true)}
+                                        className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl transition-colors duration-200 font-bold"
+                                    >
+                                        Пригласить сотрудника
+                                    </button>
+                                </div>
+
+
+>>>>>>> 1643c12456cf1e8f1308b3e1a18ba303adcca8e9
                                 {isLoadingEmployees ? (
                                     <div className="text-gray-600 text-center py-8">Загрузка списка сотрудников...</div>
                                 ) : employeesData?.employees ? (
@@ -264,5 +287,10 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                 user={user}
             />
         </div>
+        <InviteEmployeeModal
+            isOpen={isInviteModalOpen}
+            onClose={() => setInviteModalOpen(false)}
+        />
+        </>
     );
 };

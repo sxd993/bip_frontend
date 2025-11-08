@@ -1,11 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PhysicalRegister } from '../components/Register/PhysicalRegister';
 import { LegalRegister } from '../components/Register/LegalRegister';
 import { EmployeeRegister } from '../components/Register/EmployeeRegister';
 
-const Register = ({ currentStage, setCurrentStage }) => {
-  const [userType, setUserType] = useState('physical');
-  const [legalType, setLegalType] = useState('director');
+const Register = ({
+  currentStage,
+  setCurrentStage,
+  defaultUserType = 'physical',
+  defaultLegalType = 'director',
+  employeePrefill
+}) => {
+  const [userType, setUserType] = useState(defaultUserType || 'physical');
+  const [legalType, setLegalType] = useState(defaultLegalType || 'director');
+
+  useEffect(() => {
+    if (defaultUserType) {
+      setUserType(defaultUserType);
+    }
+  }, [defaultUserType]);
+
+  useEffect(() => {
+    if (defaultLegalType) {
+      setLegalType(defaultLegalType);
+    }
+  }, [defaultLegalType]);
 
   return (
     <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
@@ -76,7 +94,9 @@ const Register = ({ currentStage, setCurrentStage }) => {
           <div className="mt-8">
             {userType === 'physical' && <PhysicalRegister />}
             {userType === 'legal' && legalType === 'director' && <LegalRegister />}
-            {userType === 'legal' && legalType === 'employee' && <EmployeeRegister />}
+            {userType === 'legal' && legalType === 'employee' && (
+              <EmployeeRegister prefill={employeePrefill} />
+            )}
           </div>
 
           <div className="text-center mt-8 pt-6 border-t-2 border-red-100">
