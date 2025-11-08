@@ -73,7 +73,7 @@ export const ConfirmRegister = () => (
 
             <button
               type="button"
-              className="w-full py-4 rounded-2xl text-lg font-semibold text-white bg-gray-200 text-gray-400 cursor-not-allowed"
+              className="w-full py-4 rounded-2xl text-lg font-semibold  bg-gray-200 text-gray-400 cursor-not-allowed"
             >
               Подтвердить и продолжить
             </button>
