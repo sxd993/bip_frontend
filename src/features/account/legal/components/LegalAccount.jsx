@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import AppealsSection from '../../../deals/ui/Appeals/AppealsSection';
 import { EditEmployeeDataModal } from './EditEmployeeDataModal';
+import InviteEmployeeModal from './InviteEmployeeModal';
 
 const VALID_SECTIONS = ['employee', 'appeals', 'company', 'employees'];
 const DEFAULT_SECTION = 'appeals';
