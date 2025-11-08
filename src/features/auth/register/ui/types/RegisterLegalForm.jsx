@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
-import { validationRules } from '../../../../shared/utils/validators';
-import { Loading } from '../../../../shared/ui/Loading';
-import { useLegalRegister } from '../model/useLegalRegister';
+import { FormField, TextInput, PhoneInput } from '../../../../../shared/components/forms';
+import { validationRules } from '../../../../../shared/utils/validators';
+import { Loading } from '../../../../../shared/ui/Loading';
+import { useLegalRegister } from '../../model/hooks/useLegalRegister';
 
 export const RegisterLegalForm = () => {
   const {

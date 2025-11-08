@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { EmployeeRegister } from './EmployeeRegister';
-import { RegisterLegalForm } from './RegisterLegalForm';
-import { RegisterPhysicalForm } from './RegisterPhysicalForm';
+import { EmployeeRegister } from './types/EmployeeRegister';
+import { RegisterLegalForm } from './types/RegisterLegalForm';
+import { RegisterPhysicalForm } from './types/RegisterPhysicalForm';
 
 const Register = ({
-  currentStage,
   setCurrentStage,
   defaultUserType = 'physical',
   defaultLegalType = 'director',
@@ -38,8 +37,8 @@ const Register = ({
           <button
             type="button"
             className={`px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base font-medium transition-all duration-300 ${userType === 'physical'
-                ? 'bg-red-500 text-white'
-                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+              ? 'bg-red-500 text-white'
+              : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
               }`}
             onClick={() => setUserType('physical')}
           >
@@ -48,8 +47,8 @@ const Register = ({
           <button
             type="button"
             className={`px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base font-medium transition-all duration-300 ${userType === 'legal'
-                ? 'bg-red-500 text-white'
-                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+              ? 'bg-red-500 text-white'
+              : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
               }`}
             onClick={() => setUserType('legal')}
           >
@@ -65,8 +64,8 @@ const Register = ({
             <button
               type="button"
               className={`px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium transition-all duration-300 ${legalType === 'director'
-                  ? 'bg-red-500 text-white'
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                ? 'bg-red-500 text-white'
+                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                 }`}
               onClick={() => setLegalType('director')}
             >
@@ -75,8 +74,8 @@ const Register = ({
             <button
               type="button"
               className={`px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium transition-all duration-300 ${legalType === 'employee'
-                  ? 'bg-red-500 text-white'
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
+                ? 'bg-red-500 text-white'
+                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
                 }`}
               onClick={() => setLegalType('employee')}
             >

@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
-import { validationRules } from '../../../../shared/utils/validators';
-import { Loading } from '../../../../shared/ui/Loading';
-import { usePhysicalRegister } from '../model/usePhysicalRegister';
+import { FormField, TextInput, PhoneInput } from '../../../../../shared/components/forms';
+import { validationRules } from '../../../../../shared/utils/validators';
+import { Loading } from '../../../../../shared/ui/Loading';
+import { usePhysicalRegister } from '../../model/hooks/usePhysicalRegister';
 
 export const RegisterPhysicalForm = () => {
   const {
