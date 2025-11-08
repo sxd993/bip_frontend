@@ -1,3 +1,4 @@
+import { EnterCodeForm } from '@/features/auth/confirm-register/ui/EnterCodeForm';
 import { Link } from 'react-router-dom';
 
 const TIMELINE_STEPS = [
@@ -14,8 +15,6 @@ const TIMELINE_STEPS = [
     description: 'После подтверждения регистрация завершится автоматически и мы перенаправим вас в личный кабинет.',
   },
 ];
-
-const PLACEHOLDER_DIGITS = ['', '', '', '', '', ''];
 
 export const ConfirmRegister = () => (
   <section className="bg-white py-15">
@@ -61,22 +60,8 @@ export const ConfirmRegister = () => (
 
           <div className="space-y-8">
             <div className="flex justify-between gap-2">
-              {PLACEHOLDER_DIGITS.map((value, index) => (
-                <div
-                  key={`digit-${index}`}
-                  className="w-full aspect-square max-w-[60px] rounded-2xl border border-gray-100 bg-gray-50 text-center flex items-center justify-center text-2xl font-semibold text-gray-400"
-                >
-                  {value}
-                </div>
-              ))}
+              <EnterCodeForm />
             </div>
-
-            <button
-              type="button"
-              className="w-full py-4 rounded-2xl text-lg font-semibold  bg-gray-200 text-gray-400 cursor-not-allowed"
-            >
-              Подтвердить и продолжить
-            </button>
           </div>
 
 

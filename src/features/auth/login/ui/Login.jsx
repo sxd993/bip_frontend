@@ -33,16 +33,6 @@ const Login = ({ setCurrentStage, isLoading }) => {
     return (
       <div className="py-24 bg-white min-h-screen">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-              Авторизация
-            </h1>
-            <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
-            <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">
-              Войдите в систему или создайте новый аккаунт
-            </p>
-          </div>
-
           <div className="max-w-2xl mx-auto">
             <div className="h-64 bg-gray-100 rounded-xl animate-pulse" />
           </div>
@@ -53,12 +43,6 @@ const Login = ({ setCurrentStage, isLoading }) => {
 
   return (
     <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
-      <div className="text-center mb-10">
-        <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Вход в систему</h2>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-8">
         <FormField label="Логин" required>
           <TextInput

@@ -1,28 +1,31 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { registerLegalEntityApi } from '../../../../../shared/api/auth/registerApi';
+import { sendCheckEmailRegisterLegal } from '../../../../../shared/api/auth/registerApi';
 import { normalizePhoneForServer } from '../../../../../shared/utils/formatters';
 
 export const useLegalRegister = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: registerLegalEntityApi,
+    mutationFn: sendCheckEmailRegisterLegal,
     onSuccess: (data) => {
-      if (data?.user) {
-        queryClient.setQueryData(['user'], data.user);
-        queryClient.invalidateQueries({ queryKey: ['user'] });
-        navigate('/personal-account');
+      const precheckId = data?.precheck_id;
+      if (!precheckId) {
+        console.error('Не удалось получить идентификатор пречека');
+        return;
       }
+
+      navigate('/register/confirm', { replace: true });
     },
   });
 
   const onSubmit = (formData) => {
-    mutation.mutate({
+    const normalizedData = {
       ...formData,
       phone: normalizePhoneForServer(formData.phone),
-    });
+    };
+
+    mutation.mutate(normalizedData);
   };
 
   return {

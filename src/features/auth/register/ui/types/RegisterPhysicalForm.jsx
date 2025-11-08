@@ -68,7 +68,7 @@ export const RegisterPhysicalForm = () => {
       </FormField>
 
       <FormField label="Отчество" error={errors.second_name}>
-        <TextInput {...register('second_name')} error={errors.second_name} />
+        <TextInput {...register('second_name', validationRules.required('Отчество')) } error={errors.second_name} />
       </FormField>
 
       <FormField label="Email" error={errors.email} required>
