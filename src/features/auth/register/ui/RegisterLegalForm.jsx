@@ -1,32 +1,26 @@
- import { useForm } from 'react-hook-form';
-import { validationRules } from '../../../../shared/utils/validators';
-import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
+import { useForm } from 'react-hook-form';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
+import { validationRules } from '../../../../shared/utils/validators';
 import { Loading } from '../../../../shared/ui/Loading';
-import { useAuth } from '../../hooks/useAuth';
-import { registerLegalEntityApi } from '../../../../shared/api/auth/registerApi';
+import { useLegalRegister } from '../model/useLegalRegister';
 
-export const LegalRegister = () => {
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
+export const RegisterLegalForm = () => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm();
   const phoneValue = watch('phone');
 
-  const { registerMutation, isRegisterPending, registerError } = useAuth();
+  const { onSubmit, isPending, isSuccess, isError, errorMessage } = useLegalRegister();
 
-  const onSubmit = (data) => {
-    const payload = {
-      ...data,
-      phone: normalizePhoneForServer(data.phone),
-    };
-    
-    registerMutation.mutate({
-      registerFn: registerLegalEntityApi,
-      payload: payload
-    });
-  };
+  if (isPending) {
+    return <Loading />;
+  }
 
-  if (isRegisterPending) return <Loading />;
-
-  if (registerMutation.isSuccess) {
+  if (isSuccess) {
     return (
       <div className="text-center py-8">
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
@@ -42,7 +36,6 @@ export const LegalRegister = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-
       <FormField label="Название организации" error={errors.company_name} required>
         <TextInput
           {...register('company_name', validationRules.required('Название организации'))}
@@ -51,10 +44,7 @@ export const LegalRegister = () => {
       </FormField>
 
       <FormField label="ИНН" error={errors.inn} required>
-        <TextInput
-          {...register('inn', validationRules.inn)}
-          error={errors.inn}
-        />
+        <TextInput {...register('inn', validationRules.inn)} error={errors.inn} />
       </FormField>
 
       <FormField label="Имя руководителя" error={errors.employee_first_name} required>
@@ -102,19 +92,19 @@ export const LegalRegister = () => {
           error={errors.password}
         />
       </FormField>
-      {registerMutation.isError && (
+
+      {isError && errorMessage && (
         <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
-          <p className="text-red-600 text-sm text-center">
-            {registerError}
-          </p>
+          <p className="text-red-600 text-sm text-center">{errorMessage}</p>
         </div>
       )}
+
       <button
         type="submit"
-        disabled={isRegisterPending}
+        disabled={isPending}
         className="w-full max-w-xs mx-auto flex justify-center py-2 px-4 md:py-3 md:px-6 border border-transparent rounded-3xl text-sm md:text-base font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
       >
-        {isRegisterPending ? 'Регистрация...' : 'Зарегистрировать организацию'}
+        {isPending ? 'Регистрация...' : 'Зарегистрировать организацию'}
       </button>
     </form>
   );

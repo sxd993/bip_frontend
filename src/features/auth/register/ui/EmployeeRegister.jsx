@@ -4,7 +4,7 @@ import { validationRules } from '../../../../shared/utils/validators';
 import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
 import { Loading } from '../../../../shared/ui/Loading';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../login/model/useAuth';
 import { registerEmployeeApi } from '../../../../shared/api/auth/registerApi';
 
 export const EmployeeRegister = ({ prefill }) => {

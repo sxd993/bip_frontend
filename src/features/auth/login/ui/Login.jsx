@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FormField, TextInput } from '../../../../shared/components/forms';
-import { useAuth } from '../../hooks/useAuth';
-import useCaptcha from '../../hooks/useCaptcha';
+import { useAuth } from '../model/useAuth';
+import useCaptcha from '../model/useCaptcha';
 
 const Login = ({ setCurrentStage, isLoading }) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
