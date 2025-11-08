@@ -21,6 +21,7 @@ const Contacts = lazy(() => import('./pages/Contacts').then(module => ({ default
 const ServicesPrivate = lazy(() => import('./pages/ServicesPrivate'));
 const ServicesBusiness = lazy(() => import('./pages/ServicesBusiness'));
 const UnderDevelopment = lazy(() => import('./pages/UnderDevelopment'));
+const ConfirmRegister = lazy(() => import('./pages/ConfirmRegister').then(module => ({ default: module.ConfirmRegister })));
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/auth/:stage" element={<Auth />} />
+            <Route path="/auth/confirm" element={<ConfirmRegister />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
             <Route path="/ServicesBusiness" element={<ServicesBusiness />} />
