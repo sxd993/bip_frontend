@@ -6,7 +6,8 @@ export const useAppealsSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: appeals = [], isLoading } = useAppeals();
+  const { data = { items: [] }, isLoading } = useAppeals();
+  const appeals = data.items || [];
 
   const totalAppeals = appeals.length;
   const totalPages = Math.ceil(totalAppeals / PAGE_SIZE);
