@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useForgotPassword } from './useForgotPassword';
+import { forgotPasswordValidator } from './lib/validator';
 
 export const useForgotPasswordForm = () => {
   // Форма
@@ -20,13 +21,7 @@ export const useForgotPasswordForm = () => {
   } = useForgotPassword();
 
   // Валидация
-  const emailField = register('email', {
-    required: 'Введите email',
-    pattern: {
-      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-      message: 'Введите корректный email',
-    },
-  });
+  const emailField = register('email', forgotPasswordValidator.email);
 
   // Сабмит
   const onSubmit = async ({ email }) => {
