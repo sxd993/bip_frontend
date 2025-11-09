@@ -1,8 +1,12 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import AppealsSection from '../../../deals/ui/Appeals/AppealsSection';
 import { EditEmployeeDataModal } from './EditEmployeeDataModal';
-import InviteEmployeeModal from './InviteEmployeeModal';
+import InviteEmployeeModal from '../../../invite-employee/ui/InviteEmployeeModal';
+import PendingInvitesModal from '../../../invite-employee/ui/PendingInvitesModal';
+import RemoveEmployeeModal from '../../../remove-employee/ui/RemoveEmployeeModal';
+import { useRemoveEmployee } from '../../../remove-employee/model/useRemoveEmployee';
 
 const VALID_SECTIONS = ['employee', 'appeals', 'company', 'employees'];
 const DEFAULT_SECTION = 'appeals';
@@ -11,9 +15,32 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
     const location = useLocation();
     const navigate = useNavigate();
     const [isEditEmployeeModalOpen, setIsEditEmployeeModalOpen] = useState(false);
-    const [showToken, setShowToken] = useState(false);
-    const [copiedToken, setCopiedToken] = useState(false);
     const [isInviteModalOpen, setInviteModalOpen] = useState(false);
+    const [isPendingInvitesModalOpen, setPendingInvitesModalOpen] = useState(false);
+    const [employeeToDelete, setEmployeeToDelete] = useState(null);
+    const queryClient = useQueryClient();
+
+    const deleteEmployeeMutation = useRemoveEmployee({
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['companyEmployees'] });
+            setEmployeeToDelete(null);
+        },
+    });
+
+    const deleteEmployeeError =
+        deleteEmployeeMutation.error?.response?.data?.error ||
+        deleteEmployeeMutation.error?.message;
+
+    const handleConfirmDelete = () => {
+        if (!employeeToDelete) return;
+        deleteEmployeeMutation.mutate(employeeToDelete.id);
+    };
+
+    const handleCloseDeleteModal = () => {
+        if (deleteEmployeeMutation.isPending) return;
+        deleteEmployeeMutation.reset();
+        setEmployeeToDelete(null);
+    };
 
     // Получаем активную вкладку из URL параметра
     const params = new URLSearchParams(location.search);
@@ -30,14 +57,6 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
     // Меняем вкладку через URL
     const handleTabChange = (tabName) => {
         navigate(`/personal-account?tab=${tabName}`);
-    };
-
-    const handleCopyToken = () => {
-        if (companyData?.invite_token) {
-            navigator.clipboard.writeText(companyData.invite_token);
-            setCopiedToken(true);
-            setTimeout(() => setCopiedToken(false), 2000);
-        }
     };
 
     return (
@@ -176,41 +195,29 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                                     <div className="text-gray-600 text-center py-8">Данные компании недоступны</div>
                                 )}
 
-                                {user.role === 'Руководитель' && companyData?.invite_token && (
+                                {user.role === 'Руководитель' && (
                                     <div className="mt-8">
-                                        <div className="text-center mb-8">
-                                            <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
-                                                <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Токен приглашения</h2>
-                                            </div>
-                                        </div>
                                         <div className="bg-white border-2 border-red-200 rounded-3xl p-6">
-                                            <p className="text-gray-600 mb-6 text-center">
-                                                Передайте этот токен сотрудникам для регистрации в компании
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-3 text-center">Приглашение сотрудников</h3>
+                                            <p className="text-gray-600 text-center">
+                                                Приглашайте сотрудников по электронной почте. Каждому приглашённому отправляется уникальная одноразовая ссылка для регистрации.
                                             </p>
-                                            {showToken ? (
-                                                <div className="space-y-4">
-                                                    <div className="bg-red-50 border-2 border-red-100 rounded-2xl p-4">
-                                                        <code className="font-mono text-sm break-all text-gray-800">{companyData.invite_token}</code>
-                                                    </div>
-                                                    <div className="flex justify-center">
-                                                        <button
-                                                            className="bg-red-500 text-white px-6 py-3 rounded-3xl hover:bg-red-600 transition-colors duration-300 font-bold"
-                                                            onClick={handleCopyToken}
-                                                        >
-                                                            {copiedToken ? '✓ Скопировано' : 'Копировать токен'}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div className="flex justify-center">
-                                                    <button
-                                                        className="bg-red-500 text-white px-6 py-3 rounded-3xl hover:bg-red-600 transition-colors duration-300 font-bold"
-                                                        onClick={() => setShowToken(true)}
-                                                    >
-                                                        Показать токен
-                                                    </button>
-                                                </div>
-                                            )}
+                                            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setInviteModalOpen(true)}
+                                                    className="w-full sm:w-auto px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl font-bold transition-colors duration-200"
+                                                >
+                                                    Пригласить сотрудника
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setPendingInvitesModalOpen(true)}
+                                                    className="w-full sm:w-auto px-6 py-3 border border-gray-200 text-gray-700 rounded-3xl hover:border-gray-300 transition-colors duration-200 font-medium"
+                                                >
+                                                    Отправленные приглашения
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -227,14 +234,43 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
 
                                 {isLoadingEmployees ? (
                                     <div className="text-gray-600 text-center py-8">Загрузка списка сотрудников...</div>
-                                ) : employeesData?.employees ? (
+                                ) : employeesData?.employees?.length > 0 ? (
                                     <div>
-                                        <div className="mb-6">
-                                            <h4 className="text-lg font-medium text-gray-700">Всего сотрудников: {employeesData.total_count}</h4>
+                                        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                            <div>
+                                                <h4 className="text-lg font-medium text-gray-700">Всего сотрудников: {employeesData.total_count}</h4>
+                                                <p className="text-sm text-gray-500 mt-1">Пригласите новых сотрудников по email, чтобы они получили персональную ссылку.</p>
+                                            </div>
+                                            <div className="flex flex-col sm:flex-row gap-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setInviteModalOpen(true)}
+                                                    className="inline-flex items-center justify-center px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl font-bold transition-colors duration-200"
+                                                >
+                                                    Пригласить сотрудника
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setPendingInvitesModalOpen(true)}
+                                                    className="inline-flex items-center justify-center px-6 py-3 border border-gray-200 text-gray-700 rounded-3xl hover:border-gray-300 transition-colors duration-200 font-medium"
+                                                >
+                                                    Отправленные приглашения
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                             {employeesData.employees.map((employee) => (
-                                                <div key={employee.id} className="bg-red-50 p-4 rounded-2xl border-2 border-red-200">
+                                                <div key={employee.id} className="relative bg-red-50 p-4 rounded-2xl border-2 border-red-200">
+                                                    {employee.role !== 'Руководитель' && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setEmployeeToDelete(employee)}
+                                                            className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors"
+                                                            aria-label={`Удалить сотрудника ${employee.full_name}`}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    )}
                                                     <div className="font-semibold text-gray-800 mb-2">
                                                         {employee.full_name}
                                                     </div>
@@ -253,7 +289,16 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="text-gray-600 text-center py-8">Нет сотрудников</div>
+                                    <div className="text-gray-600 text-center py-8 space-y-6">
+                                        <p>Нет сотрудников</p>
+                                        <button
+                                            type="button"
+                                            onClick={() => setInviteModalOpen(true)}
+                                            className="inline-flex items-center justify-center px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-3xl font-bold transition-colors duration-200"
+                                        >
+                                            Пригласить первого сотрудника
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         )}
@@ -270,6 +315,21 @@ export const LegalAccount = ({ user, companyData, employeesData, isLoadingCompan
         <InviteEmployeeModal
             isOpen={isInviteModalOpen}
             onClose={() => setInviteModalOpen(false)}
+            onInviteSent={() => {
+                queryClient.invalidateQueries({ queryKey: ['companyInvites'] });
+            }}
+        />
+        <PendingInvitesModal
+            isOpen={isPendingInvitesModalOpen}
+            onClose={() => setPendingInvitesModalOpen(false)}
+        />
+        <RemoveEmployeeModal
+            isOpen={Boolean(employeeToDelete)}
+            employee={employeeToDelete}
+            onClose={handleCloseDeleteModal}
+            onConfirm={handleConfirmDelete}
+            isLoading={deleteEmployeeMutation.isPending}
+            errorMessage={deleteEmployeeError}
         />
         </>
     );

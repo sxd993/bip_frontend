@@ -60,8 +60,8 @@ export const validatePhone = (value) => {
   export const validateCompanyToken = (value) => {
     if (!value) return 'Токен компании обязателен';
     
-    if (value.length !== 32) {
-      return 'Токен должен содержать 32 символа';
+    if (value.length !== 64) {
+      return 'Токен должен содержать 64 символа';
     }
     return true;
   };
@@ -103,12 +103,12 @@ export const validatePhone = (value) => {
     companyToken: {
       required: 'Токен компании обязателен',
       minLength: {
-        value: 32,
-        message: 'Токен должен содержать 32 символа'
+        value: 64,
+        message: 'Токен должен содержать 64 символа'
       },
       maxLength: {
-        value: 32,
-        message: 'Токен должен содержать 32 символа'
+        value: 64,
+        message: 'Токен должен содержать 64 символа'
       }
     }
   };

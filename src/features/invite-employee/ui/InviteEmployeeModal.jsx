@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { Modal } from '../../../../shared/ui/Modal';
-import SuccessScreen from '../../../../shared/components/SuccessScreen';
-import { sendCompanyInviteApi } from '../../../../shared/api/account/companyApi';
+import { Modal } from '../../../shared/ui/Modal';
+import SuccessScreen from '../../../shared/components/SuccessScreen';
+import { useInviteEmployee } from '../model/useInviteEmployee';
 
-const InviteEmployeeModal = ({ isOpen, onClose }) => {
+const InviteEmployeeModal = ({ isOpen, onClose, onInviteSent }) => {
   const {
     register,
     handleSubmit,
@@ -17,8 +16,12 @@ const InviteEmployeeModal = ({ isOpen, onClose }) => {
     }
   });
 
-  const inviteMutation = useMutation({
-    mutationFn: sendCompanyInviteApi
+  const inviteMutation = useInviteEmployee({
+    onSuccess: (data, variables, context) => {
+      if (typeof onInviteSent === 'function') {
+        onInviteSent(data, variables, context);
+      }
+    }
   });
 
   useEffect(() => {
