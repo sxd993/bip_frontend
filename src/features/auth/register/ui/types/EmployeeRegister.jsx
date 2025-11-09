@@ -62,9 +62,9 @@ export const EmployeeRegister = ({ prefill }) => {
         />
       </FormField>
 
-      <FormField label="Отчество" error={errors.second_name}>
+      <FormField label="Отчество" error={errors.second_name} required>
         <TextInput
-          {...register('second_name')}
+          {...register('second_name', validationRules.required('Отчество'))}
           error={errors.second_name}
         />
       </FormField>

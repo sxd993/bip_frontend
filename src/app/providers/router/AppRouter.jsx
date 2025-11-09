@@ -14,7 +14,7 @@ const ConfirmRegister = lazy(() =>
   import('../../../pages/ConfirmRegister').then(module => ({ default: module.ConfirmRegister }))
 );
 const ForgotPassword = lazy(() => import('../../../pages/ForgotPassword'));
-const ResetPassword = lazy(() => import('../../../features/auth/reset-password/ui/ResetPassword'));
+const ResetPassword = lazy(() => import('../../../pages/ResetPassword'));
 
 export const AppRouter = () => (
   <Suspense fallback={<Loading size="large" text="Загрузка страницы..." className="min-h-screen" />}>
