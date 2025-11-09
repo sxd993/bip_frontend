@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FormField, TextInput } from '../../../../shared/components/forms';
 import { useLogin } from '../model/useLogin';
 import useCaptcha from '../model/useCaptcha';
+import { Link } from 'react-router-dom';
 
 const Login = ({ setCurrentStage, isLoading }) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -62,6 +63,11 @@ const Login = ({ setCurrentStage, isLoading }) => {
             placeholder="Введите ваш пароль"
             required
           />
+          <div className='ml-4 text-sm text-gray-500'>
+            <Link to="/auth/forgot-password" className="text-primary hover:underline">
+              Забыли пароль?
+            </Link>
+          </div>
         </FormField>
 
         <FormField label="Подтвердите, что вы человек" required>
@@ -126,7 +132,6 @@ const Login = ({ setCurrentStage, isLoading }) => {
             <span className="text-gray-600">Нет аккаунта? </span>
             <span className="text-red-600 hover:text-red-700">Зарегистрироваться</span>
           </button>
-
         </div>
 
       </form>

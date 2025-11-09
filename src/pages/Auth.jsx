@@ -60,7 +60,7 @@ export const Auth = () => {
     }, [inviteTokenParam, inviteEmailParam]);
 
    if (isLoading) {
-    return <>ЗАЛУПА</>
+    return <>Загрузка...</>
    }
    
     if (error) return <div>Ошибка загрузки данных</div>;
