@@ -6,14 +6,27 @@ import { Loading } from '../../../../../shared/ui/Loading';
 import { useEmployeeRegister } from '../../model/hooks/useEmployeeRegister';
 
 export const EmployeeRegister = ({ prefill }) => {
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      company_token: prefill?.inviteToken || ''
+    }
+  });
   const phoneValue = watch('phone');
 
   const { onSubmit, isPending, isSuccess, isError, errorMessage } = useEmployeeRegister();
+  const hasInviteToken = Boolean(prefill?.inviteToken);
 
   useEffect(() => {
     if (prefill?.inviteToken) {
       setValue('company_token', prefill.inviteToken);
+    } else {
+      setValue('company_token', '');
     }
 
     if (prefill?.email) {
@@ -37,16 +50,21 @@ export const EmployeeRegister = ({ prefill }) => {
     );
   }
 
+  if (!hasInviteToken) {
+    return (
+      <div className="text-center py-8 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">Регистрация по приглашению</h3>
+        <p className="text-gray-600">
+          Регистрация сотрудника доступна только по персональной ссылке из письма-приглашения.
+          Попросите руководителя отправить новое приглашение.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-
-      <FormField label="Токен компании" error={errors.company_token} required>
-        <TextInput
-          {...register('company_token', validationRules.companyToken)}
-          placeholder="Введите 32-символьный токен от руководителя"
-          error={errors.company_token}
-        />
-      </FormField>
+      <input type="hidden" {...register('company_token', { required: true })} />
 
       <FormField label="Имя" error={errors.first_name} required>
         <TextInput
