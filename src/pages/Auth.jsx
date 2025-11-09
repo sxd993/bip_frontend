@@ -1,5 +1,6 @@
 import Register from '../features/auth/register/ui/Register';
 import Login from '../features/auth/login/ui/Login';
+import ResetPassword from '../features/auth/reset-password/ui/ResetPassword';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useUser } from '../shared/hooks/useUser';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -60,10 +61,15 @@ export const Auth = () => {
     }, [inviteTokenParam, inviteEmailParam]);
 
    if (isLoading) {
-    return <>ЗАЛУПА</>
+    return <>Загрузка...</>
    }
    
     if (error) return <div>Ошибка загрузки данных</div>;
+
+    // Если stage === 'reset-password', показываем компонент сброса пароля
+    if (stageParam === 'reset-password') {
+      return <ResetPassword />;
+    }
 
     // если пользователь не авторизован, показываем форму
     return (
