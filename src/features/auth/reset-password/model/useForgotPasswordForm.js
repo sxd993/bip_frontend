@@ -5,7 +5,6 @@ import { forgotPasswordValidator } from './lib/validator';
 export const useForgotPasswordForm = () => {
   // Форма
   const form = useForm({
-    mode: 'onChange',
     defaultValues: {
       email: '',
     },
