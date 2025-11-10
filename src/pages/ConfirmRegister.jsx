@@ -1,4 +1,4 @@
-import { EnterCodeForm } from '@/features/auth/confirm-register/ui/EnterCodeForm';
+import { EnterCodeForm } from '../features/confirm-register/ui/EnterCodeForm';
 import { Link } from 'react-router-dom';
 
 const TIMELINE_STEPS = [
