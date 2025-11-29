@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Loading } from '../../../shared/ui/Loading';
-import { AuthGuard } from '../../../shared/lib/auth/AuthGuard';
+import { AuthGuard } from '../../../entities/user/lib/AuthGuard';
 import { Account } from '../../../pages/Account';
 import { Auth } from '../../../pages/Auth';
 

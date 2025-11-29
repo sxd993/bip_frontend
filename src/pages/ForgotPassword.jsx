@@ -1,4 +1,4 @@
-import { ForgotPasswordForm } from '@/features/auth/reset-password/ui/ForgotPasswordForm';
+import { ForgotPasswordForm } from '../features/reset-password/ui/ForgotPasswordForm';
 import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {

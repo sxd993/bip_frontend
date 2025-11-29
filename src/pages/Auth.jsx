@@ -1,7 +1,7 @@
-import Register from '../features/auth/register/ui/Register';
-import Login from '../features/auth/login/ui/Login';
+import Register from '../features/register/ui/Register';
+import Login from '../features/login/ui/Login';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useUser } from '../shared/hooks/useUser';
+import { useUser } from '../entities/user/model/useUser';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const Auth = () => {

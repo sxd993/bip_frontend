@@ -1,5 +1,5 @@
-import Header from './layout/header/Header';
-import Footer from './layout/footer/Footer';
+import Header from './widgets/header/ui/Header';
+import Footer from './widgets/footer/ui/Footer';
 import { AppRouter } from './app/providers/router';
 
 const App = () => {
