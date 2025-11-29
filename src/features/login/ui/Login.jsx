@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 const Login = ({ setCurrentStage, isLoading }) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [userType, setUserType] = useState('physical'); // частное лицо или юридическое лицо
   const { login, isPending, isError, errorMessage } = useLogin();
   const {
     value: captchaValue,
@@ -33,9 +34,9 @@ const Login = ({ setCurrentStage, isLoading }) => {
   if (isLoading) {
     return (
       <div className="py-24 bg-white min-h-screen">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className="max-w-6xl mx-auto px-4 lg:px-6">
           <div className="max-w-2xl mx-auto">
-            <div className="h-64 bg-gray-100 rounded-xl animate-pulse" />
+            <div className="h-64 bg-gray-100 rounded-lg animate-pulse" />
           </div>
         </div>
       </div>
@@ -43,99 +44,132 @@ const Login = ({ setCurrentStage, isLoading }) => {
   }
 
   return (
-    <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <FormField label="Логин" required>
+    <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
+
+      {/* Вкладки */}
+      <div className="flex w-full gap-1 sm:gap-2">
+        <button
+          type="button"
+          onClick={() => setUserType('physical')}
+          className={`flex-1 py-1 sm:py-1.5 lg:py-2 text-sm sm:text-base lg:text-lg font-extrabold transition ${
+            userType === 'physical'
+              ? 'bg-primary text-white border-0 rounded-t-lg'
+              : 'bg-white text-[#8A2A27] border-2 border-[#8A2A27] rounded-lg'
+          }`}
+          style={{
+            marginBottom: userType === 'physical' ? '0' : '8px',
+            marginRight: userType === 'physical' ? '0' : '8px'
+          }}
+        >
+          частное лицо
+        </button>
+  
+        <button
+          type="button"
+          onClick={() => setUserType('legal')}
+          className={`flex-1 py-1 sm:py-1.5 lg:py-2 text-sm sm:text-base lg:text-lg font-extrabold transition ${
+            userType === 'legal'
+              ? 'bg-secondary text-white border-0 rounded-t-lg'
+              : 'bg-white text-[#8A2A27] border-2 border-[#8A2A27] rounded-lg'
+          }`}
+          style={{
+            marginBottom: userType === 'legal' ? '0' : '8px',
+            marginLeft: userType === 'legal' ? '0' : '8px'
+          }}
+        >
+          юридическое лицо
+        </button>
+      </div>
+  
+      {/* Контейнер с динамическим цветом */}
+      <div className={`p-4 sm:p-6 lg:p-10 transition-colors duration-300 ${
+        userType === 'physical' 
+          ? 'bg-primary rounded-tr-lg rounded-b-lg' 
+          : 'bg-secondary rounded-tl-lg rounded-b-lg'
+      }`}>
+  
+        {/* Логин */}
+        <div className="mb-4 sm:mb-6">
           <TextInput
             type="text"
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e.target.value)}
-            placeholder="Email или номер телефона"
+            placeholder="Логин"
             required
           />
-        </FormField>
-
-        <FormField label="Пароль" required>
+        </div>
+  
+        {/* Пароль */}
+        <div>
           <TextInput
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Введите ваш пароль"
+            placeholder="Пароль"
             required
           />
-          <div className='ml-4 text-sm text-gray-500'>
-            <Link to="/auth/forgot-password" className="text-primary hover:underline">
+          <div className="text-xs sm:text-sm mt-2">
+            <Link to="/auth/forgot-password" className="text-white italic">
               Забыли пароль?
             </Link>
           </div>
-        </FormField>
-
-        <FormField label="Подтвердите, что вы человек" required>
-          <div className="flex flex-col gap-4">
-            <div className="flex justify-center">
-              <div className="inline-flex items-center justify-center rounded-2xl border border-red-200 bg-red-50/40 px-6 py-4 shadow-inner">
-                <CaptchaCanvas reloadColor="#ef4444" />
-              </div>
+        </div>
+  
+        {/* Капча */}
+        <div className="mt-4 sm:mt-6 lg:mt-8">
+          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-2 sm:gap-4 mb-3 sm:mb-4">
+            <label className="text-white font-semibold text-sm sm:text-base lg:text-lg text-center sm:text-left">
+              Подтвердите, что вы человек: 
+            </label>
+            <div className="bg-white border rounded-lg px-2 sm:px-4 py-1 text-black text-base sm:text-lg lg:text-xl tracking-widest">
+              <CaptchaCanvas reloadColor="#8A2A27" />
             </div>
-            <div className="flex flex-col gap-3">
-              <div className="relative w-full">
-                <TextInput
-                  type="text"
-                  value={captchaValue}
-                  onChange={(e) => handleCaptchaChange(e.target.value)}
-                  placeholder="Введите символы с изображения"
-                  required
-                  className="pr-32"
-                />
-                <button
-                  type="button"
-                  onClick={refreshCaptcha}
-                  className="absolute top-1/2 -translate-y-1/2 right-1.5 px-4 py-1.5 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
-                  disabled={isCaptchaRefreshing}
-                >
-                  Обновить
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            </div>
-            {captchaError && (
-              <p className="text-sm text-red-600 text-center">{captchaError}</p>
-            )}
           </div>
-        </FormField>
+  
+          <TextInput
+            type="text"
+            value={captchaValue}
+            onChange={(e) => handleCaptchaChange(e.target.value)}
+            placeholder="Введите символы с изображения"
+            required
+          />
+  
+          {captchaError && (
+            <p className="text-sm text-red-300 mt-1">{captchaError}</p>
+          )}
+        </div>
+  
         {isError && (
-          <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
-            <p className="text-red-600 text-sm text-center">
+          <div className="bg-red-900/30 border border-red-400 rounded-lg p-4 mt-6">
+            <p className="text-red-300 text-sm text-center">
               {errorMessage || 'Ошибка при входе'}
             </p>
           </div>
         )}
-
+      </div>
+  
+      {/* КНОПКА ВОЙТИ И РЕГИСТРАЦИЯ */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mt-6 sm:mt-8 px-2 sm:px-4 lg:px-8">
         <button
           type="submit"
-          className="w-full max-w-xs mx-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
           disabled={isPending}
+          className="flex items-center justify-center bg-primary text-white font-extrabold py-2 sm:py-3 px-4 sm:px-6 lg:px-8 xl:px-12 rounded-lg text-sm sm:text-base lg:text-lg w-full sm:w-1/2 order-1 sm:order-2"
         >
-          {isPending && (
-            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-          )}
-          {isPending ? 'Вход...' : 'Войти'}
+          {isPending ? 'Вход...' : 'ВОЙТИ'}
         </button>
-
-        <div className="text-center">
+  
+        <div className="flex-shrink-0 w-full sm:w-auto text-left order-2 sm:order-1">
+          <div className="text-[#8A2A27] text-sm sm:text-base">Нет аккаунта?</div>
           <button
             type="button"
             onClick={() => setCurrentStage('register')}
-            className="font-medium transition-colors duration-200"
+            className="text-[#8A2A27] italic font-semibold text-sm sm:text-base"
           >
-            <span className="text-gray-600">Нет аккаунта? </span>
-            <span className="text-red-600 hover:text-red-700">Зарегистрироваться</span>
+            Зарегистрироваться
           </button>
         </div>
-
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 
