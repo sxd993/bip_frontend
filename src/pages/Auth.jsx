@@ -1,7 +1,7 @@
-import Register from '../features/auth/register/ui/Register';
-import Login from '../features/auth/login/ui/Login';
+import Register from '../features/register/ui/Register';
+import Login from '../features/login/ui/Login';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useUser } from '../shared/hooks/useUser';
+import { useUser } from '../entities/user/model/useUser';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const Auth = () => {
@@ -60,19 +60,17 @@ export const Auth = () => {
     }, [inviteTokenParam, inviteEmailParam]);
 
    if (isLoading) {
-    return <>ЗАЛУПА</>
+    return <>Загрузка...</>
    }
    
     if (error) return <div>Ошибка загрузки данных</div>;
 
     // если пользователь не авторизован, показываем форму
     return (
-        <div className="py-24 bg-white">
+        <div className="py-15 bg-white">
             <div className="max-w-6xl mx-auto px-4 md:px-6">
                 <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">Авторизация</h1>
-                    <div className="w-24 h-1 bg-red-200 mx-auto mb-6"></div>
-                    <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">Войдите в систему или создайте новый аккаунт</p>
                 </div>
 
                 <div className="max-w-2xl mx-auto">

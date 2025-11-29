@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Loading } from '../../../shared/ui/Loading';
-import { AuthGuard } from '../../../shared/lib/auth/AuthGuard';
+import { AuthGuard } from '../../../entities/user/lib/AuthGuard';
 import { Account } from '../../../pages/Account';
 import { Auth } from '../../../pages/Auth';
 
@@ -13,6 +13,8 @@ const UnderDevelopment = lazy(() => import('../../../pages/UnderDevelopment'));
 const ConfirmRegister = lazy(() =>
   import('../../../pages/ConfirmRegister').then(module => ({ default: module.ConfirmRegister }))
 );
+const ForgotPassword = lazy(() => import('../../../pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('../../../pages/ResetPassword'));
 
 export const AppRouter = () => (
   <Suspense fallback={<Loading size="large" text="Загрузка страницы..." className="min-h-screen" />}>
@@ -20,6 +22,8 @@ export const AppRouter = () => (
       <Route path="/" element={<Home />} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/auth/:stage" element={<Auth />} />
+      <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+      <Route path="/auth/reset-password" element={<ResetPassword />} />
       <Route path="/register/confirm" element={<ConfirmRegister />} />
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/ServicesPrivate" element={<ServicesPrivate />} />

@@ -1,11 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { registerPhysicalReducer } from '@/features/auth/register/model/store/RegisterPhysical.slice';
+import { configureStore } from '@reduxjs/toolkit'
 
-export const createAppStore = () =>
-  configureStore({
+export const createAppStore = (initialState = {}) => {
+  return configureStore({
     reducer: {
-      registerPhysical: registerPhysicalReducer
-    },
-  });
+      app: (state = initialState) => state
+    }
+  })
+}
 
 export const appStore = createAppStore();
