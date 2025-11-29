@@ -1,17 +1,7 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import NavBar from './NavBar';
-import MobileMenuButton from './MobileMenuButton';
-import MobileMenu from './MobileMenu';
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-
-  const toggleMobileMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   const headerBgClass = 'bg-black/50 backdrop-blur-sm';
 
   return (
@@ -22,7 +12,7 @@ const Header = () => {
             {/* Логотип */}
             <div className="flex-shrink-0">
               <NavLink to="/" className="flex items-center">
-                <img src='https://s3.twcstorage.ru/d90a9000-bip/logo/logo.avif' alt="Logo" className="h-12 w-auto" />
+                <img src='https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg' alt="Logo" className="h-12 w-auto" />
               </NavLink>
             </div>
             
@@ -30,18 +20,10 @@ const Header = () => {
             <div className="hidden md:flex items-center flex-1 justify-end">
               <NavBar />
             </div>
-            
-            {/* Кнопка мобильного меню - видна только на мобильных */}
-            <MobileMenuButton isOpen={isMenuOpen} onToggle={toggleMobileMenu} />
           </div>
         </div>
       </header>
       
-      {/* Мобильное меню - вынесено за пределы Header для независимости от прозрачности */}
-      <MobileMenu 
-        isOpen={isMenuOpen} 
-        onClose={() => setIsMenuOpen(false)}
-      />
       
     </>
   );
