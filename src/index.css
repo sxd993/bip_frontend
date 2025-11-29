@@ -1,8 +1,168 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_lightitalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_mediumitalic.otf') format('opentype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_bolditalic.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro';
+    src: url('../assets/fonts/dinpro_blackitalic.otf') format('opentype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedregular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condenseditalic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedlight.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedlightitalic.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedmedium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedmediumitalic.otf') format('opentype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedbold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedbolditalic.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedblack.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DINPro Condensed';
+    src: url('../assets/fonts/dinpro_condensedblackitalic.otf') format('opentype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
 * {
-    font-family: 'Rubik', sans-serif;
-    font-weight: 100;
+    font-family: 'DINPro', sans-serif;
+    font-weight: 400;
 }
 
 @theme {

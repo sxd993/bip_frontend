@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import SocialLinks from './SocialLinks';
 import Copyright from './Copyright';
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer className="bg-slate-800 border-t border-slate-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-12">
@@ -77,4 +77,3 @@ const Footer = () => {
   );
 };
 
-export default Footer;
