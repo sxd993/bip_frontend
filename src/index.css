@@ -166,7 +166,7 @@
 }
 
 @theme {
-    --breakpoint-md: 900px;
+    --breakpoint-md: 805px;
     --breakpoint-xs: 570px;
     --color-primary: #A01E1E;
     --color-secondary: #1D293D;

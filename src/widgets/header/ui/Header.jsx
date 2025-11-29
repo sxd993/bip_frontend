@@ -66,6 +66,11 @@ export const Header = () => {
               className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
               войти
             </NavLink>
+            <NavLink
+              to={'/auth/register'}
+              className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] items-center hidden md:flex">
+              зарегистрироваться
+            </NavLink>
             <BurgerButton onClick={toggleMobileMenu} className="scale-110" />
           </div>
         </div>
@@ -73,11 +78,12 @@ export const Header = () => {
         {/* ===== DESKTOP ===== */}
         <div className="hidden lg:flex items-center justify-around px-6 py-[11px]">
           <div>
-            <NavLink to={'/'}>
-
-
+            <NavLink
+              to={'/'}
+              className="relative w-[200px] overflow-hidden">
               <img
                 src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+                className=" object-cover max-w-[90%]"
               />
             </NavLink>
           </div>
