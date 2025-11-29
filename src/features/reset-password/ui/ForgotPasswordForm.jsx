@@ -18,7 +18,7 @@ export const ForgotPasswordForm = () => {
 
   if (isSuccess) {
     return (
-      <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12 text-center">
+      <div className="bg-white p-8 md:p-12 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Письмо отправлено</h2>
         <p className="text-gray-600 mb-6">
           Проверьте почту. Если письма нет, посмотрите папку Спам.
