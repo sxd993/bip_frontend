@@ -1,47 +1,84 @@
 import { SearchIcon } from "@/shared/ui/icons/SearchIcon";
 import { SearchBar } from "./SearchBar";
+import { BurgerButton } from "@/shared/ui/icons/BurgerButton";
 
 export const Header = () => {
-
   return (
-    <>
-      <header className='max-w-[1180px] bg-primary mt-[30px] max-h-[62px] mx-auto rounded-[7px]'>
-        {/* Общий контейнер*/}
-        <div className='px-6 py-[11px] flex items-center justify-center'>
-          {/* Логотип*/}
-          <div className="mr-[30px] max-w-[225px]">
-            <img src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg" alt="Баукен и партнеры" />
+    <header className="mt-[20px] lg:mt-[30px]">
+      <div className="mx-auto max-w-[97%] lg:max-w-[1180px] bg-primary rounded-[7px]">
+        
+        {/* ===== MOBILE <430px ===== */}
+        <div className="flex items-center justify-between px-4 py-3 xs:hidden lg:hidden">
+          <img
+            src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+            className="h-[22px]"
+          />
+
+          <div className="flex items-center gap-3 shrink-0">
+            <button className="text-[14px] px-4 py-1 border border-white rounded-[6px] text-white font-bold">
+              войти
+            </button>
+            <BurgerButton />
           </div>
-          {/* Навигация*/}
-          <div className='max-w-[519px] min-h-[42px] rounded-[6px] bg-white flex items-center mr-[10px]'>
-            {/* Кнопки*/}
-            <div className='flex justify-between px-4 gap-4'>
-              <button className='text-[18px] !font-bold text-center text-primary !leading-[100%] text-nowrap'>о нас</button>
-              <button className='text-[18px] !font-bold text-center text-primary leading-[100%]'>статьи</button>
+        </div>
+
+        {/* ===== TABLET 430px–1024px (увеличенные размеры) ===== */}
+        <div className="hidden xs:flex lg:hidden items-center gap-6 px-4 py-3 justify-between">
+          <img
+            src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+            className="h-[28px]"
+          />
+
+          {/* Навигация */}
+          <nav className="flex items-center gap-5">
+            <button className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap">
+              о нас
+            </button>
+            <button className="text-white text-[16px] sm:text-[18px] font-bold">
+              статьи
+            </button>
+          </nav>
+
+          {/* Правый блок */}
+          <div className="flex items-center gap-5">
+            <button className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
+              войти
+            </button>
+            <BurgerButton className="scale-110" />
+          </div>
+        </div>
+
+        {/* ===== DESKTOP ===== */}
+        <div className="hidden lg:flex items-center justify-around px-6 py-[11px]">
+          <div className="mr-[30px]">
+            <img
+              src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+              className="h-[23px]"
+            />
+          </div>
+
+          <div className="flex items-center mr-[10px] max-w-[519px] min-h-[42px] rounded-[6px] bg-white text-primary">
+            <div className="flex justify-between px-4 gap-8">
+              <button className="text-[18px] font-bold">о нас</button>
+              <button className="text-[18px] font-bold">статьи</button>
             </div>
-            {/* Поиск */}
-            <div className='max-w-[318px] h-8 border-1 border-[#A01E1E] rounded-[7px] items-center flex px-1 py-[5px] gap-2 mr-[5px]'>
+
+            <div className="max-w-[318px] h-8 border border-[#A01E1E] rounded-[7px] items-center lg:flex px-2 py-[5px] gap-2 mr-[5px] hidden">
               <SearchIcon />
               <SearchBar />
             </div>
           </div>
-          {/* Аутентификация */}
+
           <div className="flex gap-[13px]">
-            <button
-              className="max-w-[125px] max-h-[42px] bg-primary border-2 border-white rounded-[6px] flex py-4 px-8 items-center"
-            >
-              <p className="text-white font-bold leading-[100%] text-[18px]">войти</p>
+            <button className="h-[42px] px-5 bg-primary border-2 border-white rounded-[6px] text-white font-bold text-[18px]">
+              войти
             </button>
-            <button
-              className="max-w-[227px] max-h-[42px] bg-white border-2 border-white rounded-[6px] flex py-4 px-8 items-center"
-            >
-              <p className=" text-black font-bold leading-[100%] text-[18px]">зарегистрироваться</p>
+            <button className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px]">
+              зарегистрироваться
             </button>
           </div>
         </div>
-      </header>
-
-
-    </>
+      </div>
+    </header>
   );
 };
