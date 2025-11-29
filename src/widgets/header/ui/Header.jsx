@@ -6,13 +6,15 @@ export const Header = () => {
   return (
     <header className="mt-[20px] lg:mt-[30px]">
       <div className="mx-auto max-w-[97%] lg:max-w-[1180px] bg-primary rounded-[7px]">
-        
+
         {/* ===== MOBILE <430px ===== */}
         <div className="flex items-center justify-between px-4 py-3 xs:hidden lg:hidden">
-          <img
-            src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
-            className="h-[22px]"
-          />
+          <div className="relative w-[200px] overflow-hidden">
+            <img
+              src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+              className=" object-cover max-w-[90%]"
+            />
+          </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <button className="text-[14px] px-4 py-1 border border-white rounded-[6px] text-white font-bold">
@@ -22,11 +24,10 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* ===== TABLET 430px–1024px (увеличенные размеры) ===== */}
+        {/* ===== TABLET 610px - 1024 */}
         <div className="hidden xs:flex lg:hidden items-center gap-6 px-4 py-3 justify-between">
           <img
             src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
-            className="h-[28px]"
           />
 
           {/* Навигация */}
@@ -53,7 +54,6 @@ export const Header = () => {
           <div className="mr-[30px]">
             <img
               src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
-              className="h-[23px]"
             />
           </div>
 
