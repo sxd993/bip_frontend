@@ -3,7 +3,7 @@ import '../style.css';
 export const WelcomeBanner = () => {
   return (
     <div className="welcome-banner">
-      <div className="welcome-banner__image-wrapper">
+      <div className="welcome-banner__image-wrapper !pt-[100%] sm:!pt-[50%] lg:!pt-[100%]">
         <img
           className="welcome-banner__img"
           src="https://s3.twcstorage.ru/d90a9000-bip/home-page/Group%201870.jpg"

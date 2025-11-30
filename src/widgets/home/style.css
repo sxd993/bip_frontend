@@ -86,7 +86,6 @@
   line-height: 100%;
   text-align: center;
   color: #a01e1e;
-  margin-top: 30%;
 }
 
 .home-banners__item {
@@ -94,11 +93,24 @@
 }
 
 @media (min-width: 1024px) {
+  .home-banners {
+    align-items: stretch;
+  }
+
   .home-banners__item {
     flex: 1 1 0;
+    display: flex;
+    min-height: 560px;
+  }
+
+  .welcome-banner {
+    display: flex;
+    flex: 1;
   }
 
   .welcome-banner__image-wrapper {
+    flex: 1;
+    height: 100%;
     padding: 32px 28px;
     gap: 28px;
   }
@@ -116,6 +128,9 @@
   .banner-list {
     margin: 0 0 0 6%;
     gap: 18px;
+  }
+  .banner-cta {
+    margin-top: 30%;
   }
 
   .banner-list__item {
@@ -139,6 +154,8 @@
   }
   .physical-banner__content {
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     left: 0;
   }
