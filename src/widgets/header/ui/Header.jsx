@@ -84,7 +84,7 @@ export const Header = () => {
         {/* ===== MOBILE / TABLET DROPDOWN ===== */}
         {isMenuOpen && (
           <div className="lg:hidden px-4 pb-4 bg-primary">
-            <div className="flex flex-wrap items-center justify-around gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               {/* поиск (виден везде при открытом меню) */}
               <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-[6px] flex-1 min-w-[180px] max-w-[360px]">
                 <SearchIcon />
