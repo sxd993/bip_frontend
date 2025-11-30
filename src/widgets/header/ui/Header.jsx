@@ -3,7 +3,6 @@ import { SearchBar } from "./SearchBar";
 import { BurgerButton } from "@/shared/ui/icons/BurgerButton";
 import { NavLink } from "react-router-dom";
 import { useHeader } from "../hooks/useHeader";
-import MobileMenu from "./MobileMenu";
 
 export const Header = () => {
   const { isMenuOpen, toggleMobileMenu } = useHeader()
@@ -78,14 +77,29 @@ export const Header = () => {
               className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
               войти
             </NavLink>
-            <NavLink
-              to={'/auth/register'}
-              className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] items-center hidden md:flex">
-              зарегистрироваться
-            </NavLink>
             <BurgerButton onClick={toggleMobileMenu} className="scale-110" />
           </div>
         </div>
+
+        {/* ===== MOBILE / TABLET DROPDOWN ===== */}
+        {isMenuOpen && (
+          <div className="lg:hidden px-4 pb-4 bg-primary">
+            <div className="flex flex-wrap items-center justify-around gap-3">
+              {/* поиск (виден везде при открытом меню) */}
+              <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-[6px] flex-1 min-w-[180px] max-w-[360px]">
+                <SearchIcon />
+                <SearchBar />
+              </div>
+
+              {/* кнопка регистрации */}
+              <NavLink
+                to={'/auth/register'}
+                className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] flex items-center justify-center flex-none">
+                зарегистрироваться
+              </NavLink>
+            </div>
+          </div>
+        )}
 
         {/* ===== DESKTOP ===== */}
         <div className="hidden lg:flex items-center justify-around px-6 py-[11px]">
@@ -126,10 +140,6 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      <MobileMenu
-        isOpen={isMenuOpen}
-        onClose={toggleMobileMenu}
-      />
     </header >
   );
 };

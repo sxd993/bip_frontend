@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import '../style.css';
 
 export const BusinessBanner = () => {
@@ -38,7 +39,12 @@ export const BusinessBanner = () => {
                         </li>
                     </ul>
 
-                    <button className="banner-cta">бизнесу</button>
+                    <NavLink
+                        to={'/ServicesBusiness'}
+                        className="banner-cta"
+                    >
+                        бизнесу
+                    </NavLink>
                 </div>
             </div>
         </div>
