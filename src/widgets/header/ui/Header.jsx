@@ -14,16 +14,28 @@ export const Header = () => {
       <div className="mx-auto max-w-[97%] lg:max-w-[1180px] bg-primary rounded-[7px]">
 
         {/* ===== MOBILE <430px ===== */}
-        <div className="flex items-center justify-between px-4 py-3 xs:hidden lg:hidden">
+        <div className="flex items-center justify-between px-1 py-3 xs:hidden lg:hidden h-full">
           <NavLink
             to={'/'}
-            className="relative w-[200px] overflow-hidden">
+            className="relative overflow-hidden h-full">
             <img
               src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
-              className=" object-cover max-w-[90%]"
+              className="max-w-[90%] h-full"
             />
           </NavLink>
-
+          {/* Навигация */}
+          <nav className="flex items-center gap-5 pr-4">
+            <NavLink
+              to="/about"
+              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap">
+              о нас
+            </NavLink>
+            <NavLink
+              to="/press-center"
+              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap">
+              статьи
+            </NavLink>
+          </nav>
           <div className="flex items-center gap-3 shrink-0">
             <NavLink
               to="/auth/login"
