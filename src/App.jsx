@@ -5,7 +5,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-white text-gray-800">
       <Header />
-      <main className="flex-1 pt-10">
+      <main className="flex-1">
         <AppRouter />
       </main>
       <Footer />
