@@ -3,6 +3,7 @@ import { SearchBar } from "./SearchBar";
 import { BurgerButton } from "@/shared/ui/icons/BurgerButton";
 import { NavLink } from "react-router-dom";
 import { useHeader } from "../hooks/useHeader";
+import { MobileDropdown } from "./MobileDropdown";
 
 export const Header = () => {
   const { isMenuOpen, toggleMobileMenu } = useHeader()
@@ -13,32 +14,19 @@ export const Header = () => {
       <div className="mx-auto max-w-[97%] lg:max-w-[1180px] bg-primary rounded-[7px]">
 
         {/* ===== MOBILE <430px ===== */}
-        <div className="flex items-center justify-between px-1 py-3 xs:hidden lg:hidden h-full">
+        <div className="flex items-center justify-between gap-2 px-2 py-3 xs:hidden lg:hidden h-full">
           <NavLink
             to={'/'}
-            className="relative overflow-hidden h-full">
+            className="relative overflow-hidden h-[40px] w-[140px] shrink-0 max-[390px]:w-[120px]">
             <img
               src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
-              className="max-w-[90%] h-full"
+              className="h-full w-full object-contain"
             />
           </NavLink>
-          {/* Навигация */}
-          <nav className="flex items-center gap-5 pr-4">
-            <NavLink
-              to="/about"
-              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap">
-              о нас
-            </NavLink>
-            <NavLink
-              to="/press-center"
-              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap">
-              статьи
-            </NavLink>
-          </nav>
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <NavLink
               to="/auth/login"
-              className="text-[14px] px-4 py-1 border border-white rounded-[6px] text-white font-bold">
+              className="text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
               войти
             </NavLink>
             <BurgerButton onClick={toggleMobileMenu} />
@@ -83,22 +71,7 @@ export const Header = () => {
 
         {/* ===== MOBILE / TABLET DROPDOWN ===== */}
         {isMenuOpen && (
-          <div className="lg:hidden px-4 pb-4 bg-primary">
-            <div className="flex flex-wrap items-center gap-3">
-              {/* поиск (виден везде при открытом меню) */}
-              <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-[6px] flex-1 min-w-[180px] max-w-[360px]">
-                <SearchIcon />
-                <SearchBar />
-              </div>
-
-              {/* кнопка регистрации */}
-              <NavLink
-                to={'/auth/register'}
-                className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] flex items-center justify-center flex-none">
-                зарегистрироваться
-              </NavLink>
-            </div>
-          </div>
+          <MobileDropdown />
         )}
 
         {/* ===== DESKTOP ===== */}
