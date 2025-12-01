@@ -20,7 +20,6 @@ const Register = ({
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      {/* Вкладки (как на странице логина) */}
       <div className="flex w-full gap-1 sm:gap-2">
         <button
           type="button"
@@ -55,7 +54,6 @@ const Register = ({
         </button>
       </div>
 
-      {/* Контейнер с постоянным цветом (без смены при переключении вкладок) */}
       <div
         className={`p-4 sm:p-6 lg:p-10 bg-secondary rounded-b-lg transition-colors duration-300 ${
           userType === 'physical' ? 'rounded-tr-lg' : 'rounded-tl-lg'
@@ -70,7 +68,6 @@ const Register = ({
         </div>
       </div>
 
-      {/* КНОПКА РЕГИСТРАЦИИ И ССЫЛКА НА ВХОД (как на логине) */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mt-6 sm:mt-8 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 w-full sm:w-auto text-left order-2 sm:order-1">
           <button
