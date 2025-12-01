@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { EmployeeRegister } from './types/EmployeeRegister';
 import { RegisterLegalForm } from './types/RegisterLegalForm';
 import { RegisterPhysicalForm } from './types/RegisterPhysicalForm';
+import { useRegisterTabs } from '../model/hooks/useRegisterTabs';
 
 const Register = ({
   setCurrentStage,
@@ -9,99 +9,85 @@ const Register = ({
   defaultLegalType = 'director',
   employeePrefill
 }) => {
-  const [userType, setUserType] = useState(defaultUserType || 'physical');
-  const [legalType, setLegalType] = useState(defaultLegalType || 'director');
-
-  useEffect(() => {
-    if (defaultUserType) {
-      setUserType(defaultUserType);
-    }
-  }, [defaultUserType]);
-
-  useEffect(() => {
-    if (defaultLegalType) {
-      setLegalType(defaultLegalType);
-    }
-  }, [defaultLegalType]);
+  const {
+    userType,
+    legalType,
+    selectPhysical,
+    selectLegal,
+    setLegalType,
+    activeFormId,
+  } = useRegisterTabs({ defaultUserType, defaultLegalType });
 
   return (
-    <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
-      <div className="text-center mb-10">
-        <div className="inline-block border border-red-200 rounded-2xl px-6 py-3 bg-red-100/50">
-          <h3 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Регистрация</h3>
-        </div>
-      </div>
-
-      <div className="flex justify-center mb-8">
-        <div className="flex bg-red-100 rounded-2xl p-1">
-          <button
-            type="button"
-            className={`px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base font-medium transition-all duration-300 ${userType === 'physical'
-              ? 'bg-red-500 text-white'
-              : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-              }`}
-            onClick={() => setUserType('physical')}
-          >
-            Физ. лицо
-          </button>
-          <button
-            type="button"
-            className={`px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base font-medium transition-all duration-300 ${userType === 'legal'
-              ? 'bg-red-500 text-white'
-              : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-              }`}
-            onClick={() => setUserType('legal')}
-          >
-            Юр. лицо
-          </button>
-        </div>
-      </div>
-
-      {/* Если выбрано юр. лицо, показываем дополнительный выбор */}
-      {userType === 'legal' && (
-        <div className="flex justify-center mb-8">
-          <div className="flex bg-red-100 rounded-2xl p-1">
-            <button
-              type="button"
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium transition-all duration-300 ${legalType === 'director'
-                ? 'bg-red-500 text-white'
-                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                }`}
-              onClick={() => setLegalType('director')}
-            >
-              Руководитель компании
-            </button>
-            <button
-              type="button"
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium transition-all duration-300 ${legalType === 'employee'
-                ? 'bg-red-500 text-white'
-                : 'text-gray-600 hover:text-gray-800 hover:bg-red-50'
-                }`}
-              onClick={() => setLegalType('employee')}
-            >
-              Сотрудник компании
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Отображаем нужную форму */}
-      <div className="mt-8">
-        {userType === 'physical' && <RegisterPhysicalForm />}
-        {userType === 'legal' && legalType === 'director' && <RegisterLegalForm />}
-        {userType === 'legal' && legalType === 'employee' && (
-          <EmployeeRegister prefill={employeePrefill} />
-        )}
-      </div>
-
-      <div className="text-center mt-8 pt-6 border-t-2 border-red-100">
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="flex w-full gap-1 sm:gap-2">
         <button
           type="button"
-          onClick={() => setCurrentStage('login')}
-          className="font-medium transition-colors duration-200"
+          onClick={selectPhysical}
+          className={`flex-1 py-1 sm:py-1.5 lg:py-2 text-sm sm:text-base lg:text-lg font-bold transition ${
+            userType === 'physical'
+              ? 'bg-secondary text-white border-0 rounded-t-lg'
+              : 'bg-white text-[#8A2A27] border-2 border-[#8A2A27] rounded-lg'
+          }`}
+          style={{
+            marginBottom: userType === 'physical' ? '0' : '8px',
+            marginRight: userType === 'physical' ? '0' : '8px'
+          }}
         >
-          <span className="text-gray-600">Уже есть аккаунт? </span>
-          <span className="text-red-600 hover:text-red-700">Войти</span>
+          частное лицо
+        </button>
+
+        <button
+          type="button"
+          onClick={selectLegal}
+          className={`flex-1 py-1 sm:py-1.5 lg:py-2 text-sm sm:text-base lg:text-lg font-bold transition ${
+            userType === 'legal'
+              ? 'bg-secondary text-white border-0 rounded-t-lg'
+              : 'bg-white text-[#8A2A27] border-2 border-[#8A2A27] rounded-lg'
+          }`}
+          style={{
+            marginBottom: userType === 'legal' ? '0' : '8px',
+            marginLeft: userType === 'legal' ? '0' : '8px'
+          }}
+        >
+          юридическое лицо
+        </button>
+      </div>
+
+      <div
+        className={`p-4 sm:p-6 lg:p-10 bg-secondary rounded-b-lg transition-colors duration-300 ${
+          userType === 'physical' ? 'rounded-tr-lg' : 'rounded-tl-lg'
+        }`}
+      >
+        <div className="mt-2 sm:mt-4">
+          {userType === 'physical' && <RegisterPhysicalForm />}
+          {userType === 'legal' && legalType === 'director' && <RegisterLegalForm />}
+          {userType === 'legal' && legalType === 'employee' && (
+            <EmployeeRegister prefill={employeePrefill} />
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mt-6 sm:mt-8 px-2 sm:px-4 lg:px-8">
+        <div className="flex-shrink-0 w-full sm:w-auto text-left order-2 sm:order-1">
+          <button
+            type="button"
+            onClick={() => setCurrentStage('login')}
+            className="text-left"
+          >
+            <div className="text-[#8A2A27] text-sm sm:text-base">Уже есть аккаунт?</div>
+            <span className="text-[#8A2A27] italic font-semibold text-sm sm:text-base">
+              Войти
+            </span>
+          </button>
+        </div>
+
+        <button
+          type="submit"
+          form={activeFormId}
+          className="flex items-center justify-center bg-primary text-white font-bold py-2 sm:py-3 px-4 sm:px-6 lg:px-8 xl:px-12 rounded-lg text-sm sm:text-base lg:text-lg w-full sm:w-1/2 order-1 sm:order-2"
+        >
+          зарегистрироваться
         </button>
       </div>
     </div>

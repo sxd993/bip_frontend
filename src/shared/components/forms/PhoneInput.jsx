@@ -4,8 +4,9 @@ import { handlePhoneInput, handlePhoneKeyDown } from '../../utils/formatters';
 const PhoneInput = forwardRef(({ 
   value = '+7 ',
   onChange,
-  setValue, // из react-hook-form
+  setValue,
   error,
+  className = "",
   ...props 
 }, ref) => {
   const onPhoneChange = (e) => {
@@ -26,7 +27,7 @@ const PhoneInput = forwardRef(({
       value={value}
       onChange={onPhoneChange}
       onKeyDown={handlePhoneKeyDown}
-      className={`${baseClasses} ${errorClasses}`}
+      className={`${baseClasses} ${errorClasses} ${className}`}
       {...props}
     />
   );

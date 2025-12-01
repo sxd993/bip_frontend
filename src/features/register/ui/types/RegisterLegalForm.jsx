@@ -1,20 +1,21 @@
-import { useForm } from 'react-hook-form';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
-import { validationRules } from '../../../../shared/utils/validators';
 import { Loading } from '../../../../shared/ui/Loading';
-import { useLegalRegister } from '../../model/hooks/useLegalRegister';
+import { validationRules } from '../../../../shared/utils/validators';
+import { useLegalRegisterForm } from '../../model/hooks/useLegalRegisterForm';
 
 export const RegisterLegalForm = () => {
   const {
+    formId,
     register,
-    handleSubmit,
     setValue,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const phoneValue = watch('phone');
-
-  const { onSubmit, isPending, isSuccess, isError, errorMessage } = useLegalRegister();
+    errors,
+    phoneValue,
+    onSubmitForm,
+    isPending,
+    isSuccess,
+    isError,
+    errorMessage,
+  } = useLegalRegisterForm();
 
   if (isPending) {
     return <Loading />;
@@ -35,61 +36,132 @@ export const RegisterLegalForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      <FormField label="Название организации" error={errors.company_name} required>
+    <form
+      id={formId}
+      onSubmit={onSubmitForm}
+      className="space-y-8"
+    >
+      <FormField
+        label=" "
+        error={errors.company_name}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
         <TextInput
           {...register('company_name', validationRules.required('Название организации'))}
           error={errors.company_name}
+          placeholder="Название организации"
+          className="placeholder-register"
         />
       </FormField>
 
-      <FormField label="ИНН" error={errors.inn} required>
-        <TextInput {...register('inn', validationRules.inn)} error={errors.inn} />
-      </FormField>
-
-      <FormField label="Имя руководителя" error={errors.employee_first_name} required>
+      <FormField
+        label=" "
+        error={errors.inn}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
         <TextInput
-          {...register('employee_first_name', validationRules.required('Имя руководителя'))}
-          error={errors.employee_first_name}
+          {...register('inn', validationRules.inn)}
+          error={errors.inn}
+          placeholder="ИНН организации"
+          className="placeholder-register"
         />
       </FormField>
 
-      <FormField label="Фамилия руководителя" error={errors.employee_second_name} required>
+      <FormField
+        label=" "
+        error={errors.employee_second_name}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
         <TextInput
           {...register('employee_second_name', validationRules.required('Фамилия руководителя'))}
           error={errors.employee_second_name}
+          placeholder="Фамилия руководителя"
+          className="placeholder-register"
         />
       </FormField>
 
-      <FormField label="Отчество руководителя" error={errors.employee_last_name} required>
+      <FormField
+        label=" "
+        error={errors.employee_first_name}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
+        <TextInput
+          {...register('employee_first_name', validationRules.required('Имя руководителя'))}
+          error={errors.employee_first_name}
+          placeholder="Имя руководителя"
+          className="placeholder-register"
+        />
+      </FormField>
+
+      <FormField
+        label=" "
+        error={errors.employee_last_name}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
         <TextInput
           {...register('employee_last_name', validationRules.required('Отчество руководителя'))}
           error={errors.employee_last_name}
+          placeholder="Отчество руководителя"
+          className="placeholder-register"
+        />
+      </FormField>
+      
+      <FormField
+        label=" "
+        error={errors.email}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
+        <TextInput
+          {...register('email', validationRules.email)}
+          type="email"
+          error={errors.email}
+          placeholder="Email"
+          className="placeholder-register"
         />
       </FormField>
 
-      <FormField label="Номер телефона" error={errors.phone} required>
+      <FormField
+        label=" "
+        error={errors.phone}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
         <PhoneInput
           {...register('phone', validationRules.phone)}
           value={phoneValue || '+7 '}
           setValue={setValue}
           error={errors.phone}
+          placeholder="Номер телефона"
+          className="placeholder-register"
         />
       </FormField>
 
-      <FormField label="Email" error={errors.email} required>
-        <TextInput
-          {...register('email', validationRules.email)}
-          type="email"
-          error={errors.email}
-        />
-      </FormField>
-
-      <FormField label="Пароль" error={errors.password} required>
+      <FormField
+        label=" "
+        error={errors.password}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
         <TextInput
           {...register('password', validationRules.password())}
           type="password"
           error={errors.password}
+          placeholder="Пароль"
+          className="placeholder-register"
         />
       </FormField>
 
@@ -99,13 +171,15 @@ export const RegisterLegalForm = () => {
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="w-full max-w-xs mx-auto flex justify-center py-2 px-4 md:py-3 md:px-6 border border-transparent rounded-3xl text-sm md:text-base font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
-      >
-        {isPending ? 'Регистрация...' : 'Зарегистрировать организацию'}
-      </button>
+      <div className="mt-4 flex items-start gap-2 text-white/80">
+        <span className="mt-[-4px] text-3xl sm:text-4xl leading-none font-bold">!</span>
+        <p className="text-xs sm:text-sm lg:text-base leading-snug italic">
+          Регистрация сотрудника доступна только по персональной ссылке из письма-приглашения.
+          Попросите руководителя отправить новое приглашение.
+        </p>
+      </div>
+
+      <button type="submit" className="hidden" aria-hidden="true" />
     </form>
   );
 };

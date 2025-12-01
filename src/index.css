@@ -163,6 +163,9 @@
 
 * {
   font-family: "DINPro", sans-serif;
+}
+
+body {
   font-weight: 400;
 }
 
@@ -172,4 +175,11 @@
   --color-primary: #a01e1e;
   --color-secondary: #1d293d;
   --color-text-secondary: #d9d9d9;
+}
+
+.placeholder-register::placeholder {
+  color: rgba(160, 30, 30, 0.6);
+  font-family: "DINPro", sans-serif;
+  font-weight: 300;
+  font-style: italic;
 }

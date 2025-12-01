@@ -1,7 +1,5 @@
 import { client } from '../../../shared/api/client';
 
-
-
 export const sendCheckEmailRegisterPhysical = async (data) => {
     const response = await client.post("/auth/precheck/physical", data);
     return response.data;
