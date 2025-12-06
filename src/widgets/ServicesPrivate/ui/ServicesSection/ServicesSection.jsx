@@ -3,7 +3,7 @@ import { ServicesCard } from './ServicesCard';
 
 export const ServicesSection = () => {
     return (
-        <div className='mt-10'>
+        <div className='my-10'>
             <div className="max-w-6xl mx-[5%] flex flex-col gap-10">
                 {/* Заголовок секции */}
                 <span>
