@@ -3,10 +3,10 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline"
 export const SliderSection = () => {
     return (
         <div>
-            <div className="max-w-6xl mx-[10%] flex justify-center md:justify-around items-center pt-5 gap-5">
+            <div className="max-w-6xl mx-[2%] flex justify-center md:justify-around items-center pt-5 gap-5">
                 {/* Левая стрелка */}
                 <div className="">
-                    <ArrowLeftIcon className="h-6 w-6 xs:w-10 xs:h-10 text-primary" />
+                    <ArrowLeftIcon className="h-10 w-10 text-primary" />
 
                 </div>
                 {/*  Изображения */}
@@ -24,7 +24,7 @@ export const SliderSection = () => {
                 </div>
                 {/* Правая стрелка */}
                 <div>
-                    <ArrowRightIcon className="h-6 w-6 xs:w-10 xs:h-10 text-primary" />
+                    <ArrowRightIcon className="h-10 w-10 text-primary" />
                 </div>
             </div>
         </div>
