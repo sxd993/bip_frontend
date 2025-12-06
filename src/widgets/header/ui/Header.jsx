@@ -17,7 +17,7 @@ export const Header = () => {
         ? 'absolute top-0 left-0 w-full z-50 py-3 lg:py-4'
         : 'mt-[20px] lg:mt-[30px]'}
     `}>
-      <div className="lg:max-w-[1180px] bg-primary rounded-[7px] mx-auto">
+      <div className="lg:max-w-6xl bg-primary rounded-[7px] mx-auto">
 
         {/* ===== MOBILE <430px ===== */}
         <div className="flex items-center justify-between gap-2 px-2 py-3 xs:hidden lg:hidden h-full">

@@ -4,7 +4,7 @@ import { ServicesCard } from './ServicesCard';
 export const ServicesSection = () => {
     return (
         <div className='my-10'>
-            <div className="max-w-6xl mx-[5%] flex flex-col gap-10">
+            <div className="max-w-6xl px-[2%] lg:px-0 flex flex-col gap-10 mx-auto">
                 {/* Заголовок секции */}
                 <span>
                     <p className="text-primary text-5xl">
