@@ -1,17 +1,23 @@
 import { SearchIcon } from "@/shared/ui/icons/SearchIcon";
 import { SearchBar } from "./SearchBar";
 import { BurgerButton } from "@/shared/ui/icons/BurgerButton";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useHeader } from "../hooks/useHeader";
 import { MobileDropdown } from "./MobileDropdown";
 
 export const Header = () => {
   const { isMenuOpen, toggleMobileMenu } = useHeader()
-
+  const { pathname } = useLocation()
+  const isServicesPageOpen = pathname.includes('/Services')
 
   return (
-    <header className="mt-[20px] lg:mt-[30px]">
-      <div className="mx-auto max-w-[97%] lg:max-w-[1180px] bg-primary rounded-[7px]">
+    <header className={`
+      px-[3%]
+      ${isServicesPageOpen
+        ? 'absolute top-0 left-0 w-full z-50 py-3 lg:py-4'
+        : 'mt-[20px] lg:mt-[30px]'}
+    `}>
+      <div className="lg:max-w-[1180px] bg-primary rounded-[7px] mx-auto">
 
         {/* ===== MOBILE <430px ===== */}
         <div className="flex items-center justify-between gap-2 px-2 py-3 xs:hidden lg:hidden h-full">
@@ -75,7 +81,7 @@ export const Header = () => {
         )}
 
         {/* ===== DESKTOP ===== */}
-        <div className="hidden lg:flex items-center justify-around px-6 py-[11px]">
+        <div className="hidden lg:flex items-center justify-around px-6 py-[11px] z-10">
           <div>
             <NavLink
               to={'/'}
