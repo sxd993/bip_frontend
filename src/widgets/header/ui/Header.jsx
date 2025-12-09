@@ -4,11 +4,13 @@ import { BurgerButton } from "@/shared/ui/icons/BurgerButton";
 import { NavLink, useLocation } from "react-router-dom";
 import { useHeader } from "../hooks/useHeader";
 import { MobileDropdown } from "./MobileDropdown";
+import { useAuthActions } from "../hooks/useAuthActions";
 
 export const Header = () => {
   const { isMenuOpen, toggleMobileMenu } = useHeader()
   const { pathname } = useLocation()
   const isServicesPageOpen = pathname.includes('/Services')
+  const { user, handleLogout } = useAuthActions()
 
   return (
     <header className={`
@@ -30,11 +32,19 @@ export const Header = () => {
             />
           </NavLink>
           <div className="flex items-center gap-2 shrink-0">
-            <NavLink
-              to="/auth/login"
-              className="text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
-              войти
-            </NavLink>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
+                выйти
+              </button>
+            ) : (
+              <NavLink
+                to="/auth/login"
+                className="text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
+                войти
+              </NavLink>
+            )}
             <BurgerButton onClick={toggleMobileMenu} />
           </div>
         </div>
@@ -66,11 +76,19 @@ export const Header = () => {
 
           {/* Правый блок */}
           <div className="flex items-center gap-5">
-            <NavLink
-              to="/auth/login"
-              className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
-              войти
-            </NavLink>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
+                выйти
+              </button>
+            ) : (
+              <NavLink
+                to="/auth/login"
+                className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
+                войти
+              </NavLink>
+            )}
             <BurgerButton onClick={toggleMobileMenu} className="scale-110" />
           </div>
         </div>
@@ -106,16 +124,26 @@ export const Header = () => {
           </div>
 
           <div className="flex gap-[13px]">
-            <NavLink
-              to={'/auth/login'}
-              className="h-[42px] px-5 bg-primary border-2 border-white rounded-[6px] text-white font-bold text-[18px] flex items-center">
-              войти
-            </NavLink>
-            <NavLink
-              to={'/auth/register'}
-              className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] flex items-center">
-              зарегистрироваться
-            </NavLink>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="h-[42px] px-5 bg-primary border-2 border-white rounded-[6px] text-white font-bold text-[18px] flex items-center">
+                выйти
+              </button>
+            ) : (
+              <>
+                <NavLink
+                  to={'/auth/login'}
+                  className="h-[42px] px-5 bg-primary border-2 border-white rounded-[6px] text-white font-bold text-[18px] flex items-center">
+                  войти
+                </NavLink>
+                <NavLink
+                  to={'/auth/register'}
+                  className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] flex items-center">
+                  зарегистрироваться
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@ export const Auth = () => {
     return (
         <div className="py-15 bg-white">
             <div className="max-w-6xl mx-auto px-4 md:px-6">
-                <div className="text-center mb-16">
+                <div className="text-center mb-16 hidden lg:block">
                     <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 tracking-tight">
                         {title}
                     </h1>
