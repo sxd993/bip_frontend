@@ -1,44 +1,46 @@
-import { useEnterCodeForm } from "../model/useEnterCodeForm"
-
-export const EnterCodeForm = () => {
-  const { handleSubmit, formState, codeField, onSubmit, isPending, isError, errorMessage } = useEnterCodeForm()
-  const { errors, isValid } = formState
-  const isSubmitDisabled = !isValid || isPending
-
+export const EnterCodeForm = ({
+  handleSubmit,
+  formState,
+  codeValues,
+  inputRefs,
+  handleCodeInput,
+  handleKeyDown,
+  handlePaste,
+  isPending,
+  isError,
+  errorMessage,
+}) => {
+  const { errors } = formState;
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-full flex flex-col gap-3"
+      id="confirm-register-form"
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4"
+      onPaste={handlePaste}
     >
-      <input
-        type="text"
-        placeholder="Введите 6-значный код"
-        {...codeField}
-        maxLength={6}
-        disabled={isPending}
-        className="border p-2 rounded disabled:bg-gray-100 disabled:text-gray-400"
-      />
-
-      {errors.code && (
-        <span className="text-red-500 text-sm">{errors.code.message}</span>
-      )}
+      <div className="flex gap-2 sm:gap-3 lg:gap-4">
+        {[0, 1, 2, 3, 4, 5].map((index) => (
+          <input
+            key={index}
+            ref={(el) => (inputRefs.current[index] = el)}
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            value={codeValues[index] || ''}
+            onChange={(e) => handleCodeInput(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+            disabled={isPending}
+            className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-center text-lg sm:text-xl lg:text-2xl border-2 border-white rounded-lg bg-white text-primary focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
+          />
+        ))}
+      </div>
 
       {isError && errorMessage && (
-        <span className="text-red-500 text-sm">{errorMessage}</span>
+        <span className="text-red-300 text-sm text-center">{errorMessage}</span>
       )}
 
-      <button
-        type="submit"
-        disabled={isSubmitDisabled}
-        className={`w-full py-4 rounded-2xl text-lg font-semibold transition ${
-          isValid && !isPending
-            ? "bg-red-500 text-white cursor-pointer"
-            : "bg-red-300 text-white cursor-not-allowed"
-        }`}
-      >
-        {isPending ? 'Отправляем...' : 'Подтвердить и продолжить'}
-      </button>
+      <button type="submit" className="hidden" aria-hidden="true" />
     </form>
   )
 }

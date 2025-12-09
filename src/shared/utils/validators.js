@@ -90,6 +90,16 @@ export const validatePhone = (value) => {
       }
     }),
     
+    confirmPassword: (password) => ({
+      required: 'Подтвердите пароль',
+      validate: (value) => {
+        if (value !== password) {
+          return 'Пароли не совпадают';
+        }
+        return true;
+      },
+    }),
+    
     phone: {
       required: 'Номер телефона обязателен',
       validate: validatePhone

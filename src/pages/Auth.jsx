@@ -14,10 +14,10 @@ export const Auth = () => {
         title,
     } = useAuthPage();
 
-    if (isLoading) {
+   if (isLoading) {
         return <>Загрузка...</>;
-    }
-
+   }
+   
     if (error) {
         return <div>Ошибка загрузки данных</div>;
     }

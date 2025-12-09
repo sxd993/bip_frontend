@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useLegalRegister } from './useLegalRegister';
+import { validationRules } from '../../../../shared/utils/validators';
 
 export const useLegalRegisterForm = () => {
   const {
@@ -11,10 +12,15 @@ export const useLegalRegisterForm = () => {
   } = useForm();
 
   const phoneValue = watch('phone');
+  const password = watch('password');
 
   const { onSubmit, isPending, isSuccess, isError, errorMessage } = useLegalRegister();
 
-  const onSubmitForm = handleSubmit(onSubmit);
+  const onSubmitForm = handleSubmit((data) => {
+    // Удаляем confirmPassword перед отправкой
+    const { confirmPassword, ...submitData } = data;
+    onSubmit(submitData);
+  });
 
   return {
     formId: 'register-legal-form',
@@ -22,6 +28,7 @@ export const useLegalRegisterForm = () => {
     setValue,
     errors,
     phoneValue,
+    password,
     onSubmitForm,
     isPending,
     isSuccess,

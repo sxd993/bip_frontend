@@ -17,6 +17,7 @@ export const useEmployeeRegisterForm = (prefill) => {
   });
 
   const phoneValue = watch('phone');
+  const password = watch('password');
 
   const { onSubmit, isPending, isSuccess, isError, errorMessage } = useEmployeeRegister();
   const hasInviteToken = Boolean(prefill?.inviteToken);
@@ -33,7 +34,11 @@ export const useEmployeeRegisterForm = (prefill) => {
     }
   }, [prefill, setValue]);
 
-  const onSubmitForm = handleSubmit(onSubmit);
+  const onSubmitForm = handleSubmit((data) => {
+    // Удаляем confirmPassword перед отправкой
+    const { confirmPassword, ...submitData } = data;
+    onSubmit(submitData);
+  });
 
   return {
     formId: 'register-employee-form',
@@ -41,6 +46,7 @@ export const useEmployeeRegisterForm = (prefill) => {
     setValue,
     errors,
     phoneValue,
+    password,
     onSubmitForm,
     isPending,
     isSuccess,

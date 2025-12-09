@@ -1,79 +1,110 @@
 import { EnterCodeForm } from '../features/confirm-register/ui/EnterCodeForm';
-import { Link } from 'react-router-dom';
+import { useConfirmRegister } from './hooks/useConfirmRegister';
 
-const TIMELINE_STEPS = [
-  {
-    label: 'Получите письмо',
-    description: 'Мы отправили код на указанную при регистрации почту с темой «Код подтверждения».',
-  },
-  {
-    label: 'Скопируйте код',
-    description: 'Код состоит из 6 цифр и действителен 10 минут. Если письма нет — загляните в папку «Спам».',
-  },
-  {
-    label: 'Вставьте ниже',
-    description: 'После подтверждения регистрация завершится автоматически и мы перенаправим вас в личный кабинет.',
-  },
-];
+export const ConfirmRegister = () => {
+  const {
+    handleSubmit,
+    formState,
+    onSubmit,
+    isPending,
+    isError,
+    errorMessage,
+    codeValues,
+    inputRefs,
+    handleCodeInput,
+    handleKeyDown,
+    handlePaste,
+    isSubmitDisabled,
+    timer,
+    formatTimer,
+    isResending,
+    resendError,
+    handleResendCode,
+  } = useConfirmRegister();
 
-export const ConfirmRegister = () => (
-  <section className="bg-white py-15">
-    <div className="max-w-6xl mx-auto px-4 md:px-6">
-      <div className="text-center mb-12">
-        <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-4">шаг 2 из 2</p>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">Подтверждение регистрации</h1>
-      </div>
+  return (
+    <section className="bg-white py-15">
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className="text-center mb-12 hidden lg:block">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-5">Зарегистрироваться</h1>
+        </div>
 
-      <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-start">
-        <article className="border border-red-200 rounded-3xl p-10 shadow-[0px_25px_60px_rgba(239,68,68,0.08)]">
-          <header className="flex items-center gap-4 mb-10">
-            <span className="w-12 h-12 rounded-2xl bg-red-100 text-red-500 flex items-center justify-center font-semibold">
-              01
-            </span>
-            <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-gray-400">как это работает</p>
-              <h2 className="text-2xl font-semibold text-gray-900">Небольшой чек-лист</h2>
-            </div>
-          </header>
+        <div className="max-w-3xl mx-auto">
+          <article className="p-4 sm:p-6 lg:p-8 bg-secondary rounded-lg">
+            <header className="text-center mb-2">
+              <p className="text-white text-sm sm:text-base lg:text-lg italic opacity-80 leading-tight">
+                Вам на почту было направлено письмо с подтверждением регистрации. 
+                <br />
+                Введите код из него, чтобы завершить регистрацию.
+              </p>
+            </header>
 
-          <div className="space-y-6">
-            {TIMELINE_STEPS.map((step, index) => (
-              <div key={step.label} className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center font-semibold">
-                  {index + 1}
+            <div className="mt-0">
+              <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
+                <div className="flex justify-center">
+                  <EnterCodeForm
+                    handleSubmit={handleSubmit(onSubmit)}
+                    formState={formState}
+                    codeValues={codeValues}
+                    inputRefs={inputRefs}
+                    handleCodeInput={handleCodeInput}
+                    handleKeyDown={handleKeyDown}
+                    handlePaste={handlePaste}
+                    isPending={isPending}
+                    isError={isError}
+                    errorMessage={errorMessage}
+                  />
                 </div>
-                <div>
-                  <p className="text-gray-900 font-medium mb-1">{step.label}</p>
-                  <p className="text-gray-500">{step.description}</p>
+
+                <div className="flex justify-center">
+                  <div className="flex gap-2 sm:gap-3 lg:gap-4 relative pb-10 sm:pb-10 lg:pb-0">
+                    <div className="text-white text-xs sm:text-sm lg:text-base w-12 sm:w-14 lg:w-16">
+                      {formatTimer(timer)}
+                    </div>
+                    <div className="w-12 sm:w-14 lg:w-16"></div>
+                    <div className="w-12 sm:w-14 lg:w-16"></div>
+                    <div className="w-12 sm:w-14 lg:w-16"></div>
+                    <div className="w-12 sm:w-14 lg:w-16"></div>
+                    <div className="w-12 sm:w-14 lg:w-16"></div>
+                    <div className="absolute right-0 text-white text-xs sm:text-sm lg:text-base text-right leading-tight">
+                      <div className="mb-0">Не пришел код?</div>
+                      <button
+                        type="button"
+                        onClick={handleResendCode}
+                        disabled={timer > 0 || isResending}
+                        className="text-white font-medium text-xs sm:text-sm lg:text-base italic disabled:opacity-100 disabled:text-white disabled:cursor-not-allowed hover:underline"
+                      >
+                        {isResending ? 'Отправляем...' : 'Запросить снова'}
+                      </button>
+                      {resendError && (
+                        <div className="text-red-300 text-xs mt-1">{resendError}</div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </article>
+            </div>
+          </article>
 
-        <article className="border border-gray-100 rounded-3xl p-8 md:p-10 bg-white shadow-[0px_25px_60px_rgba(15,23,42,0.08)]">
-          <header className="text-center mb-8">
-            <p className="text-xs uppercase tracking-[0.4em] text-gray-400 mb-3">код доступа</p>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">Введите код из письма</h2>
-            <p className="text-gray-500">Ниже — статические поля без логики. Здесь позже появится ввод и таймер.</p>
-          </header>
-
-          <div className="space-y-8">
-            <div className="flex justify-between gap-2">
-              <EnterCodeForm />
+          <div className="flex mt-6 sm:mt-8">
+            <div className="w-1/2"></div>
+            <div className="w-1/2 flex justify-end">
+              <button
+                type="submit"
+                form="confirm-register-form"
+                disabled={isSubmitDisabled}
+                className={`flex items-center justify-center bg-primary text-white font-bold py-2 sm:py-3 px-4 sm:px-6 lg:px-8 xl:px-12 rounded-lg text-sm sm:text-base lg:text-lg transition w-full ${
+                  isSubmitDisabled
+                    ? 'opacity-50 cursor-not-allowed'
+                    : 'hover:opacity-90'
+                }`}
+              >
+                {isPending ? 'Отправляем...' : 'продолжить'}
+              </button>
             </div>
           </div>
-
-
-          <div className="mt-6 text-center text-sm text-gray-500">
-            Не пришёл код? Позже тут будет обработчик повторной отправки либо ссылка на{' '}
-            <Link to="/contacts" className="text-red-500 font-medium">
-              службу поддержки
-            </Link>
-            .
-          </div>
-        </article>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

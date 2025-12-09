@@ -10,6 +10,7 @@ export const RegisterLegalForm = () => {
     setValue,
     errors,
     phoneValue,
+    password,
     onSubmitForm,
     isPending,
     isSuccess,
@@ -161,6 +162,22 @@ export const RegisterLegalForm = () => {
           type="password"
           error={errors.password}
           placeholder="Пароль"
+          className="placeholder-register"
+        />
+      </FormField>
+
+      <FormField
+        label=" "
+        error={errors.confirmPassword}
+        required
+        labelClassName="text-white"
+        requiredClassName="text-white"
+      >
+        <TextInput
+          {...register('confirmPassword', validationRules.confirmPassword(password))}
+          type="password"
+          error={errors.confirmPassword}
+          placeholder="Подтверждение пароля"
           className="placeholder-register"
         />
       </FormField>

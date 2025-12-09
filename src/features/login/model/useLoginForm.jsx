@@ -25,6 +25,7 @@ export const useLoginForm = () => {
       login({
         email_or_phone: emailOrPhone,
         password,
+        user_type: userType,
       });
     },
     [emailOrPhone, password, validateCaptcha, login],

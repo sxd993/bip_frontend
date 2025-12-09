@@ -15,6 +15,11 @@ export const confirmRegistrationPrecheck = async (data) => {
     return response.data;
 }
 
+export const resendRegistrationCode = async (data) => {
+    const response = await client.post("/auth/precheck/resend", data);
+    return response.data;
+}
+
 export const registerLegalEntityApi = async (data) => {
     const response = await client.post("/auth/register/legal", data);
     return response.data;
