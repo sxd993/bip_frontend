@@ -6,7 +6,7 @@ import { EditEmployeeDataModal } from './EditEmployeeDataModal';
 import InviteEmployeeModal from '../../../invite-employee/ui/InviteEmployeeModal';
 import PendingInvitesModal from '../../../invite-employee/ui/PendingInvitesModal';
 import RemoveEmployeeModal from '../../../remove-employee/ui/RemoveEmployeeModal';
-import { useRemoveEmployee } from '../../../remove-employee/model/useRemoveEmployee';
+import { useRemoveEmployee } from '../../../account/remove-emloyee/model/useRemoveEmployee';
 
 const VALID_SECTIONS = ['employee', 'appeals', 'company', 'employees'];
 const DEFAULT_SECTION = 'appeals';

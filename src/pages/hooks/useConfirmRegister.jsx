@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useEnterCodeForm } from '../../features/confirm-register/model/useEnterCodeForm';
-import { resendRegistrationCode } from '../../features/register/api/registerApi';
+import { useEnterCodeForm } from '../../features/auth/confirm-register/model/useEnterCodeForm';
+import { resendRegistrationCode } from '../../features/auth/register/api/registerApi';
 
 export const useConfirmRegister = () => {
-  const { 
-    handleSubmit, 
-    formState, 
-    onSubmit, 
-    isPending, 
-    isError, 
+  const {
+    handleSubmit,
+    formState,
+    onSubmit,
+    isPending,
+    isError,
     errorMessage,
     codeValues,
     inputRefs,
@@ -16,7 +16,7 @@ export const useConfirmRegister = () => {
     handleKeyDown,
     handlePaste,
   } = useEnterCodeForm();
-  
+
   const { isValid } = formState;
   const codeString = codeValues.join('');
   const isSubmitDisabled = !isValid || isPending || codeString.length !== 6;

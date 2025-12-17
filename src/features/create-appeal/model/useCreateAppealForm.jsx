@@ -50,7 +50,7 @@ export const useCreateAppealForm = (isOpen, onClose) => {
         try {
             const base64Files = await getBase64Files();
             const cleanFiles = base64Files.map(file => {
-                const { type, ...cleanFile } = file;
+                const { type: _type, ...cleanFile } = file;
                 return cleanFile;
             });
 

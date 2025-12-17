@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const ServicesBusiness = () => {
   const navigate = useNavigate();
+  const MotionDiv = motion.div;
 
   const handleConsultationClick = () => {
     navigate("/personal-account");
@@ -39,7 +40,7 @@ const ServicesBusiness = () => {
 
                   <AnimatePresence initial={false}>
                     {open && (
-                      <motion.div
+                      <MotionDiv
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -72,7 +73,7 @@ const ServicesBusiness = () => {
                             </button>
                           </div>
                         </div>
-                      </motion.div>
+                      </MotionDiv>
                     )}
                   </AnimatePresence>
                 </div>

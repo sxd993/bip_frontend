@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Modal } from '../../../../shared/ui/Modal';
 import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
@@ -13,7 +12,6 @@ export const EditEmployeeDataModal = ({ isOpen, onClose, user }) => {
     formState: { errors },
     setValue,
     watch,
-    reset,
   } = useForm({
     defaultValues: {
       first_name: user?.first_name || '',

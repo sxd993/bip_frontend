@@ -1,5 +1,5 @@
-import Register from '../features/register/ui/Register';
-import Login from '../features/login/ui/Login';
+import Register from '../features/auth/register/ui/Register';
+import Login from '../features/auth/login/ui/Login';
 import { useAuthPage } from './hooks/useAuthPage';
 
 export const Auth = () => {
@@ -14,10 +14,10 @@ export const Auth = () => {
         title,
     } = useAuthPage();
 
-   if (isLoading) {
+    if (isLoading) {
         return <>Загрузка...</>;
-   }
-   
+    }
+
     if (error) {
         return <div>Ошибка загрузки данных</div>;
     }

@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
 import { useAppeals } from './useAppeals';
 
+const EMPTY_ITEMS = [];
+
 export const useAppealsSection = () => {
   const PAGE_SIZE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data = { items: [] }, isLoading } = useAppeals();
-  const appeals = data.items || [];
+  const appeals = data.items ?? EMPTY_ITEMS;
 
   const totalAppeals = appeals.length;
   const totalPages = Math.ceil(totalAppeals / PAGE_SIZE);

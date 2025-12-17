@@ -17,8 +17,6 @@ const AppealsSection = () => {
     totalAppeals,
     totalPages,
     currentPage,
-    startItem,
-    endItem,
     goToPrevPage,
     goToNextPage,
     goToPage,

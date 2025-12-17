@@ -1,4 +1,4 @@
-import { ForgotPasswordForm } from '../features/reset-password/ui/ForgotPasswordForm';
+import { ForgotPasswordForm } from '../features/auth/reset-password/ui/ForgotPasswordForm';
 import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
@@ -12,7 +12,7 @@ const ForgotPassword = () => {
 
         <div className="bg-white border-2 border-red-200 rounded-3xl p-8 md:p-12">
           <ForgotPasswordForm />
-          
+
           <div className="mt-6 text-center">
             <Link
               to="/auth/login"

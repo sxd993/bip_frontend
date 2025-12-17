@@ -53,7 +53,6 @@ export const useModalState = (options = {}) => {
   // Обертка для выполнения async операций
   const executeAsync = async (asyncFn, options = {}) => {
     const {
-      successMessage = 'Операция выполнена успешно',
       errorMessage: customErrorMessage = 'Произошла ошибка',
       onSuccess,
       onError

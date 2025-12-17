@@ -102,7 +102,7 @@ export const ReplyModal = ({ isOpen, onClose, appealId }) => {
     try {
       await handleSubmit(attachedFiles);
       setTimeout(() => handleClose(), 2000);
-    } catch (error) {
+    } catch {
       // Ошибка уже в состоянии хука
     }
   };

@@ -36,15 +36,11 @@ export const useReplyModal = (appealId) => {
       throw new Error('Сообщение слишком длинное (макс. 1500 символов)');
     }
 
-    try {
-      await sendReplyMutation.mutateAsync({
-        message: message.trim(),
-        files: attachedFiles
-      });
-      return true;
-    } catch (error) {
-      throw error;
-    }
+    await sendReplyMutation.mutateAsync({
+      message: message.trim(),
+      files: attachedFiles
+    });
+    return true;
   };
 
   const reset = () => {

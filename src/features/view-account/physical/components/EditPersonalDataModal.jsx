@@ -4,10 +4,9 @@ import { FormField, TextInput, PhoneInput } from '../../../../shared/components/
 import { validationRules } from '../../../../shared/utils/validators';
 import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
 import { useEditPersonalData } from '../../hooks/useEditPersonalData';
-import { useState } from 'react';
 
 export const EditPersonalDataModal = ({ isOpen, onClose, user }) => {
-  const { register, handleSubmit, formState: { errors }, setValue, watch, reset } = useForm({
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
     defaultValues: {
       first_name: user?.first_name || '',
       last_name: user?.last_name || '',
