@@ -44,7 +44,7 @@ export const RegisterPhysicalForm = () => {
     >
 
       <FormField
-        label=" "
+        label="Фамилия"
         error={errors.last_name}
         required
         labelClassName="text-white"
@@ -59,7 +59,7 @@ export const RegisterPhysicalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Имя"
         error={errors.first_name}
         required
         labelClassName="text-white"
@@ -74,7 +74,7 @@ export const RegisterPhysicalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Отчество"
         error={errors.second_name}
         required
         labelClassName="text-white"
@@ -89,7 +89,7 @@ export const RegisterPhysicalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Электронная почта"
         error={errors.email}
         required
         labelClassName="text-white"
@@ -105,7 +105,7 @@ export const RegisterPhysicalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Номер телефона"
         error={errors.phone}
         required
         labelClassName="text-white"
@@ -122,7 +122,7 @@ export const RegisterPhysicalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Пароль"
         error={errors.password}
         required
         labelClassName="text-white"
@@ -138,7 +138,7 @@ export const RegisterPhysicalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Подтверждение пароля"
         error={errors.confirmPassword}
         required
         labelClassName="text-white"

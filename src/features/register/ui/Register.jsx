@@ -14,7 +14,6 @@ const Register = ({
     legalType,
     selectPhysical,
     selectLegal,
-    setLegalType,
     activeFormId,
   } = useRegisterTabs({ defaultUserType, defaultLegalType });
 

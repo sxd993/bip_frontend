@@ -43,7 +43,7 @@ export const RegisterLegalForm = () => {
       className="space-y-8"
     >
       <FormField
-        label=" "
+        label="Название организации"
         error={errors.company_name}
         required
         labelClassName="text-white"
@@ -58,7 +58,7 @@ export const RegisterLegalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="ИНН организации"
         error={errors.inn}
         required
         labelClassName="text-white"
@@ -73,7 +73,7 @@ export const RegisterLegalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Фамилия руководителя"
         error={errors.employee_second_name}
         required
         labelClassName="text-white"
@@ -88,7 +88,7 @@ export const RegisterLegalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Имя руководителя"
         error={errors.employee_first_name}
         required
         labelClassName="text-white"
@@ -103,7 +103,7 @@ export const RegisterLegalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Отчество руководителя"
         error={errors.employee_last_name}
         required
         labelClassName="text-white"
@@ -116,9 +116,9 @@ export const RegisterLegalForm = () => {
           className="placeholder-register"
         />
       </FormField>
-      
+
       <FormField
-        label=" "
+        label="Email"
         error={errors.email}
         required
         labelClassName="text-white"
@@ -134,7 +134,7 @@ export const RegisterLegalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Номер телефона"
         error={errors.phone}
         required
         labelClassName="text-white"
@@ -151,7 +151,7 @@ export const RegisterLegalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Пароль"
         error={errors.password}
         required
         labelClassName="text-white"
@@ -167,7 +167,7 @@ export const RegisterLegalForm = () => {
       </FormField>
 
       <FormField
-        label=" "
+        label="Подтверждение пароля"
         error={errors.confirmPassword}
         required
         labelClassName="text-white"
