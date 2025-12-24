@@ -18,45 +18,42 @@ export const ForgotPasswordForm = () => {
 
   if (isSuccess) {
     return (
-      <div className="bg-white p-8 md:p-12 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Письмо отправлено</h2>
-        <p className="text-gray-600 mb-6">
-          Проверьте почту. Если письма нет, посмотрите папку Спам.
+      <div className="w-full">
+        <p className="text-white text-sm sm:text-base md:text-lg text-center">
+          Письмо отправлено, проверьте почту
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+    <form
+      id="forgot-password-form"
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4 w-full"
+    >
+      <div className="w-full">
         <input
           type="email"
-          placeholder="your@email.com"
+          placeholder="Почта"
           {...emailField}
           disabled={isPending}
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-red-400 disabled:bg-gray-100 disabled:text-gray-400"
+          className="w-full px-4 py-2 border-2 border-white rounded-lg bg-white text-primary focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
         />
         {errors.email && (
-          <span className="text-red-500 text-sm mt-1 block">{errors.email.message}</span>
+          <span className="text-red-300 text-sm mt-1 block text-center">{errors.email.message}</span>
         )}
       </div>
 
+      <p className="text-white text-sm sm:text-base md:text-lg italic opacity-80 leading-tight text-center">
+        Вам на почту будет направлено письмо с ссылкой, при переходе по которой возможно обновить пароль.
+      </p>
+
       {isError && errorMessage && (
-        <div className="text-red-600 bg-red-50 border border-red-200 rounded-2xl p-3">
-          {errorMessage}
-        </div>
+        <span className="text-red-300 text-sm text-center">{errorMessage}</span>
       )}
 
-      <button
-        type="submit"
-        disabled={isSubmitDisabled}
-        className={buttonClassName}
-      >
-        {isPending ? 'Отправка...' : 'Отправить'}
-      </button>
+      <button type="submit" className="hidden" aria-hidden="true" />
     </form>
   );
 };
-
