@@ -19,21 +19,20 @@ export const ServicesCard = ({
                                 className="w-full" />
                         </div>
                         {/* Заголовок */}
-                        <div className={`text-left text-wrap flex justify-baseline ${isRed && 'text-primary'} mt-2`}>
-                            <span className="text-black font-medium text-xl leading-[100%]">{title}</span>
+                        <div className={`text-left text-wrap flex justify-baseline mt-2`}>
+                            <span className={`${isRed ? 'text-primary' : 'text-black'} font-medium text-xl leading-[100%]`}>{title}</span>
                         </div>
                         {/* Описание */}
-                        <div className={`text-left font-light text-[#1d293d] lg:text-base text-sm mt-2 ${isRed && 'text-primary'} max-w-[90%]`}>
-                            <p>{description}</p>
+                        <div className={`text-left font-light text-[#1d293d] lg:text-base text-sm mt-2 ${isRed && 'text-primary'}`}>
+                            {description}
                         </div>
                     </div>
                 </div>
                 {/* Кнопка */}
                 <div className="flex justify-center items-end">
                     <Button
-                        className=""
-                        variant="black"
-                        label='Решить проблему'
+                        className={`${isRed ? 'bg-primary!' : 'bg-secondary!'} font-bold!  text-white! text-base! leading-[100%] py-3! px-4! flex-1!`}
+                        label='решить проблему'
                     />
 
                 </div>
