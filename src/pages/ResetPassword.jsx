@@ -1,5 +1,5 @@
 import { useResetPasswordForm } from '@/features/auth/reset-password/model/hooks/useResetPasswordForm';
-import { ResetPasswordForm } from '../features/reset-password/ui/ResetPasswordForm';
+import { ResetPasswordForm } from '@/features/auth/reset-password/ui/ResetPasswordForm';
 
 const ResetPassword = () => {
   const {
