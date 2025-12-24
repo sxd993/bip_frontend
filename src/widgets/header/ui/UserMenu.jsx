@@ -31,13 +31,20 @@ export const UserMenu = ({ user, onLogout, buttonClassName, label }) => {
 
   const userLabel =
     label ??
-    `${user.second_name ?? ""} ${user.first_name ? `${user.first_name[0]}.` : ""}`.trim();
+    [
+      user.second_name ?? user.last_name ?? "",
+      user.last_name ? `${user.last_name[0]}.` : "",
+      user.first_name ? `${user.first_name[0]}.` : "",
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
 
   return (
     <div ref={containerRef} className="relative">
       <button
         type="button"
-        className={buttonClassName || "text-white text-[16px] font-bold border border-white px-5 py-[6px] rounded-[6px]"}
+        className={buttonClassName || "text-white text-[16px] font-bold border border-white px-5 py-[6px]"}
         onClick={toggleMenu}
         aria-expanded={isOpen}
         aria-haspopup="menu"
@@ -46,7 +53,7 @@ export const UserMenu = ({ user, onLogout, buttonClassName, label }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-[200px] rounded-[6px] bg-white text-black border border-[#A01E1E] shadow-lg z-50 flex flex-col">
+        <div className="absolute -right-2 mt-2 w-[200px] bg-white text-black border border-[#A01E1E] shadow-lg z-50 flex flex-col">
           <NavLink
             to="/personal-account"
             className="px-4 py-3 text-[15px] font-semibold border-b border-[#A01E1E] hover:bg-gray-100"

@@ -12,11 +12,29 @@ export const Header = () => {
   const { pathname } = useLocation()
   const isServicesPageOpen = pathname.includes('/Services')
   const { user, handleLogout } = useAuthActions()
-  console.log(user)
+
+  const formatInitials = (person) => {
+    if (!person) {
+      return ""
+    }
+
+    const initials = []
+    if (person.last_name) {
+      initials.push(`${person.last_name[0]}.`)
+    }
+    if (person.first_name) {
+      initials.push(`${person.first_name[0]}.`)
+    }
+
+    return initials.join(" ")
+  }
+
   const desktopLabel = user
-    ? `${user.second_name ?? ""} ${user.first_name ? `${user.first_name[0]}.` : ""}`.trim()
+    ? `${user.second_name ?? ""} ${formatInitials(user)}`.trim()
     : ""
-  const tabletLabel = user?.last_name ?? ""
+  const tabletLabel = user
+    ? `${user.last_name ?? ""} ${formatInitials(user)}`.trim()
+    : ""
 
   return (
     <header className={`
