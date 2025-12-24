@@ -1,4 +1,5 @@
-import { Modal } from '../../../shared/ui/Modal';
+import { Modal } from "@/shared/ui/Modal";
+
 
 const RemoveEmployeeModal = ({
   employee,

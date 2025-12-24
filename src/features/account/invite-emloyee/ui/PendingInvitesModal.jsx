@@ -1,5 +1,5 @@
-import { Modal } from '../../../shared/ui/Modal';
-import { usePendingInvites } from '../../account/invite-emloyee/model/usePendingInvites';
+import { Modal } from "@/shared/ui/Modal";
+import { usePendingInvites } from "../model/usePendingInvites";
 
 const formatDate = (isoDate) => {
   if (!isoDate) return '';

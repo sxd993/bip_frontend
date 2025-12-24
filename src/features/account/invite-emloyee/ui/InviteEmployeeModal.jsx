@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Modal } from '../../../shared/ui/Modal';
-import SuccessScreen from '../../../shared/components/SuccessScreen';
-import { useInviteEmployee } from '../../account/invite-emloyee/model/useInviteEmployee';
+import { Modal } from "@/shared/ui/Modal";
+import SuccessScreen from '@/shared/components/SuccessScreen';
+import { useInviteEmployee } from '../model/useInviteEmployee';
 
 const InviteEmployeeModal = ({ isOpen, onClose, onInviteSent }) => {
   const {
