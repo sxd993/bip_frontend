@@ -5,12 +5,18 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useHeader } from "../hooks/useHeader";
 import { MobileDropdown } from "./MobileDropdown";
 import { useAuthActions } from "../hooks/useAuthActions";
+import { UserMenu } from "./UserMenu";
 
 export const Header = () => {
   const { isMenuOpen, toggleMobileMenu } = useHeader()
   const { pathname } = useLocation()
   const isServicesPageOpen = pathname.includes('/Services')
   const { user, handleLogout } = useAuthActions()
+  console.log(user)
+  const desktopLabel = user
+    ? `${user.second_name ?? ""} ${user.first_name ? `${user.first_name[0]}.` : ""}`.trim()
+    : ""
+  const tabletLabel = user?.last_name ?? ""
 
   return (
     <header className={`
@@ -36,7 +42,6 @@ export const Header = () => {
               <button
                 onClick={handleLogout}
                 className="text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
-                выйти
               </button>
             ) : (
               <NavLink
@@ -77,11 +82,12 @@ export const Header = () => {
           {/* Правый блок */}
           <div className="flex items-center gap-5">
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
-                выйти
-              </button>
+              <UserMenu
+                user={user}
+                onLogout={handleLogout}
+                label={tabletLabel}
+                buttonClassName="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]"
+              />
             ) : (
               <NavLink
                 to="/auth/login"
@@ -125,11 +131,12 @@ export const Header = () => {
 
           <div className="flex gap-[13px]">
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="h-[42px] px-5 bg-primary border-2 border-white rounded-[6px] text-white font-bold text-[18px] flex items-center">
-                выйти
-              </button>
+              <UserMenu
+                user={user}
+                onLogout={handleLogout}
+                label={desktopLabel}
+                buttonClassName="text-white flex items-center gap-1 text-[18px] font-bold"
+              />
             ) : (
               <>
                 <NavLink
