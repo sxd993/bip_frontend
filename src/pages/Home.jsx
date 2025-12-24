@@ -3,6 +3,7 @@ import { usePrefetchUser } from '../entities/business/user/lib/prefetchUser';
 import { WelcomeSection } from '@/widgets/home/WelcomeSection/WelcomeSection';
 import { ReviewsSection } from '@/widgets/home/ReviewsSection/ui/ReviewsSection';
 import { ArticleSection } from '@/widgets/home/ArticleSection/ArticleSection';
+import { FAQSection } from '@/widgets/home/FAQSection/FAQSection';
 
 
 export const Home = () => {
@@ -14,6 +15,7 @@ export const Home = () => {
       <SliderSection />
       <ReviewsSection />
       <ArticleSection/>
+      <FAQSection/>
     </div>
   );
 };
