@@ -10,7 +10,7 @@ export const ReviewsSection = () => {
                 Отзывы о нас
             </p>
             {/* Отзывы */}
-            <div className="flex w-full justify gap-5">
+            <div className="flex flex-col md:flex-row w-full justify gap-5">
                 <div className="basis-4/6 md:basis-1/3 ">
                     <BigReview />
                 </div>
