@@ -1,19 +1,12 @@
-import { useForgotPasswordForm } from '../model/hooks/useForgotPasswordForm';
-
-export const ForgotPasswordForm = () => {
-  const {
-    handleSubmit,
-    formState,
-    emailField,
-    onSubmit,
-    isPending,
-    isSuccess,
-    isError,
-    errorMessage,
-    isSubmitDisabled,
-    buttonClassName,
-  } = useForgotPasswordForm();
-
+export const ForgotPasswordForm = ({
+  handleSubmit,
+  formState,
+  emailField,
+  isPending,
+  isSuccess,
+  isError,
+  errorMessage,
+}) => {
   const { errors } = formState;
 
   if (isSuccess) {

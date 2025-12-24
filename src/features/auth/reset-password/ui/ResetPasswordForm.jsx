@@ -1,20 +1,13 @@
-import { useResetPasswordForm } from '../model/hooks/useResetPasswordForm';
-
-export const ResetPasswordForm = () => {
-  const {
-    handleSubmit,
-    formState,
-    passwordField,
-    confirmPasswordField,
-    onSubmit,
-    isPending,
-    isSuccess,
-    isError,
-    errorMessage,
-    isSubmitDisabled,
-    buttonClassName,
-  } = useResetPasswordForm();
-
+export const ResetPasswordForm = ({
+  handleSubmit,
+  formState,
+  passwordField,
+  confirmPasswordField,
+  isPending,
+  isSuccess,
+  isError,
+  errorMessage,
+}) => {
   const { errors } = formState;
 
   if (isSuccess) {

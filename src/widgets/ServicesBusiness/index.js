@@ -1,2 +1,2 @@
-export { SliderSection } from './ui/SliderSection.jsx'
-export { FAQSection } from './ui/FAQSection/FAQSection.jsx'
+export { SliderSection } from '../SliderSection/SliderSection.jsx'
+export { FAQSection } from '../FAQSection/FAQSection.jsx'

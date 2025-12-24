@@ -1,5 +1,5 @@
 import { SERVICES } from '../../const/services';
-import { RegisterAds } from '../RegisterAds/RegisterAds';
+import { RegisterAds } from '../../../RegisterAds/RegisterAds';
 import { ServicesCard } from './ServicesCard';
 
 export const ServicesSection = () => {
