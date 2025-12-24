@@ -12,6 +12,7 @@ export const Home = () => {
       <WelcomeSection />
       <SliderSection />
       <ReviewsSection />
+      <div>d</div>
     </div>
   );
 };
