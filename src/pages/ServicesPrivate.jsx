@@ -1,6 +1,7 @@
 import { HeroSection } from "@/widgets/ServicesPrivate";
 import { SliderSection } from "@/widgets/ServicesPrivate";
 import { ServicesSection } from "@/widgets/ServicesPrivate/ui/ServicesSection/ServicesSection";
+import { FAQSection } from "@/widgets/ServicesPrivate";
 
 const ServicesPrivate = () => {
 
@@ -10,6 +11,7 @@ const ServicesPrivate = () => {
       <HeroSection />
       <SliderSection />
       <ServicesSection />
+      <FAQSection />
     </div>
   );
 };
