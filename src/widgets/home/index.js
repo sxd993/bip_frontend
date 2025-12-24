@@ -1,3 +1,3 @@
-export { PhysicalBanner } from "./physical-banner/PhysicalBanner";
-export { WelcomeBanner } from "./welcone-banner/WelcomeBanner";
-export { BusinessBanner } from "./business-banner/BusinessBanner";
+export { PhysicalBanner } from "./Banners/physical-banner/PhysicalBanner";
+export { WelcomeBanner } from "./Banners/welcone-banner/WelcomeBanner";
+export { BusinessBanner } from "./Banners/business-banner/BusinessBanner";

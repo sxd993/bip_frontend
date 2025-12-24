@@ -1,6 +1,6 @@
+import { useUser } from '@/entities/business/user/model/useUser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useUser } from '../../entities/user/model/useUser';
 
 export const useAuthPage = () => {
   const [searchParams] = useSearchParams();

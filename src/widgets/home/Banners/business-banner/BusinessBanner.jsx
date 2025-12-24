@@ -1,13 +1,13 @@
 import { NavLink } from 'react-router-dom';
-import '../style.css';
+import '../../style.css';
 
-export const PhysicalBanner = () => {
+export const BusinessBanner = () => {
     return (
         <div className="welcome-banner bg-secondary rounded-[9px]">
             <div className="welcome-banner__image-wrapper">
                 <img
-                    className="welcome-banner__img translate-y-50"
-                    src="https://s3.twcstorage.ru/d90a9000-bip/home-page/Group%202005.png"
+                    className="welcome-banner__img"
+                    src="https://s3.twcstorage.ru/d90a9000-bip/home-page/Group%202006.png"
                     alt="Широкий спектр услуг"
                 />
                 <div className="welcome-banner__overlay" />
@@ -15,38 +15,38 @@ export const PhysicalBanner = () => {
                     <ul className="banner-list">
                         <li className="banner-list__item">
                             <span className="banner-list__arrow">→</span>
-                            <span>Защита прав потребителей</span>
+                            <span>Сопровождение сделок</span>
                         </li>
                         <li className="banner-list__item">
                             <span className="banner-list__arrow">→</span>
-                            <span>Семейные споры</span>
+                            <span>Земельные вопросы</span>
                         </li>
                         <li className="banner-list__item">
                             <span className="banner-list__arrow">→</span>
-                            <span>Ущерб</span>
+                            <span>Трудовое право</span>
                         </li>
                         <li className="banner-list__item">
                             <span className="banner-list__arrow">→</span>
-                            <span>Проблемы с земельными участками</span>
+                            <span>Вопросы в сфере интеллектуальной собственности</span>
                         </li>
                         <li className="banner-list__item">
                             <span className="banner-list__arrow">→</span>
-                            <span>Споры с работодателем</span>
+                            <span>Взыскание дебиторской задолженности</span>
                         </li>
                         <li className="banner-list__item">
-                            <span className="banner-list__arrow"></span>
-                            <span>и другое</span>
+                            <span className="banner-list__arrow">→</span>
+                            <span>и многое другое</span>
                         </li>
                     </ul>
 
                     <NavLink
-                        to={'/ServicesPrivate'}
+                        to={'/ServicesBusiness'}
                         className="banner-cta"
                     >
-                        частным лицам
+                        бизнесу
                     </NavLink>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }

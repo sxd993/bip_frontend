@@ -2,7 +2,7 @@ import { useReplyModal } from '../model/useReplyModal';
 import { Modal } from '../../../shared/ui/Modal';
 import SuccessScreen from '../../../shared/components/SuccessScreen';
 import ReplyForm from './ReplyForm';
-import { downloadFileApi } from '../../../entities/deal/api/replyApi';
+import { downloadFileApi } from '../../../entities/business/deal/api/replyApi';
 import { formatFileSize } from '../../../shared/utils/formatters';
 
 const FilesList = ({ files, isLoading }) => {

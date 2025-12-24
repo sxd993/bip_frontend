@@ -1,4 +1,4 @@
-import { client } from "../../../shared/api/client";
+import { client } from "../../../../shared/api/client";
 
 // Для физ. лица
 export const updatePhysicalPersonApi = async (data) => {

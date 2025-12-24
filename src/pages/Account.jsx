@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useUser } from '../entities/user/model/useUser';
-import { useCompanyData, useCompanyEmployees } from '../entities/company/model/useCompanyData';
+import { useCompanyData, useCompanyEmployees } from '../entities/business/company/model/useCompanyData';
 import { prefetchAppealCategories } from '../features/create-appeal/utils/prefetch';
 import { LegalAccount } from '../features/view-account/legal/components/LegalAccount';
 import { PhysicalAccount } from '../features/view-account/physical/components/PhysicalAccount';
-import { Loading } from '../shared/ui/Loading';
+import { useUser } from '@/entities/business/user/model/useUser';
 
 export const Account = () => {
   const { user, isLoading: userLoading, error } = useUser();

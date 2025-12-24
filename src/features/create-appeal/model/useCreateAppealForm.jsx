@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppealCategories } from '../../view-appeals/model/useAppeals';
-import { createAppealApi } from '../../../entities/deal/api/dealsApi';
+import { createAppealApi } from '../../../entities/business/deal/api/dealsApi';
 import { useFileUpload } from '../../../shared/hooks/useFileUpload';
 import { VALIDATION_RULES, FORM_DEFAULTS } from './constants';
 

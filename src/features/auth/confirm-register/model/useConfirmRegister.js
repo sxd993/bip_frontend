@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { confirmRegistrationPrecheck } from '../../register/api/registerApi';
-import { getUser } from '../../../../entities/user/api/userApi';
+import { getUser } from '../../../../entities/business/user/api/userApi';
 
 export const useConfirmRegister = () => {
   const queryClient = useQueryClient();

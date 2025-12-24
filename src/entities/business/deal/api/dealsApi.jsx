@@ -1,4 +1,4 @@
-import { client } from '../../../shared/api/client';
+import { client } from '../../../../shared/api/client';
 
 export const getDealsApi = async () => {
     const response = await client.get('/deals/get-deals');

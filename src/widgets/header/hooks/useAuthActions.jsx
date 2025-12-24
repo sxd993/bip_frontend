@@ -1,5 +1,5 @@
-import { useUser } from "@/entities/user/model/useUser";
-import { useLogout } from "@/entities/user/model/useLogout";
+import { useLogout } from '@/entities/business/user/model/useLogout';
+import { useUser } from '@/entities/business/user/model/useUser';
 
 // Хук для управления авторизацией в header
 export const useAuthActions = () => {

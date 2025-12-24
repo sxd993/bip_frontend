@@ -1,4 +1,4 @@
-import { getDealStagesApi } from "../../../entities/deal/api/dealsApi";
+import { getDealStagesApi } from "../../../entities/business/deal/api/dealsApi";
 
 export const prefetchAppealCategories = async (queryClient) => {
     await queryClient.prefetchQuery({
