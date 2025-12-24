@@ -23,7 +23,7 @@ export const ServicesCard = ({
                             <span className="text-black font-medium text-xl leading-[100%]">{title}</span>
                         </div>
                         {/* Описание */}
-                        <div className={`text-left font-light text-[#1d293d] text-[9px] mt-2 ${isRed && 'text-primary'} max-w-[90%]`}>
+                        <div className={`text-left font-light text-[#1d293d] lg:text-base text-sm mt-2 ${isRed && 'text-primary'} max-w-[90%]`}>
                             <p>{description}</p>
                         </div>
                     </div>
@@ -31,6 +31,7 @@ export const ServicesCard = ({
                 {/* Кнопка */}
                 <div className="flex justify-center items-end">
                     <Button
+                        className=""
                         variant="black"
                         label='Решить проблему'
                     />

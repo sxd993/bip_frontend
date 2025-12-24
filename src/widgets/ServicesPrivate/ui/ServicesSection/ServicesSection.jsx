@@ -12,7 +12,7 @@ export const ServicesSection = () => {
                     </p>
                 </span>
                 {/* Сетка услуг */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                     {SERVICES.map((s) => (
                         <ServicesCard
                             key={s.id}
