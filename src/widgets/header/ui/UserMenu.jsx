@@ -32,9 +32,9 @@ export const UserMenu = ({ user, onLogout, buttonClassName, label }) => {
   const userLabel =
     label ??
     [
-      user.second_name ?? user.last_name ?? "",
-      user.last_name ? `${user.last_name[0]}.` : "",
+      user.last_name ?? "",
       user.first_name ? `${user.first_name[0]}.` : "",
+      user.second_name ? `${user.second_name[0]}.` : "",
     ]
       .filter(Boolean)
       .join(" ")
@@ -44,13 +44,14 @@ export const UserMenu = ({ user, onLogout, buttonClassName, label }) => {
     <div ref={containerRef} className="relative">
       <button
         type="button"
-        className={buttonClassName || "text-white text-[16px] font-bold border border-white px-5 py-[6px]"}
+        className={`${buttonClassName || "text-white text-[16px] font-bold border border-white px-5 py-[6px]"} inline-flex items-center gap-1 whitespace-nowrap`}
         onClick={toggleMenu}
         aria-expanded={isOpen}
         aria-haspopup="menu"
       >
         {userLabel}
         <svg
+          className="shrink-0"
           width={10}
           height={5}
           viewBox="0 0 10 5"

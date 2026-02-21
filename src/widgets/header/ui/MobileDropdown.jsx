@@ -6,7 +6,7 @@ import { useAuthActions } from "../hooks/useAuthActions";
 export const MobileDropdown = () => {
   const { user, handleLogout } = useAuthActions()
   return (
-    <div className="lg:hidden px-4 pb-4 bg-primary">
+    <div className="lg:hidden px-4 pb-4 bg-primary rounded-[7px]">
       <div className="flex flex-wrap items-center justify-center gap-3 px-4">
         <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-[6px] flex-1 min-w-[180px] max-w-[360px]">
           <SearchIcon />

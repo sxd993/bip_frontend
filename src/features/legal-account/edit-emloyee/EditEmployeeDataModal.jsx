@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
-import { Modal } from '../../../../shared/ui/Modal';
-import { FormField, TextInput, PhoneInput } from '../../../../shared/components/forms';
-import { validationRules } from '../../../../shared/utils/validators';
-import { normalizePhoneForServer } from '../../../../shared/utils/formatters';
-import { useEditEmployeeData } from '../../hooks/useEditPersonalData';
+import { Modal } from '../../../shared/ui/Modal';
+import { FormField, TextInput, PhoneInput } from '../../../shared/components/forms';
+import { validationRules } from '../../../shared/utils/validators';
+import { normalizePhoneForServer } from '../../../shared/utils/formatters';
+import { useEditEmployeeData } from '../../view-account/hooks/useEditPersonalData';
 
 export const EditEmployeeDataModal = ({ isOpen, onClose, user }) => {
   const {

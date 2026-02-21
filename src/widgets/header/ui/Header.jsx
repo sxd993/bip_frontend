@@ -19,18 +19,18 @@ export const Header = () => {
     }
 
     const initials = []
-    if (person.last_name) {
-      initials.push(`${person.last_name[0]}.`)
-    }
     if (person.first_name) {
       initials.push(`${person.first_name[0]}.`)
+    }
+    if (person.second_name) {
+      initials.push(`${person.second_name[0]}.`)
     }
 
     return initials.join(" ")
   }
 
   const desktopLabel = user
-    ? `${user.second_name ?? ""} ${formatInitials(user)}`.trim()
+    ? `${user.last_name ?? ""} ${formatInitials(user)}`.trim()
     : ""
   const tabletLabel = user
     ? `${user.last_name ?? ""} ${formatInitials(user)}`.trim()
@@ -59,12 +59,12 @@ export const Header = () => {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
+                className="hidden text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
               </button>
             ) : (
               <NavLink
                 to="/auth/login"
-                className="text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
+                className="sm:hidden text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
                 войти
               </NavLink>
             )}
