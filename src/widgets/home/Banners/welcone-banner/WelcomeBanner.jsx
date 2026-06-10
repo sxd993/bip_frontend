@@ -1,4 +1,4 @@
-import '../../style.css';
+import "../../style.css";
 
 export const WelcomeBanner = () => {
   return (
@@ -6,7 +6,7 @@ export const WelcomeBanner = () => {
       <div className="welcome-banner__image-wrapper !pt-[100%] sm:!pt-[50%] lg:!pt-[100%]">
         <img
           className="welcome-banner__img"
-          src="https://s3.twcstorage.ru/d90a9000-bip/home-page/Group%201870.jpg"
+          src="https://s3.twcstorage.ru/1718254b-3e5a-4845-8527-e67480872a8b/center.png"
           alt="Широкий спектр услуг"
         />
         <div className="welcome-banner__overlay" />

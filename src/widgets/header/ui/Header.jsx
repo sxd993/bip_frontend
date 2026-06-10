@@ -8,50 +8,54 @@ import { useAuthActions } from "../hooks/useAuthActions";
 import { UserMenu } from "./UserMenu";
 
 export const Header = () => {
-  const { isMenuOpen, toggleMobileMenu } = useHeader()
-  const { pathname } = useLocation()
-  const isServicesPageOpen = pathname.includes('/Services')
-  const { user, handleLogout } = useAuthActions()
+  const { isMenuOpen, toggleMobileMenu } = useHeader();
+  const { pathname } = useLocation();
+  const isServicesPageOpen = pathname.includes("/Services");
+  const { user, handleLogout } = useAuthActions();
 
   const formatInitials = (person) => {
     if (!person) {
-      return ""
+      return "";
     }
 
-    const initials = []
+    const initials = [];
     if (person.first_name) {
-      initials.push(`${person.first_name[0]}.`)
+      initials.push(`${person.first_name[0]}.`);
     }
     if (person.second_name) {
-      initials.push(`${person.second_name[0]}.`)
+      initials.push(`${person.second_name[0]}.`);
     }
 
-    return initials.join(" ")
-  }
+    return initials.join(" ");
+  };
 
   const desktopLabel = user
     ? `${user.last_name ?? ""} ${formatInitials(user)}`.trim()
-    : ""
+    : "";
   const tabletLabel = user
     ? `${user.last_name ?? ""} ${formatInitials(user)}`.trim()
-    : ""
+    : "";
 
   return (
-    <header className={`
+    <header
+      className={`
       px-[3%]
-      ${isServicesPageOpen
-        ? 'absolute top-0 left-0 w-full z-50 py-3 lg:py-4'
-        : 'mt-[20px] lg:mt-[30px]'}
-    `}>
+      ${
+        isServicesPageOpen
+          ? "absolute top-0 left-0 w-full z-50 py-3 lg:py-4"
+          : "mt-[20px] lg:mt-[30px]"
+      }
+    `}
+    >
       <div className="lg:max-w-6xl bg-primary rounded-[7px] mx-auto">
-
         {/* ===== MOBILE <430px ===== */}
         <div className="flex items-center justify-between gap-2 px-2 py-3 xs:hidden lg:hidden h-full">
           <NavLink
-            to={'/'}
-            className="relative overflow-hidden h-[40px] w-[140px] shrink-0 max-[390px]:w-[120px]">
+            to={"/"}
+            className="relative overflow-hidden h-[40px] w-[140px] shrink-0 max-[390px]:w-[120px]"
+          >
             <img
-              src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+              src="https://s3.twcstorage.ru/1718254b-3e5a-4845-8527-e67480872a8b/logo.svg"
               className="h-full w-full object-contain"
             />
           </NavLink>
@@ -59,12 +63,13 @@ export const Header = () => {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="hidden text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
-              </button>
+                className="hidden text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2"
+              ></button>
             ) : (
               <NavLink
                 to="/auth/login"
-                className="sm:hidden text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2">
+                className="sm:hidden text-[14px] px-3 py-1 border border-white rounded-[6px] text-white font-bold max-[390px]:px-2"
+              >
                 войти
               </NavLink>
             )}
@@ -74,11 +79,9 @@ export const Header = () => {
 
         {/* ===== TABLET 610px - 1024 */}
         <div className="hidden xs:flex lg:hidden items-center gap-6 px-4 py-3 justify-between">
-          <NavLink
-            to={'/'}
-            className="relative w-[200px] overflow-hidden">
+          <NavLink to={"/"} className="relative w-[200px] overflow-hidden">
             <img
-              src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+              src="https://s3.twcstorage.ru/1718254b-3e5a-4845-8527-e67480872a8b/logo.svg"
               className=" object-cover max-w-[90%]"
             />
           </NavLink>
@@ -87,12 +90,14 @@ export const Header = () => {
           <nav className="flex items-center gap-5">
             <NavLink
               to="/about"
-              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap">
+              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap"
+            >
               о нас
             </NavLink>
             <NavLink
               to="/press-center"
-              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap">
+              className="text-white text-[16px] sm:text-[18px] font-bold text-nowrap"
+            >
               статьи
             </NavLink>
           </nav>
@@ -109,7 +114,8 @@ export const Header = () => {
             ) : (
               <NavLink
                 to="/auth/login"
-                className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]">
+                className="text-white text-[16px] sm:text-[18px] font-bold border border-white px-5 py-[6px] rounded-[6px]"
+              >
                 войти
               </NavLink>
             )}
@@ -118,18 +124,14 @@ export const Header = () => {
         </div>
 
         {/* ===== MOBILE / TABLET DROPDOWN ===== */}
-        {isMenuOpen && (
-          <MobileDropdown />
-        )}
+        {isMenuOpen && <MobileDropdown />}
 
         {/* ===== DESKTOP ===== */}
         <div className="hidden lg:flex items-center justify-around px-6 py-[11px] z-10">
           <div>
-            <NavLink
-              to={'/'}
-              className="relative w-[200px] overflow-hidden">
+            <NavLink to={"/"} className="relative w-[200px] overflow-hidden">
               <img
-                src="https://s3.twcstorage.ru/d90a9000-bip/logo/Bauken%20Logo%201%20White%20%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%203%20(1).svg"
+                src="https://s3.twcstorage.ru/1718254b-3e5a-4845-8527-e67480872a8b/logo.svg"
                 className=" object-cover max-w-[90%]"
               />
             </NavLink>
@@ -137,8 +139,18 @@ export const Header = () => {
 
           <div className="flex items-center mr-[10px] max-w-[519px] min-h-[42px] rounded-[6px] bg-white text-primary">
             <div className="flex justify-between px-4 gap-8">
-              <NavLink to="/about" className="text-[18px] font-bold whitespace-nowrap">о нас</NavLink>
-              <NavLink to="/press-center" className="text-[18px] font-bold whitespace-nowrap">статьи</NavLink>
+              <NavLink
+                to="/about"
+                className="text-[18px] font-bold whitespace-nowrap"
+              >
+                о нас
+              </NavLink>
+              <NavLink
+                to="/press-center"
+                className="text-[18px] font-bold whitespace-nowrap"
+              >
+                статьи
+              </NavLink>
             </div>
 
             <div className="max-w-[318px] h-8 border border-[#A01E1E] rounded-[7px] items-center lg:flex px-2 py-[5px] gap-2 mr-[5px] hidden">
@@ -158,13 +170,15 @@ export const Header = () => {
             ) : (
               <>
                 <NavLink
-                  to={'/auth/login'}
-                  className="h-[42px] px-5 bg-primary border-2 border-white rounded-[6px] text-white font-bold text-[18px] flex items-center">
+                  to={"/auth/login"}
+                  className="h-[42px] px-5 bg-primary border-2 border-white rounded-[6px] text-white font-bold text-[18px] flex items-center"
+                >
                   войти
                 </NavLink>
                 <NavLink
-                  to={'/auth/register'}
-                  className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] flex items-center">
+                  to={"/auth/register"}
+                  className="h-[42px] px-5 bg-white border-2 border-white rounded-[6px] text-black font-bold text-[18px] flex items-center"
+                >
                   зарегистрироваться
                 </NavLink>
               </>
@@ -172,6 +186,6 @@ export const Header = () => {
           </div>
         </div>
       </div>
-    </header >
+    </header>
   );
 };
