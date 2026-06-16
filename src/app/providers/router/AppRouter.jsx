@@ -6,6 +6,7 @@ import { Account } from '../../../pages/Account';
 import { Auth } from '../../../pages/Auth';
 
 const Home = lazy(() => import('../../../pages/Home').then(module => ({ default: module.Home })));
+const AiChatPage = lazy(() => import('../../../pages/AiChatPage'));
 const Contacts = lazy(() => import('../../../pages/Contacts').then(module => ({ default: module.Contacts })));
 const ServicesPrivate = lazy(() => import('../../../pages/ServicesPrivate'));
 const ServicesBusiness = lazy(() => import('../../../pages/ServicesBusiness'));
@@ -35,6 +36,7 @@ export const AppRouter = () => (
       <Route path="/certificate-verification" element={<UnderDevelopment />} />
       <Route path="/certification-of-evidence" element={<UnderDevelopment />} />
       <Route path="/about" element={<UnderDevelopment />} />
+      <Route path="/ai-chat" element={<AiChatPage />} />
       <Route
         path="/personal-account"
         element={

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../../style.css";
 
 export const WelcomeBanner = () => {
@@ -15,6 +16,12 @@ export const WelcomeBanner = () => {
           <br />
           для любого случая
         </div>
+        <Link
+          to="/ai-chat"
+          className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-white text-[#1e3a5f] font-semibold text-sm px-6 py-2.5 rounded-full shadow-lg hover:bg-[#1e3a5f] hover:text-white transition-colors duration-200 whitespace-nowrap z-10"
+        >
+          Онлайн консультация
+        </Link>
       </div>
     </div>
   );
