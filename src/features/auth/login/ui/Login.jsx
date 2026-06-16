@@ -7,13 +7,9 @@ const Login = ({ setCurrentStage, isLoading }) => {
     emailOrPhone,
     password,
     userType,
-    captchaValue,
     setEmailOrPhone,
     setPassword,
     setUserType,
-    handleCaptchaChange,
-    captchaError,
-    CaptchaCanvas,
     handleSubmit,
     isPending,
     isError,
@@ -100,30 +96,6 @@ const Login = ({ setCurrentStage, isLoading }) => {
               Забыли пароль?
             </Link>
           </div>
-        </div>
-  
-        <div className="mt-4 sm:mt-6 lg:mt-8">
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-2 sm:gap-4 mb-3 sm:mb-4">
-            <label className="text-white font-semibold text-sm sm:text-base lg:text-lg text-center sm:text-left">
-              Подтвердите, что вы человек: 
-            </label>
-            <div className="bg-white border rounded-lg px-2 sm:px-4 py-1 text-black text-base sm:text-lg lg:text-xl tracking-widest">
-              <CaptchaCanvas reloadColor="#8A2A27" />
-            </div>
-          </div>
-  
-          <TextInput
-            type="text"
-            value={captchaValue}
-            onChange={(e) => handleCaptchaChange(e.target.value)}
-            placeholder="Введите символы с изображения"
-            required
-            className="placeholder-register"
-          />
-  
-          {captchaError && (
-            <p className="text-sm text-red-300 mt-1">{captchaError}</p>
-          )}
         </div>
   
         {isError && (

@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { useLogin } from './useLogin';
-import useCaptcha from './useCaptcha';
 
 export const useLoginForm = () => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -8,19 +7,11 @@ export const useLoginForm = () => {
   const [userType, setUserType] = useState('physical');
 
   const { login, isPending, isError, errorMessage } = useLogin();
-  const {
-    value: captchaValue,
-    handleChange: handleCaptchaChange,
-    validate: validateCaptcha,
-    error: captchaError,
-    CaptchaCanvas,
-  } = useCaptcha({ length: 6 });
 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
       if (!emailOrPhone.trim() || !password.trim()) return;
-      if (!validateCaptcha()) return;
 
       login({
         email_or_phone: emailOrPhone,
@@ -28,22 +19,17 @@ export const useLoginForm = () => {
         user_type: userType,
       });
     },
-    [emailOrPhone, password, userType, validateCaptcha, login],
+    [emailOrPhone, password, userType, login],
   );
 
   return {
     emailOrPhone,
     password,
     userType,
-    captchaValue,
 
     setEmailOrPhone,
     setPassword,
     setUserType,
-
-    handleCaptchaChange,
-    captchaError,
-    CaptchaCanvas,
 
     handleSubmit,
 

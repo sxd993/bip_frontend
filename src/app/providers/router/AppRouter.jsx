@@ -11,9 +11,6 @@ const Contacts = lazy(() => import('../../../pages/Contacts').then(module => ({ 
 const ServicesPrivate = lazy(() => import('../../../pages/ServicesPrivate'));
 const ServicesBusiness = lazy(() => import('../../../pages/ServicesBusiness'));
 const UnderDevelopment = lazy(() => import('../../../pages/UnderDevelopment'));
-const ConfirmRegister = lazy(() =>
-  import('../../../pages/ConfirmRegister').then(module => ({ default: module.ConfirmRegister }))
-);
 const ForgotPassword = lazy(() => import('../../../pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('../../../pages/ResetPassword'));
 
@@ -25,7 +22,6 @@ export const AppRouter = () => (
       <Route path="/auth/:stage" element={<Auth />} />
       <Route path="/auth/forgot-password" element={<ForgotPassword />} />
       <Route path="/auth/reset-password" element={<ResetPassword />} />
-      <Route path="/register/confirm" element={<ConfirmRegister />} />
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/ServicesPrivate" element={<ServicesPrivate />} />
       <Route path="/ServicesBusiness" element={<ServicesBusiness />} />

@@ -1,25 +1,26 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { normalizePhoneForServer } from '@shared/utils/formatters';
-import { sendCheckEmailRegisterPhysical } from '@features/auth/register/api/registerApi';
+import { registerPhysicalApi } from '@features/auth/register/api/registerApi';
+import { getUser } from '@/entities/business/user/api/userApi';
 
 export const usePhysicalRegister = () => {
-
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: sendCheckEmailRegisterPhysical,
-    onSuccess: (data) => {
-      const precheckId = data?.precheck_id;
-      if (!precheckId) {
-        console.error('Не удалось получить идентификатор пречека');
-        return;
+    mutationFn: registerPhysicalApi,
+    onSuccess: async () => {
+      try {
+        const userData = await getUser();
+        queryClient.setQueryData(['user'], userData);
+      } catch (error) {
+        console.error('Не удалось обновить данные пользователя после регистрации', error);
       }
 
-      navigate('/register/confirm', { replace: true });
+      navigate('/personal-account', { replace: true });
     },
   });
-
 
   const onSubmit = (formData) => {
     const normalizedData = {

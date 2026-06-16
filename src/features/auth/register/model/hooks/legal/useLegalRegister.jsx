@@ -1,21 +1,24 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { sendCheckEmailRegisterLegal } from '@features/auth/register/api/registerApi';
+import { registerLegalApi } from '@features/auth/register/api/registerApi';
 import { normalizePhoneForServer } from '@shared/utils/formatters';
+import { getUser } from '@/entities/business/user/api/userApi';
 
 export const useLegalRegister = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: sendCheckEmailRegisterLegal,
-    onSuccess: (data) => {
-      const precheckId = data?.precheck_id;
-      if (!precheckId) {
-        console.error('Не удалось получить идентификатор пречека');
-        return;
+    mutationFn: registerLegalApi,
+    onSuccess: async () => {
+      try {
+        const userData = await getUser();
+        queryClient.setQueryData(['user'], userData);
+      } catch (error) {
+        console.error('Не удалось обновить данные пользователя после регистрации', error);
       }
 
-      navigate('/register/confirm', { replace: true });
+      navigate('/personal-account', { replace: true });
     },
   });
 
