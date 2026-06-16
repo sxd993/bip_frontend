@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { streamAiMessage } from '../api/aiChatApi';
 
 const DEAL_JSON_REGEX = /\{"action":"create_deal"[\s\S]*?\}/;
@@ -16,10 +16,14 @@ export const useAiChat = () => {
   const [isLocked, setIsLocked] = useState(false);
   const [dealId, setDealId] = useState(null);
   const messagesEndRef = useRef(null);
+  const scrollContainerRef = useRef(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      const el = scrollContainerRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    }, 0);
+  };
 
   const sendMessage = async () => {
     const trimmed = input.trim();
@@ -30,6 +34,7 @@ export const useAiChat = () => {
     setInput('');
     setIsStreaming(true);
     setIsTyping(true);
+    scrollToBottom();
 
     try {
       const reader = await streamAiMessage(nextMessages);
@@ -66,6 +71,7 @@ export const useAiChat = () => {
                 updated[updated.length - 1] = { role: 'assistant', content: display };
                 return updated;
               });
+              scrollToBottom();
             } else if (event.done === true) {
               setIsLocked(true);
               if (event.dealId) setDealId(event.dealId);
@@ -115,6 +121,7 @@ export const useAiChat = () => {
     isLocked,
     dealId,
     messagesEndRef,
+    scrollContainerRef,
     sendMessage,
     handleKeyDown,
     handleInputChange,
