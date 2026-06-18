@@ -27,6 +27,16 @@ export const formatDate = (dateString) => {
     
     return Number(amount).toLocaleString('ru-RU') + ' ₽';
   };
+
+  export const formatBalance = (value) => {
+    if (value == null) return null;
+
+    return new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency: 'RUB',
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
   
   export const formatAppealNumber = (id) => `#${id}`;
   

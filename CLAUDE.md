@@ -12,6 +12,7 @@ BIP (Баукен и Партнеры) — платформа юридическ
 ## Команды
 
 ### Фронтенд (`bip_frontend/`)
+
 ```bash
 npm run dev       # Запуск dev-сервера Vite
 npm run build     # Продакшн-сборка
@@ -20,6 +21,7 @@ npm run preview   # Предпросмотр продакшн-сборки
 ```
 
 ### Бэкенд (`bip_backend/`)
+
 ```bash
 node server.js    # Запуск сервера (порт 8000)
 nodemon server.js # Запуск с авто-перезагрузкой
@@ -34,15 +36,32 @@ nodemon server.js # Запуск с авто-перезагрузкой
 Структура следует Feature-Sliced Design (FSD): `features/` → `entities/` → `widgets/` → `pages/` → `shared/`.
 
 **Псевдонимы путей** (настроены в `vite.config.js` и `jsconfig.json`):
+
 - `@` → `src/`
+- `@app` → `src/app/`
 - `@pages`, `@features`, `@entities`, `@widgets`, `@shared` → соответствующие директории
 
+**Слой `app/`:**
+
+```
+app/
+├── main.jsx
+├── App.jsx
+├── index.css
+├── providers/
+│   ├── AppProviders.jsx
+│   └── react-query/queryClient.js
+└── router/
+    ├── RouterProvider.jsx
+    └── AppRouter.jsx
+```
+
 **Разделение состояния:**
-- Redux Toolkit (`src/app/providers/store/`) — состояние авторизации и сессии
-- TanStack React Query — серверные данные
+
+- TanStack React Query (`src/app/providers/react-query/`) — серверные данные и сессия пользователя
 - Axios-инстанс в `src/shared/api/` (credentials: true, базовый URL из `VITE_API_URL`)
 
-Страницы используют `React.lazy` + `Suspense` для разделения кода. Защищённые маршруты обёрнуты в auth guard в `src/entities/business/user/`.
+Страницы используют `React.lazy` + `Suspense` для разделения кода. Защищённые маршруты обёрнуты в `AuthGuard` в `src/entities/auth/`.
 
 ### Бэкенд
 
@@ -53,6 +72,7 @@ nodemon server.js # Запуск с авто-перезагрузкой
 **Флоу AI-чата** (`src/features/ai-chat/`): принимает сообщение → отправляет в Timeweb AI API с системным промптом для юридических консультаций → стримит ответ через Server-Sent Events → если в ответе AI обнаружен JSON-блок сделки, автоматически создаёт контакт и сделку в Bitrix24.
 
 **Внешние интеграции:**
+
 - `src/services/bitrix.js` — CRM Bitrix24 (сделки, контакты)
 - `src/services/aiService.js` — Timeweb AI (OpenAI-совместимый), стриминг
 - `src/services/mailTransporter.js` / `src/services/email.js` — Nodemailer
