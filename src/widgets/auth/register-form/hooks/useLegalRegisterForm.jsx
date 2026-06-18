@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLegalRegister } from '@/features/auth/register/useLegalRegister';
 import { useForm } from 'react-hook-form';
 
@@ -5,13 +6,22 @@ export const useLegalRegisterForm = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
-    formState: { errors },
-  } = useForm();
+    trigger,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  });
 
-  const phoneValue = watch('phone');
   const password = watch('password');
+  const confirmPassword = watch('confirmPassword');
+
+  useEffect(() => {
+    if (confirmPassword) {
+      trigger('confirmPassword');
+    }
+  }, [password, confirmPassword, trigger]);
 
   const { onSubmit, isPending, isSuccess, isError, errorMessage } = useLegalRegister();
 
@@ -22,11 +32,10 @@ export const useLegalRegisterForm = () => {
 
   return {
     register,
-    setValue,
     errors,
-    phoneValue,
     password,
     onSubmitForm,
+    isFormValid: isValid,
     isPending,
     isSuccess,
     isError,

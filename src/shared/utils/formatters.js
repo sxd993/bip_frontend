@@ -65,16 +65,7 @@ export const formatDate = (dateString) => {
   };
   
   export const normalizePhoneForServer = (phone) => {
-    const digitsOnly = phone.replace(/\D/g, '');
-    let normalizedPhone = digitsOnly;
-  
-    if (digitsOnly.length === 10) {
-      normalizedPhone = '7' + digitsOnly;
-    } else if (digitsOnly.startsWith('8')) {
-      normalizedPhone = '7' + digitsOnly.slice(1);
-    }
-  
-    return normalizedPhone;
+    return String(phone).replace(/\D/g, '');
   };
   
   export const handlePhoneInput = (e, setValue) => {

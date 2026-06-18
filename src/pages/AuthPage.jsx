@@ -20,7 +20,7 @@ export const AuthPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="flex flex-1 items-center justify-center py-12">
         <p className="text-text-muted">Загрузка...</p>
       </div>
     );
@@ -28,7 +28,7 @@ export const AuthPage = () => {
 
   if (error) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="flex flex-1 items-center justify-center py-12">
         <p className="text-error">Ошибка загрузки данных</p>
       </div>
     );
@@ -37,22 +37,24 @@ export const AuthPage = () => {
   const title = stage === 'register' ? 'Зарегистрироваться' : 'Войти';
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md rounded-4xl bg-surface p-8 shadow-sm sm:p-10">
-        <h1 className="text-center text-2xl font-bold tracking-tight text-text sm:text-3xl">
-          {title}
-        </h1>
+    <section className="flex flex-1 items-center justify-center py-8 sm:py-10">
+      <div className="w-full max-w-lg">
+        <div className="rounded-xl border border-border bg-surface p-5 sm:p-8">
+          <h1 className="text-center text-2xl font-bold tracking-tight text-text sm:text-3xl">
+            {title}
+          </h1>
 
-        <div className="mt-8 flex flex-col gap-5">
-          {stage === 'register' ? (
-            <RegisterForm defaultUserType={userTypeParam} />
-          ) : (
-            <LoginForm />
-          )}
+          <div className="mt-6 flex flex-col gap-5 sm:mt-8">
+            {stage === 'register' ? (
+              <RegisterForm defaultUserType={userTypeParam} />
+            ) : (
+              <LoginForm />
+            )}
 
-          <AuthRedirect />
+            <AuthRedirect />
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

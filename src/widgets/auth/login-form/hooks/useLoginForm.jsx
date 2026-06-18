@@ -1,35 +1,39 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useLogin } from '@/features/auth';
 
 export const useLoginForm = () => {
-  const [emailOrPhone, setEmailOrPhone] = useState('');
-  const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('physical');
-
   const { login, isPending, isError, errorMessage } = useLogin();
 
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (!emailOrPhone.trim() || !password.trim()) return;
-
-      login({
-        email_or_phone: emailOrPhone,
-        password,
-        user_type: userType,
-      });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      email_or_phone: '',
+      password: '',
     },
-    [emailOrPhone, password, userType, login],
-  );
+  });
+
+  const onSubmit = handleSubmit((data) => {
+    login({
+      email_or_phone: data.email_or_phone.trim(),
+      password: data.password,
+      user_type: userType,
+    });
+  });
 
   return {
-    emailOrPhone,
-    password,
+    register,
+    errors,
     userType,
-    setEmailOrPhone,
-    setPassword,
     setUserType,
-    handleSubmit,
+    handleSubmit: onSubmit,
+    isFormValid: isValid,
     isPending,
     isError,
     errorMessage,

@@ -1,31 +1,18 @@
 import { Field } from '@/shared/ui/Field';
 import { Input } from '@/shared/ui/Input';
 import { SubmitButton } from '@/shared/ui/SubmitButton';
+import { UserTypeSwitch } from '@/shared/ui/UserTypeSwitch';
+import { validationRules } from '@/shared/utils/validators';
 import { useLoginForm } from '../hooks/useLoginForm';
-
-const UserTypeRadio = ({ value, label, checked, onChange }) => (
-  <label className="flex cursor-pointer items-center gap-2 text-sm text-text">
-    <input
-      type="radio"
-      name="userType"
-      value={value}
-      checked={checked}
-      onChange={() => onChange(value)}
-      className="accent-primary"
-    />
-    {label}
-  </label>
-);
 
 export const LoginForm = () => {
   const {
-    emailOrPhone,
-    password,
+    register,
+    errors,
     userType,
-    setEmailOrPhone,
-    setPassword,
     setUserType,
     handleSubmit,
+    isFormValid,
     isPending,
     isError,
     errorMessage,
@@ -33,50 +20,35 @@ export const LoginForm = () => {
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
-      <div className="flex justify-center gap-6">
-        <UserTypeRadio
-          value="physical"
-          label="Частное лицо"
-          checked={userType === 'physical'}
-          onChange={setUserType}
-        />
-        <UserTypeRadio
-          value="legal"
-          label="Юридическое лицо"
-          checked={userType === 'legal'}
-          onChange={setUserType}
-        />
-      </div>
+      <UserTypeSwitch value={userType} onChange={setUserType} />
 
-      <Field>
+      <Field error={errors.email_or_phone?.message}>
         <Input
           type="text"
           placeholder="Логин"
-          value={emailOrPhone}
-          onChange={(e) => setEmailOrPhone(e.target.value)}
           autoComplete="username"
-          required
+          hasError={Boolean(errors.email_or_phone)}
+          {...register('email_or_phone', validationRules.loginIdentifier)}
         />
       </Field>
 
-      <Field>
+      <Field error={errors.password?.message}>
         <Input
           type="password"
           placeholder="Пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           autoComplete="current-password"
-          required
+          hasError={Boolean(errors.password)}
+          {...register('password', validationRules.loginPassword)}
         />
       </Field>
 
       {isError && (
-        <p className="text-center text-xs text-error">
+        <p className="text-center text-sm text-error">
           {errorMessage || 'Ошибка при входе'}
         </p>
       )}
 
-      <SubmitButton className="mt-2" disabled={isPending}>
+      <SubmitButton disabled={!isFormValid || isPending}>
         {isPending ? 'Вход...' : 'Войти'}
       </SubmitButton>
     </form>

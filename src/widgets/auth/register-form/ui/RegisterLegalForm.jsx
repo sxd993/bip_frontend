@@ -1,22 +1,17 @@
-import { PhoneInput } from '@/shared/components/forms';
 import { Field } from '@/shared/ui/Field';
 import { Input } from '@/shared/ui/Input';
 import { SubmitButton } from '@/shared/ui/SubmitButton';
 import { Loading } from '@/shared/ui/Loading';
-import { validationRules } from '@/shared/utils/validators';
+import { validationRules, PHONE_PLACEHOLDER } from '@/shared/utils/validators';
 import { useLegalRegisterForm } from '../hooks/useLegalRegisterForm';
-
-const inputClassName =
-  'w-full rounded-lg border bg-surface px-4 py-3 text-base text-text outline-none transition placeholder:text-text-muted focus:border-primary';
 
 export const RegisterLegalForm = () => {
   const {
     register,
-    setValue,
     errors,
-    phoneValue,
     password,
     onSubmitForm,
+    isFormValid,
     isPending,
     isSuccess,
     isError,
@@ -40,7 +35,7 @@ export const RegisterLegalForm = () => {
     <form className="flex flex-col gap-4" onSubmit={onSubmitForm} noValidate>
       <Field error={errors.company_name?.message}>
         <Input
-          {...register('company_name', validationRules.required('Название организации'))}
+          {...register('company_name', validationRules.companyName)}
           placeholder="Название организации"
           hasError={Boolean(errors.company_name)}
         />
@@ -56,7 +51,7 @@ export const RegisterLegalForm = () => {
 
       <Field error={errors.employee_second_name?.message}>
         <Input
-          {...register('employee_second_name', validationRules.required('Фамилия руководителя'))}
+          {...register('employee_second_name', validationRules.personName('Фамилия руководителя'))}
           placeholder="Фамилия руководителя"
           hasError={Boolean(errors.employee_second_name)}
         />
@@ -64,7 +59,7 @@ export const RegisterLegalForm = () => {
 
       <Field error={errors.employee_first_name?.message}>
         <Input
-          {...register('employee_first_name', validationRules.required('Имя руководителя'))}
+          {...register('employee_first_name', validationRules.personName('Имя руководителя'))}
           placeholder="Имя руководителя"
           hasError={Boolean(errors.employee_first_name)}
         />
@@ -72,7 +67,7 @@ export const RegisterLegalForm = () => {
 
       <Field error={errors.employee_last_name?.message}>
         <Input
-          {...register('employee_last_name', validationRules.required('Отчество руководителя'))}
+          {...register('employee_last_name', validationRules.personName('Отчество руководителя'))}
           placeholder="Отчество руководителя"
           hasError={Boolean(errors.employee_last_name)}
         />
@@ -89,13 +84,13 @@ export const RegisterLegalForm = () => {
       </Field>
 
       <Field error={errors.phone?.message}>
-        <PhoneInput
+        <Input
           {...register('phone', validationRules.phone)}
-          value={phoneValue || '+7 '}
-          setValue={setValue}
-          error={errors.phone}
-          placeholder="Номер телефона"
-          className={`${inputClassName} ${errors.phone ? 'border-error' : 'border-border'}`}
+          type="tel"
+          inputMode="tel"
+          placeholder={PHONE_PLACEHOLDER}
+          autoComplete="tel"
+          hasError={Boolean(errors.phone)}
         />
       </Field>
 
@@ -120,10 +115,10 @@ export const RegisterLegalForm = () => {
       </Field>
 
       {isError && errorMessage && (
-        <p className="text-center text-xs text-error">{errorMessage}</p>
+        <p className="text-center text-sm text-error">{errorMessage}</p>
       )}
 
-      <SubmitButton className="mt-2">Создать аккаунт</SubmitButton>
+      <SubmitButton disabled={!isFormValid || isPending}>Создать аккаунт</SubmitButton>
     </form>
   );
 };

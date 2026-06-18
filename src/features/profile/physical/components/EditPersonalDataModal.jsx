@@ -1,22 +1,21 @@
 import { useForm } from 'react-hook-form';
 import { Modal } from '@/shared/ui/Modal';
-import { FormField, TextInput, PhoneInput } from '@/shared/components/forms';
-import { validationRules } from '@/shared/utils/validators';
+import { FormField, TextInput } from '@/shared/components/forms';
+import { validationRules, PHONE_PLACEHOLDER } from '@/shared/utils/validators';
 import { normalizePhoneForServer } from '@/shared/utils/formatters';
 import { useEditPersonalData } from '../hooks/useEditPersonalData';
 
 export const EditPersonalDataModal = ({ isOpen, onClose, user }) => {
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       first_name: user?.first_name || '',
       last_name: user?.last_name || '',
       second_name: user?.second_name || '',
       email: user?.email || '',
-      phone: user?.phone || '+7 ',
+      phone: user?.phone?.replace(/\D/g, '') || '',
     }
   });
 
-  const phoneValue = watch('phone');
   const { mutate, isUpdating, updateError, isSuccess } = useEditPersonalData();
 
   const onSubmit = (data) => {
@@ -38,7 +37,7 @@ export const EditPersonalDataModal = ({ isOpen, onClose, user }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <FormField label="Фамилия" error={errors.last_name} required>
             <TextInput
-              {...register('last_name', validationRules.required('Фамилия'))}
+              {...register('last_name', validationRules.personName('Фамилия'))}
               placeholder="Ваша фамилия"
               error={errors.last_name}
             />
@@ -46,7 +45,7 @@ export const EditPersonalDataModal = ({ isOpen, onClose, user }) => {
 
           <FormField label="Имя" error={errors.first_name} required>
             <TextInput
-              {...register('first_name', validationRules.required('Имя'))}
+              {...register('first_name', validationRules.personName('Имя'))}
               placeholder="Ваше имя"
               error={errors.first_name}
             />
@@ -54,7 +53,7 @@ export const EditPersonalDataModal = ({ isOpen, onClose, user }) => {
 
           <FormField label="Отчество" error={errors.second_name}>
             <TextInput
-              {...register('second_name')}
+              {...register('second_name', validationRules.personNameOptional('Отчество'))}
               placeholder="Ваше отчество"
               error={errors.second_name}
             />
@@ -70,10 +69,12 @@ export const EditPersonalDataModal = ({ isOpen, onClose, user }) => {
           </FormField>
 
           <FormField label="Номер телефона" error={errors.phone} required>
-            <PhoneInput
+            <TextInput
               {...register('phone', validationRules.phone)}
-              value={phoneValue}
-              setValue={setValue}
+              type="tel"
+              inputMode="tel"
+              placeholder={PHONE_PLACEHOLDER}
+              autoComplete="tel"
               error={errors.phone}
             />
           </FormField>

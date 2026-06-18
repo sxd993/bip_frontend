@@ -1,22 +1,17 @@
-import { PhoneInput } from '@/shared/components/forms';
 import { Field } from '@/shared/ui/Field';
 import { Input } from '@/shared/ui/Input';
 import { SubmitButton } from '@/shared/ui/SubmitButton';
 import { Loading } from '@/shared/ui/Loading';
-import { validationRules } from '@/shared/utils/validators';
+import { validationRules, PHONE_PLACEHOLDER } from '@/shared/utils/validators';
 import { usePhysicalRegisterForm } from '../hooks/usePhysicalRegisterForm';
-
-const inputClassName =
-  'w-full rounded-lg border bg-surface px-4 py-3 text-base text-text outline-none transition placeholder:text-text-muted focus:border-primary';
 
 export const RegisterPhysicalForm = () => {
   const {
     register,
-    setValue,
     errors,
-    phoneValue,
     password,
     onSubmitForm,
+    isFormValid,
     isPending,
     isSuccess,
     isError,
@@ -40,7 +35,7 @@ export const RegisterPhysicalForm = () => {
     <form className="flex flex-col gap-4" onSubmit={onSubmitForm} noValidate>
       <Field error={errors.last_name?.message}>
         <Input
-          {...register('last_name', validationRules.required('Фамилия'))}
+          {...register('last_name', validationRules.personName('Фамилия'))}
           placeholder="Фамилия"
           hasError={Boolean(errors.last_name)}
         />
@@ -48,7 +43,7 @@ export const RegisterPhysicalForm = () => {
 
       <Field error={errors.first_name?.message}>
         <Input
-          {...register('first_name', validationRules.required('Имя'))}
+          {...register('first_name', validationRules.personName('Имя'))}
           placeholder="Имя"
           hasError={Boolean(errors.first_name)}
         />
@@ -56,7 +51,7 @@ export const RegisterPhysicalForm = () => {
 
       <Field error={errors.second_name?.message}>
         <Input
-          {...register('second_name', validationRules.required('Отчество'))}
+          {...register('second_name', validationRules.personName('Отчество'))}
           placeholder="Отчество"
           hasError={Boolean(errors.second_name)}
         />
@@ -73,13 +68,13 @@ export const RegisterPhysicalForm = () => {
       </Field>
 
       <Field error={errors.phone?.message}>
-        <PhoneInput
+        <Input
           {...register('phone', validationRules.phone)}
-          value={phoneValue || '+7 '}
-          setValue={setValue}
-          error={errors.phone}
-          placeholder="Номер телефона"
-          className={`${inputClassName} ${errors.phone ? 'border-error' : 'border-border'}`}
+          type="tel"
+          inputMode="tel"
+          placeholder={PHONE_PLACEHOLDER}
+          autoComplete="tel"
+          hasError={Boolean(errors.phone)}
         />
       </Field>
 
@@ -104,10 +99,10 @@ export const RegisterPhysicalForm = () => {
       </Field>
 
       {isError && errorMessage && (
-        <p className="text-center text-xs text-error">{errorMessage}</p>
+        <p className="text-center text-sm text-error">{errorMessage}</p>
       )}
 
-      <SubmitButton className="mt-2">Создать аккаунт</SubmitButton>
+      <SubmitButton disabled={!isFormValid || isPending}>Создать аккаунт</SubmitButton>
     </form>
   );
 };

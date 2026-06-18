@@ -26,6 +26,9 @@
   /* Font */
   --font-family-sans:
     var(--font-commissioner), system-ui, -apple-system, sans-serif;
+
+  /* Layout */
+  --max-width-300: 75rem;
 }
 
 body {
