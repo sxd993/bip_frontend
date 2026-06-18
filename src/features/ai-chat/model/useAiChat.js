@@ -1,16 +1,17 @@
-import { useState, useRef } from 'react';
-import { streamAiMessage } from '@/entities/ai-chat';
+import { useState, useRef } from "react";
+import { streamAiMessage } from "../api/aiChatApi";
 
 const DEAL_JSON_REGEX = /\{"action":"create_deal"[\s\S]*?\}/;
 
 export const INITIAL_MESSAGE = {
-  role: 'assistant',
-  content: 'Здравствуйте! Я ассистент юридической компании «Баукен и Партнеры». Расскажите, пожалуйста, с какой проблемой вы обратились?'
+  role: "assistant",
+  content:
+    "Здравствуйте! Я ассистент юридической компании «Баукен и Партнеры». Расскажите, пожалуйста, с какой проблемой вы обратились?",
 };
 
 export const useAiChat = () => {
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
@@ -29,9 +30,9 @@ export const useAiChat = () => {
     const trimmed = input.trim();
     if (!trimmed || isStreaming || isLocked) return;
 
-    const nextMessages = [...messages, { role: 'user', content: trimmed }];
+    const nextMessages = [...messages, { role: "user", content: trimmed }];
     setMessages(nextMessages);
-    setInput('');
+    setInput("");
     setIsStreaming(true);
     setIsTyping(true);
     scrollToBottom();
@@ -39,8 +40,8 @@ export const useAiChat = () => {
     try {
       const reader = await streamAiMessage(nextMessages);
       const decoder = new TextDecoder();
-      let buffer = '';
-      let botText = '';
+      let buffer = "";
+      let botText = "";
       let firstToken = false;
 
       while (true) {
@@ -48,11 +49,11 @@ export const useAiChat = () => {
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
+        const lines = buffer.split("\n");
         buffer = lines.pop();
 
         for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
+          if (!line.startsWith("data: ")) continue;
           const raw = line.slice(6).trim();
 
           try {
@@ -62,13 +63,19 @@ export const useAiChat = () => {
               if (!firstToken) {
                 firstToken = true;
                 setIsTyping(false);
-                setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+                setMessages((prev) => [
+                  ...prev,
+                  { role: "assistant", content: "" },
+                ]);
               }
               botText += event.token;
-              const display = botText.replace(DEAL_JSON_REGEX, '').trim();
-              setMessages(prev => {
+              const display = botText.replace(DEAL_JSON_REGEX, "").trim();
+              setMessages((prev) => {
                 const updated = [...prev];
-                updated[updated.length - 1] = { role: 'assistant', content: display };
+                updated[updated.length - 1] = {
+                  role: "assistant",
+                  content: display,
+                };
                 return updated;
               });
               scrollToBottom();
@@ -77,22 +84,41 @@ export const useAiChat = () => {
               if (event.dealId) setDealId(event.dealId);
             } else if (event.error) {
               setIsTyping(false);
-              setMessages(prev => [
-                ...prev,
-                { role: 'assistant', content: 'Произошла ошибка. Попробуйте позже или свяжитесь с нами напрямую.' }
-              ]);
+              if (!firstToken) {
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    role: "assistant",
+                    content:
+                      "Произошла ошибка. Попробуйте позже или свяжитесь с нами напрямую.",
+                  },
+                ]);
+              }
             }
           } catch {
             // пропускаем битые SSE-чанки
           }
         }
       }
+
+      if (!firstToken) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "Не удалось получить ответ. Пожалуйста, повторите вопрос.",
+          },
+        ]);
+      }
     } catch (err) {
-      console.error('[AI Chat] ошибка:', err);
+      console.error("[AI Chat] ошибка:", err);
       setIsTyping(false);
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: 'Ошибка соединения. Пожалуйста, попробуйте позже.' }
+        {
+          role: "assistant",
+          content: "Ошибка соединения. Пожалуйста, попробуйте позже.",
+        },
       ]);
     } finally {
       setIsStreaming(false);
@@ -101,7 +127,7 @@ export const useAiChat = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -109,8 +135,8 @@ export const useAiChat = () => {
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
-    e.target.style.height = 'auto';
-    e.target.style.height = Math.min(e.target.scrollHeight, 128) + 'px';
+    e.target.style.height = "auto";
+    e.target.style.height = Math.min(e.target.scrollHeight, 128) + "px";
   };
 
   return {
