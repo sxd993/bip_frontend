@@ -29,13 +29,13 @@ export const formatDate = (dateString) => {
   };
 
   export const formatBalance = (value) => {
-    if (value == null) return null;
+    const parsed = value == null ? 0 : Number(value);
 
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',
       currency: 'RUB',
       maximumFractionDigits: 2,
-    }).format(value);
+    }).format(Number.isFinite(parsed) ? parsed : 0);
   };
   
   export const formatAppealNumber = (id) => `#${id}`;

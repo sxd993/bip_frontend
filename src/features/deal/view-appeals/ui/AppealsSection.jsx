@@ -1,16 +1,12 @@
-import AppealCard from './AppealCard';
-import CreateAppealModal from '../../create-appeal/ui/CreateAppealModal';
-import { useAppealsSection } from '../model/useAppealsSection';
-import { Loading } from '@/shared/ui/Loading';
+import AppealCard from "./AppealCard";
+import CreateAppealModal from "../../create-appeal/ui/CreateAppealModal";
+import { useAppealsSection } from "../model/useAppealsSection";
+import { Loading } from "@/shared/ui/Loading";
+import { Button } from "@/shared/ui/Button";
 
 const AppealsSection = () => {
-  const {
-    paginatedAppeals,
-    modal,
-    pagination,
-    isLoading,
-    error
-  } = useAppealsSection();
+  const { paginatedAppeals, modal, pagination, isLoading, error } =
+    useAppealsSection();
 
   const { isModalOpen, openModal, closeModal } = modal;
   const {
@@ -22,52 +18,68 @@ const AppealsSection = () => {
     goToPage,
   } = pagination;
 
-
   const shouldShowPagination = totalPages > 1;
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-16">
-        <Loading size="medium" text="Загрузка обращений..." />
-      </div>
-    );
+    return <Loading fullScreen />;
   }
 
   if (error) {
     return (
-      <div className="text-center py-12">
-        <p className="text-red-600">Ошибка загрузки: {error.message}</p>
+      <div className="py-12 text-center">
+        <p className="text-error">Ошибка загрузки: {error.message}</p>
       </div>
     );
   }
 
   return (
     <div>
-      <div className="flex justify-center mb-8">
-        <button
+      <div className="mb-6 flex flex-col items-center gap-4 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
+        <div>
+          <h2 className="text-lg font-semibold text-text sm:text-xl lg:text-xl">
+            Мои обращения
+          </h2>
+          <p className="mt-1 text-sm text-text-muted sm:text-base lg:text-sm">
+            {totalAppeals === 0
+              ? 'Создайте обращение — мы ответим в ближайшее время'
+              : `Всего обращений: ${totalAppeals}`}
+          </p>
+        </div>
+        <Button
           onClick={openModal}
-          className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-3xl transition-colors duration-300 flex items-center gap-2 font-bold"
+          className="w-full max-w-xs shrink-0 sm:w-auto lg:self-auto"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
           Новое обращение
-        </button>
+        </Button>
       </div>
 
       {totalAppeals === 0 ? (
-        <div className="text-center py-12">
-          <div className="mx-auto w-16 h-16 text-gray-400 mb-6">
-            <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <div className="rounded-xl border border-dashed border-border bg-background px-6 py-14 text-center">
+          <div className="mx-auto mb-5 h-14 w-14 text-text-muted">
+            <svg
+              className="h-full w-full"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-800 mb-3">Нет обращений</h3>
-          <p className="text-gray-500">У вас пока нет обращений</p>
+          <h3 className="mb-2 text-base font-medium text-text sm:text-lg lg:text-lg">
+            Пока нет обращений
+          </h3>
+          <p className="mx-auto max-w-sm text-sm leading-relaxed text-text-muted sm:text-base lg:text-sm">
+            Опишите ситуацию — юрист свяжется с вами и подскажет следующий шаг
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-4">
           {paginatedAppeals.map((appeal) => (
             <AppealCard key={appeal.id} appeal={appeal} />
           ))}
@@ -75,34 +87,39 @@ const AppealsSection = () => {
       )}
 
       {shouldShowPagination && (
-        <div className="mt-6 flex gap-4 justify-center">
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            <button
+        <div className="mt-6 flex justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <Button
+              variant="outline"
               onClick={goToPrevPage}
               disabled={currentPage === 1}
-              className="px-3 py-2 text-sm border border-gray-200 rounded-2xl text-gray-700 disabled:opacity-40 hover:border-red-400 transition-colors duration-200"
+              className="px-3 py-2"
             >
               Назад
-            </button>
+            </Button>
             {pageNumbers.map((page) => (
               <button
                 key={page}
+                type="button"
                 onClick={() => goToPage(page)}
-                className={`px-3 py-2 text-sm rounded-2xl transition-colors duration-200 ${page === currentPage
-                    ? 'bg-red-500 text-white'
-                    : 'border border-gray-200 text-gray-700 hover:border-red-400'
-                  }`}
+                className={[
+                  "rounded-xl px-3 py-2 text-sm transition",
+                  page === currentPage
+                    ? "bg-primary font-medium text-on-primary"
+                    : "border border-border text-text hover:border-primary",
+                ].join(" ")}
               >
                 {page}
               </button>
             ))}
-            <button
+            <Button
+              variant="outline"
               onClick={goToNextPage}
               disabled={currentPage === totalPages}
-              className="px-3 py-2 text-sm border border-gray-200 rounded-2xl text-gray-700 disabled:opacity-40 hover:border-red-400 transition-colors duration-200"
+              className="px-3 py-2"
             >
               Вперед
-            </button>
+            </Button>
           </div>
         </div>
       )}

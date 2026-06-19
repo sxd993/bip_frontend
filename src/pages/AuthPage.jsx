@@ -1,29 +1,26 @@
 import { useUser } from '@/entities/auth';
 import { AuthRedirect, LoginForm, RegisterForm } from '@/widgets/auth';
+import { Loading } from '@/shared/ui/Loading';
 import { useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 export const AuthPage = () => {
   const { stage: stageRouteParam } = useParams();
   const [searchParams] = useSearchParams();
-  const stage = stageRouteParam || searchParams.get('stage') || 'login';
-  const userTypeParam = searchParams.get('userType');
+  const stage = stageRouteParam || searchParams.get("stage") || "login";
+  const userTypeParam = searchParams.get("userType");
 
   const { user, isLoading, error } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoading && user) {
-      navigate('/personal-account', { replace: true });
+      navigate("/personal-account", { replace: true });
     }
   }, [isLoading, user, navigate]);
 
   if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-12">
-        <p className="text-text-muted">Загрузка...</p>
-      </div>
-    );
+    return <Loading fullScreen />;
   }
 
   if (error) {
@@ -34,7 +31,7 @@ export const AuthPage = () => {
     );
   }
 
-  const title = stage === 'register' ? 'Зарегистрироваться' : 'Войти';
+  const title = stage === "register" ? "Зарегистрироваться" : "Войти";
 
   return (
     <section className="flex flex-1 items-center justify-center py-8 sm:py-10">
@@ -45,7 +42,7 @@ export const AuthPage = () => {
           </h1>
 
           <div className="mt-6 flex flex-col gap-5 sm:mt-8">
-            {stage === 'register' ? (
+            {stage === "register" ? (
               <RegisterForm defaultUserType={userTypeParam} />
             ) : (
               <LoginForm />

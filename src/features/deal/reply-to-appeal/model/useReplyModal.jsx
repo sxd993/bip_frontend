@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAppealDetailsApi, sendReplyApi } from '@/entities/deals';
 
 export const useReplyModal = (appealId) => {
-  const [message, setMessage] = useState('');
   const queryClient = useQueryClient();
 
   const normalizedAppealId = appealId?.toString();
@@ -27,24 +25,25 @@ export const useReplyModal = (appealId) => {
     }
   });
 
-  const handleSubmit = async (attachedFiles) => {
-    if (!message.trim()) {
+  const handleSubmit = async (message, attachedFiles) => {
+    const trimmed = message?.trim();
+
+    if (!trimmed) {
       throw new Error('Введите сообщение');
     }
 
-    if (message.length > 1500) {
+    if (trimmed.length > 1500) {
       throw new Error('Сообщение слишком длинное (макс. 1500 символов)');
     }
 
     await sendReplyMutation.mutateAsync({
-      message: message.trim(),
+      message: trimmed,
       files: attachedFiles
     });
     return true;
   };
 
   const reset = () => {
-    setMessage('');
     sendReplyMutation.reset();
   };
 
@@ -58,11 +57,6 @@ export const useReplyModal = (appealId) => {
     isSuccess: sendReplyMutation.isSuccess,
     error: appealDetailsQuery.error || sendReplyMutation.error,
 
-    // UI состояние
-    message,
-    setMessage,
-
-    // Действия
     handleSubmit,
     reset,
 

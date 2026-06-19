@@ -7,9 +7,9 @@ export const getAppealDetailsApi = async (dealId) => {
 
 export const sendReplyApi = async (dealId, message, files = []) => {
   const response = await client.post('/deals/reply/send-reply', {
-    dealId,
+    dealId: String(dealId),
     message,
-    files,
+    files: files.map(({ name, base64, size }) => ({ name, base64, size })),
   });
   return response.data;
 };

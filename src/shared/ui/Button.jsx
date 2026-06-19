@@ -1,26 +1,36 @@
-import { NavLink } from "react-router-dom";
-
-const variants = {
-  black: "bg-black text-white",
-  red: "bg-primary text-white",
-  white: "bg-white text-[#A01E1E]",
+const VARIANT_CLASSES = {
+  primary:
+    'bg-primary text-on-primary hover:bg-primary-hover font-semibold',
+  outline:
+    'border border-border bg-surface text-text hover:border-primary hover:text-primary font-medium',
 };
 
 export const Button = ({
-  to = "/",
-  label,
-  className = "",
-  variant = "white",
+  variant = 'primary',
+  type = 'button',
+  fullWidth,
+  className = '',
+  children,
+  ...props
 }) => {
-  const baseClasses =
-    "inline-flex items-center justify-center w-[80%] self-center px-3 py-2 rounded-[8px] font-bold text-sm leading-[1] text-center";
+  const isSubmit = type === 'submit';
+  const resolvedFullWidth = fullWidth ?? isSubmit;
 
   return (
-    <NavLink
-      to={to}
-      className={`${baseClasses} ${variants[variant]} ${className}`}
+    <button
+      type={type}
+      className={[
+        'inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm transition disabled:cursor-not-allowed disabled:opacity-50',
+        isSubmit && 'text-base',
+        resolvedFullWidth && 'w-full',
+        VARIANT_CLASSES[variant],
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      {...props}
     >
-      {label}
-    </NavLink>
+      {children}
+    </button>
   );
 };

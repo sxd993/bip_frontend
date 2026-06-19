@@ -5,7 +5,7 @@ export const getUser = async () => {
     const response = await client.get('/user/get-info');
     return response.data;
   } catch (err) {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 || err.response?.status === 404) {
       return null;
     }
     throw err;

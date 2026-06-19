@@ -1,6 +1,6 @@
 import { Field } from '@/shared/ui/Field';
 import { Input } from '@/shared/ui/Input';
-import { SubmitButton } from '@/shared/ui/SubmitButton';
+import { Button } from '@/shared/ui/Button';
 import { UserTypeSwitch } from '@/shared/ui/UserTypeSwitch';
 import { validationRules } from '@/shared/utils/validators';
 import { useLoginForm } from '../hooks/useLoginForm';
@@ -48,9 +48,9 @@ export const LoginForm = () => {
         </p>
       )}
 
-      <SubmitButton disabled={!isFormValid || isPending}>
+      <Button type="submit" disabled={!isFormValid || isPending}>
         {isPending ? 'Вход...' : 'Войти'}
-      </SubmitButton>
+      </Button>
     </form>
   );
 };

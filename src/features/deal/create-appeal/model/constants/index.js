@@ -16,47 +16,70 @@ export const STAGE_COLORS = {
   LOSE: 'bg-red-100 text-red-800'
 };
 
-export const FILE_CONSTRAINTS = {
-  MAX_SIZE_MB: 10,
-  MAX_SIZE_BYTES: 10 * 1024 * 1024,
-  ALLOWED_EXTENSIONS: ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'],
-  ALLOWED_MIME_TYPES: [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'image/jpeg',
-    'image/jpg',
-    'image/png'
-  ]
-};
+export { FILE_CONSTRAINTS } from '@/shared/constants/fileConstraints';
 
 export const MESSAGE_CONSTRAINTS = {
   MAX_LENGTH: 1500,
-  MIN_LENGTH: 1
+  MIN_LENGTH: 1,
+};
+
+export const APPEAL_FIELD_CONSTRAINTS = {
+  title: { min: 3, max: 200 },
+  comment: { min: 10, max: 1500 },
+  message: { min: 1, max: 1500 },
+};
+
+const validateLength = (value, { min, max, fieldLabel }) => {
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    return `${fieldLabel} обязательно`;
+  }
+
+  if (min && trimmed.length < min) {
+    return `${fieldLabel} должно содержать минимум ${min} символов`;
+  }
+
+  if (max && trimmed.length > max) {
+    return `${fieldLabel} не должно превышать ${max} символов`;
+  }
+
+  return true;
 };
 
 export const FORM_DEFAULTS = {
-    category_id: '',
     title: '',
     comment: ''
 };
 
+export const DEFAULT_APPEAL_CATEGORY_ID = '0';
+
 export const VALIDATION_RULES = {
-    category_id: { 
-        required: 'Выберите категорию обращения' 
-    },
-    title: { 
-        required: 'Введите заголовок обращения',
-        minLength: {
-            value: 3,
-            message: 'Заголовок должен содержать минимум 3 символа'
-        }
-    },
-    comment: { 
-        required: 'Введите подробное описание проблемы',
-        minLength: {
-            value: 10,
-            message: 'Описание должно содержать минимум 10 символов'
-        }
-    }
+  title: {
+    required: 'Введите заголовок обращения',
+    validate: (value) =>
+      validateLength(value, {
+        ...APPEAL_FIELD_CONSTRAINTS.title,
+        fieldLabel: 'Заголовок',
+      }),
+  },
+  comment: {
+    required: 'Введите подробное описание проблемы',
+    validate: (value) =>
+      validateLength(value, {
+        ...APPEAL_FIELD_CONSTRAINTS.comment,
+        fieldLabel: 'Описание',
+      }),
+  },
+};
+
+export const REPLY_VALIDATION_RULES = {
+  message: {
+    required: 'Введите ответ',
+    validate: (value) =>
+      validateLength(value, {
+        ...APPEAL_FIELD_CONSTRAINTS.message,
+        fieldLabel: 'Ответ',
+      }),
+  },
 };
