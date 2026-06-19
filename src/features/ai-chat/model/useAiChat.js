@@ -36,6 +36,15 @@ export const useAiChat = () => {
     setIsTyping(true);
     scrollToBottom();
 
+    let errorShown = false;
+    // Показать сообщение об ошибке ровно один раз и снять индикатор печати.
+    const showError = (text) => {
+      if (errorShown) return;
+      errorShown = true;
+      setIsTyping(false);
+      setMessages(prev => [...prev, { role: 'assistant', content: text }]);
+    };
+
     try {
       const reader = await streamAiMessage(nextMessages);
       const decoder = new TextDecoder();
@@ -76,11 +85,7 @@ export const useAiChat = () => {
               setIsLocked(true);
               if (event.dealId) setDealId(event.dealId);
             } else if (event.error) {
-              setIsTyping(false);
-              setMessages(prev => [
-                ...prev,
-                { role: 'assistant', content: 'Произошла ошибка. Попробуйте позже или свяжитесь с нами напрямую.' }
-              ]);
+              showError('Произошла ошибка. Попробуйте позже или свяжитесь с нами напрямую.');
             }
           } catch {
             // пропускаем битые SSE-чанки
@@ -89,11 +94,7 @@ export const useAiChat = () => {
       }
     } catch (err) {
       console.error('[AI Chat] ошибка:', err);
-      setIsTyping(false);
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: 'Ошибка соединения. Пожалуйста, попробуйте позже.' }
-      ]);
+      showError('Ошибка соединения. Пожалуйста, попробуйте позже.');
     } finally {
       setIsStreaming(false);
       setIsTyping(false);
