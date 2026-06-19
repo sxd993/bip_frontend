@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { streamAiMessage } from '../api/aiChatApi';
+import { streamAiMessage } from '@/entities/ai-chat/api/aiChatApi';
 
 const DEAL_JSON_REGEX = /\{"action":"create_deal"[\s\S]*?\}/;
 
