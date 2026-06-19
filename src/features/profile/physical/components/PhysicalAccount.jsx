@@ -5,11 +5,7 @@ import { PhysicalProfileSidebar } from "@/widgets/profile/ui/PhysicalProfileSide
 
 import { getGreetingName } from '@/widgets/profile/lib/getGreetingName';
 
-export const PhysicalAccount = ({ user, isLoading }) => {
-  if (isLoading) {
-    return <Loading fullScreen />;
-  }
-
+export const PhysicalAccount = ({ user }) => {
   return (
     <AccountLayout
       title={`Здравствуйте, ${getGreetingName(user)}`}

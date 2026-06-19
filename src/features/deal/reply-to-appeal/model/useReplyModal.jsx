@@ -20,8 +20,8 @@ export const useReplyModal = (appealId) => {
   const sendReplyMutation = useMutation({
     mutationFn: ({ message, files }) => sendReplyApi(normalizedAppealId, message, files),
     onSuccess: () => {
-      queryClient.invalidateQueries(['appeals']);
-      queryClient.invalidateQueries(['appealDetails', normalizedAppealId]);
+      queryClient.invalidateQueries({ queryKey: ['appeals'] });
+      queryClient.invalidateQueries({ queryKey: ['appealDetails', normalizedAppealId] });
     }
   });
 

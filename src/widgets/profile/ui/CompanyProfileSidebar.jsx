@@ -1,10 +1,7 @@
 import { ProfileSidebarField } from "./ProfileSidebarField";
 import { formatBalance } from "@/shared/utils/formatters";
-
-const getFullName = (user) =>
-  [user?.last_name, user?.first_name, user?.second_name]
-    .filter(Boolean)
-    .join(" ");
+import { AccountNav } from "./AccountNav";
+import { DIRECTOR_ROLE } from "@/features/profile/company/manage-employees/model/constants";
 
 export const CompanyProfileSidebar = ({ user }) => {
   const company = user?.company;
@@ -20,16 +17,25 @@ export const CompanyProfileSidebar = ({ user }) => {
           <p className="line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base">
             {companyName}
           </p>
-          <p className="text-[0.6875rem] text-text-muted sm:text-xs">Юридическое лицо</p>
+          <p
+            className={[
+              "text-[0.6875rem] sm:text-xs",
+              user?.role === DIRECTOR_ROLE
+                ? "font-semibold text-primary"
+                : "text-text-muted",
+            ].join(" ")}
+          >
+            {user?.role || "Сотрудник"}
+          </p>
         </div>
       </div>
 
       <dl className="mt-4 space-y-3 border-t border-border pt-4">
-        <ProfileSidebarField label="ИНН">
-          {company?.inn || "—"}
-        </ProfileSidebarField>
         <ProfileSidebarField label="Баланс" highlight>
           {formatBalance(user?.balance)}
+        </ProfileSidebarField>
+        <ProfileSidebarField label="ИНН">
+          {company?.inn || "—"}
         </ProfileSidebarField>
         <ProfileSidebarField label="Телефон">
           {company?.phone || "—"}
@@ -39,18 +45,7 @@ export const CompanyProfileSidebar = ({ user }) => {
         </ProfileSidebarField>
       </dl>
 
-      {user && (
-        <div className="mt-4 border-t border-border pt-4">
-          <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-wide text-text-muted sm:text-xs">
-            Руководитель
-          </p>
-          <dl className="space-y-3 mt-2">
-            <ProfileSidebarField label="ФИО">
-              {getFullName(user) || "—"}
-            </ProfileSidebarField>
-          </dl>
-        </div>
-      )}
+      <AccountNav user={user} />
     </div>
   );
 };

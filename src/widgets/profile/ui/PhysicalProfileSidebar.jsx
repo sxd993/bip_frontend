@@ -23,7 +23,9 @@ export const PhysicalProfileSidebar = ({ user }) => {
           <p className="truncate text-sm font-semibold text-text sm:text-base">
             {fullName || 'Пользователь'}
           </p>
-          <p className="text-[0.6875rem] text-text-muted sm:text-xs">Частное лицо</p>
+          <p className="text-[0.6875rem] font-semibold text-primary sm:text-xs">
+            Частное лицо
+          </p>
         </div>
       </div>
 

@@ -29,7 +29,7 @@ export const useCreateAppealForm = (isOpen, onClose) => {
   const createAppealMutation = useMutation({
     mutationFn: createAppealApi,
     onSuccess: () => {
-      queryClient.invalidateQueries(["appeals"]);
+      queryClient.invalidateQueries({ queryKey: ["appeals"] });
     },
   });
 

@@ -1,1 +1,7 @@
-export { getCompanyInfoApi } from "./api/companyApi";
+export {
+  getCompanyInfoApi,
+  getCompanyEmployeesApi,
+  getCompanyInvitesApi,
+  inviteEmployeeApi,
+  removeEmployeeApi,
+} from "./api/companyApi";

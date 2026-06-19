@@ -9,6 +9,12 @@ export const AuthPage = () => {
   const [searchParams] = useSearchParams();
   const stage = stageRouteParam || searchParams.get("stage") || "login";
   const userTypeParam = searchParams.get("userType");
+  const legalType = searchParams.get("legalType");
+  const inviteToken = searchParams.get("inviteToken");
+  const inviteEmail = searchParams.get("email");
+
+  const isEmployeeInvite =
+    stage === "register" && legalType === "employee" && Boolean(inviteToken);
 
   const { user, isLoading, error } = useUser();
   const navigate = useNavigate();
@@ -31,7 +37,11 @@ export const AuthPage = () => {
     );
   }
 
-  const title = stage === "register" ? "Зарегистрироваться" : "Войти";
+  const title = isEmployeeInvite
+    ? "Регистрация сотрудника"
+    : stage === "register"
+      ? "Зарегистрироваться"
+      : "Войти";
 
   return (
     <section className="flex flex-1 items-center justify-center py-8 sm:py-10">
@@ -43,7 +53,12 @@ export const AuthPage = () => {
 
           <div className="mt-6 flex flex-col gap-5 sm:mt-8">
             {stage === "register" ? (
-              <RegisterForm defaultUserType={userTypeParam} />
+              <RegisterForm
+                defaultUserType={userTypeParam}
+                legalType={legalType}
+                inviteToken={inviteToken}
+                inviteEmail={inviteEmail}
+              />
             ) : (
               <LoginForm />
             )}

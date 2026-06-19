@@ -18,7 +18,7 @@ export const AppRouter = () => (
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/auth/:stage" element={<AuthPage />} />
       <Route
-        path="/personal-account"
+        path="/personal-account/*"
         element={
           <AuthGuard>
             <ProfilePage />

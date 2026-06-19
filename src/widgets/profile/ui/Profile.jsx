@@ -1,8 +1,18 @@
-import { PhysicalAccount, CompanyAccount } from "@/features/profile";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Loading } from "@/shared/ui/Loading";
+import {
+  PhysicalAccount,
+  CompanyAccount,
+  CompanyManageAccount,
+} from "@/features/profile";
 import { useUser } from "@/entities/auth";
 
 export const Profile = () => {
   const { user, isLoading: userLoading, error } = useUser();
+
+  if (userLoading) {
+    return <Loading fullScreen />;
+  }
 
   if (error) {
     return (
@@ -13,12 +23,28 @@ export const Profile = () => {
   }
 
   return (
-    <div>
-      {user?.user_type === "legal" ? (
-        <CompanyAccount user={user} isLoading={userLoading} />
-      ) : (
-        <PhysicalAccount user={user} isLoading={userLoading} />
-      )}
-    </div>
+    <Routes>
+      <Route
+        index
+        element={
+          user?.user_type === "legal" ? (
+            <CompanyAccount user={user} />
+          ) : (
+            <PhysicalAccount user={user} />
+          )
+        }
+      />
+      <Route
+        path="company"
+        element={
+          user?.user_type === "legal" ? (
+            <CompanyManageAccount user={user} />
+          ) : (
+            <Navigate to="/personal-account" replace />
+          )
+        }
+      />
+      <Route path="*" element={<Navigate to="/personal-account" replace />} />
+    </Routes>
   );
 };

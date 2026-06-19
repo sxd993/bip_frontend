@@ -16,6 +16,7 @@ const AppealCard = ({ appeal }) => {
         <div className="min-w-0 flex-1 space-y-2">
           <p className="text-[0.6875rem] font-semibold uppercase tracking-widest text-primary sm:text-xs">
             Обращение #{appeal.id}
+            {appeal.author_name ? ` (${appeal.author_name})` : ""}
           </p>
           <h3 className="text-sm font-semibold leading-snug text-text sm:text-base md:text-lg">
             {appeal.title}
