@@ -1,13 +1,22 @@
-import { useAiChat, ChatMessage } from "@/features/ai-chat";
+import { Link } from "react-router-dom";
+import { useAiChat, ChatMessage, INITIAL_MESSAGE } from "@/features/ai-chat";
+import { useUser } from "@/entities/auth";
+
+const GUEST_AUTH_MESSAGE = {
+  role: "assistant",
+  content:
+    "Чтобы начать консультацию и отслеживать статус вашего обращения в личном кабинете, пожалуйста, войдите в аккаунт — это займёт всего пару минут.",
+};
 
 export const AiChat = () => {
+  const { user, isLoading: isSessionLoading } = useUser();
   const {
     messages,
     input,
     isStreaming,
     isTyping,
     isLocked,
-    dealId,
+    orderId,
     messagesEndRef,
     scrollContainerRef,
     sendMessage,
@@ -15,9 +24,9 @@ export const AiChat = () => {
     handleInputChange,
   } = useAiChat();
 
-  const startNewConsultation = () => {
-    window.location.reload();
-  };
+  const isAuthorized = Boolean(user);
+  const displayMessages = isAuthorized ? messages : [INITIAL_MESSAGE, GUEST_AUTH_MESSAGE];
+  const isInputDisabled = isStreaming || isLocked || !isAuthorized || isSessionLoading;
 
   return (
     <div
@@ -40,25 +49,23 @@ export const AiChat = () => {
         ref={scrollContainerRef}
         className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto bg-background px-4 py-4"
       >
-        {messages.map((msg, i) => (
+        {displayMessages.map((msg, i) => (
           <ChatMessage key={i} role={msg.role} content={msg.content} />
         ))}
-        {isTyping && <ChatMessage isTyping />}
+        {(isTyping || isSessionLoading) && <ChatMessage isTyping />}
         <div ref={messagesEndRef} />
       </div>
 
       {isLocked && (
-        <div className="shrink-0 border-t border-border bg-surface px-4 py-3 text-sm text-text">
+        <div className="shrink-0 border-t border-border bg-surface px-4 py-3 text-sm leading-relaxed text-text">
           <span className="font-semibold text-success">
-            Заявка принята{dealId ? ` № ${dealId}` : ""}.
+            Заявка на оплату создана{orderId ? ` № ${orderId}` : ""}.
           </span>{" "}
-          <button
-            type="button"
-            onClick={startNewConsultation}
-            className="text-primary hover:underline"
-          >
-            Начать новую консультацию
-          </button>
+          Перейдите в{" "}
+          <Link to="/personal-account/orders" className="text-primary hover:underline">
+            личный кабинет
+          </Link>
+          , чтобы оплатить.
         </div>
       )}
 
@@ -74,15 +81,21 @@ export const AiChat = () => {
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            disabled={isStreaming || isLocked}
-            placeholder={isLocked ? "Заявка создана" : "Опишите ситуацию..."}
+            disabled={isInputDisabled}
+            placeholder={
+              isLocked
+                ? "Заявка на оплату создана"
+                : !isAuthorized
+                  ? "Войдите в аккаунт, чтобы начать консультацию..."
+                  : "Опишите ситуацию..."
+            }
             rows={1}
             className="max-h-24 min-h-6 flex-1 resize-none bg-transparent py-1 text-sm leading-6 text-text outline-none placeholder:text-text-muted disabled:cursor-not-allowed"
           />
           <button
             type="button"
             onClick={sendMessage}
-            disabled={!input.trim() || isStreaming || isLocked}
+            disabled={!input.trim() || isInputDisabled}
             className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary text-on-primary transition-all hover:bg-primary-hover disabled:opacity-30 active:scale-95"
             aria-label="Отправить"
           >

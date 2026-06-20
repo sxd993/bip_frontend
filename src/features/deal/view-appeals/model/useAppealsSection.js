@@ -6,7 +6,6 @@ const EMPTY_ITEMS = [];
 export const useAppealsSection = () => {
   const PAGE_SIZE = 10;
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data = { items: [] }, isLoading } = useAppeals();
   const appeals = data.items ?? EMPTY_ITEMS;
@@ -26,11 +25,6 @@ export const useAppealsSection = () => {
     appeals,
     paginatedAppeals,
     isLoading,
-    modal: {
-      isModalOpen,
-      openModal: () => setIsModalOpen(true),
-      closeModal: () => setIsModalOpen(false),
-    },
     pagination: {
       currentPage,
       totalPages,

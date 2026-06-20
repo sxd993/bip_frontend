@@ -12,18 +12,19 @@ const navLinkClass = ({ isActive }) =>
 export const AccountNav = ({ user }) => {
   const isDirector = user?.role === DIRECTOR_ROLE;
 
-  if (!isDirector) {
-    return null;
-  }
-
   return (
     <nav className="mt-4 space-y-2 border-t border-border pt-4">
       <NavLink to="/personal-account" end className={navLinkClass}>
         Обращения
       </NavLink>
-      <NavLink to="/personal-account/company" className={navLinkClass}>
-        Управление компанией
+      <NavLink to="/personal-account/orders" className={navLinkClass}>
+        Заявки на оплату
       </NavLink>
+      {isDirector && (
+        <NavLink to="/personal-account/company" className={navLinkClass}>
+          Управление компанией
+        </NavLink>
+      )}
     </nav>
   );
 };

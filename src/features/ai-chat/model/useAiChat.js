@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { streamAiMessage } from '@/entities/ai-chat/api/aiChatApi';
 
-const DEAL_JSON_REGEX = /\{"action":"create_deal"[\s\S]*?\}/;
+const ORDER_JSON_REGEX = /\{"action":"create_(?:order|deal)"[\s\S]*?\}/;
 
 export const INITIAL_MESSAGE = {
   role: 'assistant',
@@ -9,12 +10,13 @@ export const INITIAL_MESSAGE = {
 };
 
 export const useAiChat = () => {
+  const queryClient = useQueryClient();
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
-  const [dealId, setDealId] = useState(null);
+  const [orderId, setOrderId] = useState(null);
   const messagesEndRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
@@ -74,7 +76,7 @@ export const useAiChat = () => {
                 setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
               }
               botText += event.token;
-              const display = botText.replace(DEAL_JSON_REGEX, '').trim();
+              const display = botText.replace(ORDER_JSON_REGEX, '').trim();
               setMessages(prev => {
                 const updated = [...prev];
                 updated[updated.length - 1] = { role: 'assistant', content: display };
@@ -83,7 +85,9 @@ export const useAiChat = () => {
               scrollToBottom();
             } else if (event.done === true) {
               setIsLocked(true);
-              if (event.dealId) setDealId(event.dealId);
+              const createdOrderId = event.orderId ?? event.dealId ?? null;
+              if (createdOrderId) setOrderId(createdOrderId);
+              queryClient.invalidateQueries({ queryKey: ['pendingOrder'] });
             } else if (event.error) {
               showError('Произошла ошибка. Попробуйте позже или свяжитесь с нами напрямую.');
             }
@@ -94,7 +98,11 @@ export const useAiChat = () => {
       }
     } catch (err) {
       console.error('[AI Chat] ошибка:', err);
-      showError('Ошибка соединения. Пожалуйста, попробуйте позже.');
+      if (err.message === 'UNAUTHORIZED') {
+        showError('Для использования помощника необходимо войти в аккаунт.');
+      } else {
+        showError('Ошибка соединения. Пожалуйста, попробуйте позже.');
+      }
     } finally {
       setIsStreaming(false);
       setIsTyping(false);
@@ -120,7 +128,7 @@ export const useAiChat = () => {
     isStreaming,
     isTyping,
     isLocked,
-    dealId,
+    orderId,
     messagesEndRef,
     scrollContainerRef,
     sendMessage,

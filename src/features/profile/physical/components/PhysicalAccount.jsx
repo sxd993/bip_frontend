@@ -9,7 +9,7 @@ export const PhysicalAccount = ({ user }) => {
   return (
     <AccountLayout
       title={`Здравствуйте, ${getGreetingName(user)}`}
-      subtitle="Здесь вы видите все обращения и можете создать новое"
+      subtitle="Здесь вы видите ваши обращения после оплаты заявки"
       sidebar={<PhysicalProfileSidebar user={user} />}
     >
       <AppealsSection />

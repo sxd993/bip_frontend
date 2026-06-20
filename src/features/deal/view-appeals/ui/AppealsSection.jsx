@@ -1,14 +1,12 @@
+import { Link } from "react-router-dom";
 import AppealCard from "./AppealCard";
-import CreateAppealModal from "../../create-appeal/ui/CreateAppealModal";
 import { useAppealsSection } from "../model/useAppealsSection";
 import { Loading } from "@/shared/ui/Loading";
 import { Button } from "@/shared/ui/Button";
 
 const AppealsSection = () => {
-  const { paginatedAppeals, modal, pagination, isLoading, error } =
-    useAppealsSection();
+  const { paginatedAppeals, pagination, isLoading, error } = useAppealsSection();
 
-  const { isModalOpen, openModal, closeModal } = modal;
   const {
     totalAppeals,
     totalPages,
@@ -35,23 +33,15 @@ const AppealsSection = () => {
 
   return (
     <div>
-      <div className="mb-6 flex flex-col items-center gap-4 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
-        <div>
-          <h2 className="text-lg font-semibold text-text sm:text-xl lg:text-xl">
-            Мои обращения
-          </h2>
-          <p className="mt-1 text-sm text-text-muted sm:text-base lg:text-sm">
-            {totalAppeals === 0
-              ? 'Создайте обращение — мы ответим в ближайшее время'
-              : `Всего обращений: ${totalAppeals}`}
-          </p>
-        </div>
-        <Button
-          onClick={openModal}
-          className="w-full max-w-xs shrink-0 sm:w-auto lg:self-auto"
-        >
-          Новое обращение
-        </Button>
+      <div className="mb-6 text-center lg:text-left">
+        <h2 className="text-lg font-semibold text-text sm:text-xl lg:text-xl">
+          Мои обращения
+        </h2>
+        <p className="mt-1 text-sm text-text-muted sm:text-base lg:text-sm">
+          {totalAppeals === 0
+            ? "Обращения появятся здесь после оплаты заявки из интеллектуального помощника"
+            : `Всего обращений: ${totalAppeals}`}
+        </p>
       </div>
 
       {totalAppeals === 0 ? (
@@ -75,8 +65,15 @@ const AppealsSection = () => {
             Пока нет обращений
           </h3>
           <p className="mx-auto max-w-sm text-sm leading-relaxed text-text-muted sm:text-base lg:text-sm">
-            Опишите ситуацию — юрист свяжется с вами и подскажет следующий шаг
+            Опишите ситуацию интеллектуальному помощнику на главной странице —
+            он подготовит заявку на оплату
           </p>
+          <Link
+            to="/#chat"
+            className="mt-5 inline-block text-sm font-medium text-primary hover:underline"
+          >
+            Перейти к помощнику →
+          </Link>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
@@ -123,8 +120,6 @@ const AppealsSection = () => {
           </div>
         </div>
       )}
-
-      <CreateAppealModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };

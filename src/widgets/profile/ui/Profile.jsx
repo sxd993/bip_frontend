@@ -4,6 +4,7 @@ import {
   PhysicalAccount,
   CompanyAccount,
   CompanyManageAccount,
+  OrdersAccount,
 } from "@/features/profile";
 import { useUser } from "@/entities/auth";
 
@@ -33,6 +34,10 @@ export const Profile = () => {
             <PhysicalAccount user={user} />
           )
         }
+      />
+      <Route
+        path="orders"
+        element={<OrdersAccount user={user} />}
       />
       <Route
         path="company"

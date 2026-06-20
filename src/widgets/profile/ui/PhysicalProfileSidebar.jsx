@@ -1,5 +1,6 @@
 import { ProfileSidebarField } from './ProfileSidebarField';
 import { formatBalance } from '@/shared/utils/formatters';
+import { AccountNav } from './AccountNav';
 
 const getInitials = (user) => {
   const first = user?.first_name?.[0] ?? '';
@@ -36,6 +37,8 @@ export const PhysicalProfileSidebar = ({ user }) => {
         <ProfileSidebarField label="Телефон">{user?.phone || '—'}</ProfileSidebarField>
         <ProfileSidebarField label="Email">{user?.email || '—'}</ProfileSidebarField>
       </dl>
+
+      <AccountNav user={user} />
     </div>
   );
 };
