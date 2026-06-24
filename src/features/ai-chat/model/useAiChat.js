@@ -76,7 +76,8 @@ export const useAiChat = () => {
                 setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
               }
               botText += event.token;
-              const display = botText.replace(ORDER_JSON_REGEX, '').trim();
+              const jsonIdx = botText.indexOf('{"action":"create_');
+              const display = (jsonIdx >= 0 ? botText.slice(0, jsonIdx) : botText.replace(ORDER_JSON_REGEX, '')).trim();
               setMessages(prev => {
                 const updated = [...prev];
                 updated[updated.length - 1] = { role: 'assistant', content: display };
@@ -122,6 +123,10 @@ export const useAiChat = () => {
     e.target.style.height = Math.min(e.target.scrollHeight, 128) + 'px';
   };
 
+  const selectSuggestion = (text) => {
+    setInput(text);
+  };
+
   return {
     messages,
     input,
@@ -134,5 +139,6 @@ export const useAiChat = () => {
     sendMessage,
     handleKeyDown,
     handleInputChange,
+    selectSuggestion,
   };
 };

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAiChat, ChatMessage, INITIAL_MESSAGE } from "@/features/ai-chat";
+import { useAiChat, ChatMessage, SuggestionChips, INITIAL_MESSAGE } from "@/features/ai-chat";
 import { useUser } from "@/entities/auth";
 
 const GUEST_AUTH_MESSAGE = {
@@ -22,11 +22,13 @@ export const AiChat = () => {
     sendMessage,
     handleKeyDown,
     handleInputChange,
+    selectSuggestion,
   } = useAiChat();
 
   const isAuthorized = Boolean(user);
   const displayMessages = isAuthorized ? messages : [INITIAL_MESSAGE, GUEST_AUTH_MESSAGE];
   const isInputDisabled = isStreaming || isLocked || !isAuthorized || isSessionLoading;
+  const showSuggestions = isAuthorized && messages.length === 1 && !isStreaming && !isLocked;
 
   return (
     <div
@@ -55,6 +57,10 @@ export const AiChat = () => {
         {(isTyping || isSessionLoading) && <ChatMessage isTyping />}
         <div ref={messagesEndRef} />
       </div>
+
+      {showSuggestions && (
+        <SuggestionChips onSelect={selectSuggestion} />
+      )}
 
       {isLocked && (
         <div className="shrink-0 border-t border-border bg-surface px-4 py-3 text-sm leading-relaxed text-text">
