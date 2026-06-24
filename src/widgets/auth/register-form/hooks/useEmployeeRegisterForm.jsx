@@ -18,6 +18,7 @@ export const useEmployeeRegisterForm = ({ inviteToken, inviteEmail }) => {
       phone: '',
       password: '',
       confirmPassword: '',
+      personalDataConsent: false,
     },
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -36,7 +37,12 @@ export const useEmployeeRegisterForm = ({ inviteToken, inviteEmail }) => {
     useEmployeeRegister(inviteToken);
 
   const onSubmitForm = handleSubmit((data) => {
-    onSubmit(data);
+    const {
+      confirmPassword: _confirmPassword,
+      personalDataConsent: _personalDataConsent,
+      ...submitData
+    } = data;
+    onSubmit(submitData);
   });
 
   return {

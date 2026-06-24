@@ -1,5 +1,5 @@
-import { AppRouter } from '@app/router';
-import { Header } from '@/widgets';
+import { AppRouter } from "@app/router";
+import { CookieConsentBanner, Footer, Header } from "@/widgets";
 
 const App = () => {
   return (
@@ -11,6 +11,9 @@ const App = () => {
           <AppRouter />
         </main>
       </div>
+
+      <Footer />
+      <CookieConsentBanner />
     </div>
   );
 };

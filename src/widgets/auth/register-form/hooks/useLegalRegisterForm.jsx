@@ -26,7 +26,11 @@ export const useLegalRegisterForm = () => {
   const { onSubmit, isPending, isSuccess, isError, errorMessage } = useLegalRegister();
 
   const onSubmitForm = handleSubmit((data) => {
-    const { confirmPassword: _confirmPassword, ...submitData } = data;
+    const {
+      confirmPassword: _confirmPassword,
+      personalDataConsent: _personalDataConsent,
+      ...submitData
+    } = data;
     onSubmit(submitData);
   });
 

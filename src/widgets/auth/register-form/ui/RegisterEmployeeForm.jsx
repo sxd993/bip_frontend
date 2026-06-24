@@ -4,6 +4,7 @@ import { Button } from '@/shared/ui/Button';
 import { Loading } from '@/shared/ui/Loading';
 import { validationRules, PHONE_PLACEHOLDER } from '@/shared/utils/validators';
 import { useEmployeeRegisterForm } from '../hooks/useEmployeeRegisterForm';
+import { PersonalDataConsentField } from './PersonalDataConsentField';
 
 export const RegisterEmployeeForm = ({ inviteToken, inviteEmail }) => {
   const {
@@ -107,6 +108,11 @@ export const RegisterEmployeeForm = ({ inviteToken, inviteEmail }) => {
           hasError={Boolean(errors.confirmPassword)}
         />
       </Field>
+
+      <PersonalDataConsentField
+        register={register}
+        error={errors.personalDataConsent?.message}
+      />
 
       {isError && errorMessage && (
         <p className="text-center text-sm text-error">{errorMessage}</p>

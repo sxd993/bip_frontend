@@ -24,8 +24,7 @@
   --color-success: #22c55e;
 
   /* Font */
-  --font-family-sans:
-    var(--font-commissioner), system-ui, -apple-system, sans-serif;
+  --font-family-sans: "Commissioner", sans-serif;
 
   /* Layout */
   --max-width-300: 75rem;

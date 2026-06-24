@@ -3,7 +3,7 @@ import { AiChat } from "@/widgets/ai-chat";
 import { WELCOME_HIGHLIGHTS } from "../model/const/highlights";
 
 export const WelcomeSection = () => (
-  <section className="pt-4 pb-10 sm:pt-6 sm:pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20">
+  <section>
     <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
       <div className="text-center lg:text-left">
         <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary sm:mb-4 sm:text-base md:text-lg lg:text-xl">
@@ -24,7 +24,7 @@ export const WelcomeSection = () => (
       <AiChat />
     </div>
 
-    <ul className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:mt-14 lg:gap-6">
+    <ul className="mt-8 grid gap-8 sm:mt-10 sm:grid-cols-2 sm:gap-10">
       {WELCOME_HIGHLIGHTS.map((item) => (
         <li key={item.title}>
           <Link

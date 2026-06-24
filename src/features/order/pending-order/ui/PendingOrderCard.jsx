@@ -61,7 +61,7 @@ export const PendingOrderCard = ({ order, onPay, isPaying, payError }) => {
           disabled={isPaying}
           fullWidth
         >
-          {isPaying ? 'Оплата...' : 'Оплатить'}
+          {isPaying ? 'Передаём в работу...' : 'Передать в работу'}
         </Button>
       </div>
     </article>

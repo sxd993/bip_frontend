@@ -25,7 +25,11 @@ export const useEmployeeRegister = (companyToken) => {
   });
 
   const onSubmit = (formData) => {
-    const { confirmPassword: _confirmPassword, ...rest } = formData;
+    const {
+      confirmPassword: _confirmPassword,
+      personalDataConsent: _personalDataConsent,
+      ...rest
+    } = formData;
 
     mutation.mutate({
       ...rest,

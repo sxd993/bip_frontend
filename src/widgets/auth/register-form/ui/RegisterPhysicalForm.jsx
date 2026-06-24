@@ -4,6 +4,7 @@ import { Button } from "@/shared/ui/Button";
 import { Loading } from "@/shared/ui/Loading";
 import { validationRules, PHONE_PLACEHOLDER } from "@/shared/utils/validators";
 import { usePhysicalRegisterForm } from "../hooks/usePhysicalRegisterForm";
+import { PersonalDataConsentField } from "./PersonalDataConsentField";
 
 export const RegisterPhysicalForm = () => {
   const {
@@ -102,6 +103,11 @@ export const RegisterPhysicalForm = () => {
           hasError={Boolean(errors.confirmPassword)}
         />
       </Field>
+
+      <PersonalDataConsentField
+        register={register}
+        error={errors.personalDataConsent?.message}
+      />
 
       {isError && errorMessage && (
         <p className="text-center text-sm text-error">{errorMessage}</p>

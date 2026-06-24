@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { Loading } from '@/shared/ui/Loading';
 import { usePendingOrder } from '../model/usePendingOrder';
 import { PendingOrderCard } from './PendingOrderCard';
@@ -22,7 +21,7 @@ export const PendingOrdersSection = () => {
     <div>
       <div className="mb-6 text-center lg:text-left">
         <h2 className="text-lg font-semibold text-text sm:text-xl lg:text-xl">
-          Заявки на оплату
+          Неоплаченные заявки
         </h2>
         <p className="mt-1 text-sm text-text-muted sm:text-base lg:text-sm">
           {order
@@ -56,18 +55,12 @@ export const PendingOrdersSection = () => {
             </svg>
           </div>
           <h3 className="mb-2 text-base font-medium text-text sm:text-lg lg:text-lg">
-            Нет заявок на оплату
+            Нет неоплаченных заявок
           </h3>
           <p className="mx-auto max-w-sm text-sm leading-relaxed text-text-muted sm:text-base lg:text-sm">
             Опишите ситуацию интеллектуальному помощнику на главной странице — он
             подготовит заявку с суммой и сроками
           </p>
-          <Link
-            to="/#chat"
-            className="mt-5 inline-block text-sm font-medium text-primary hover:underline"
-          >
-            Перейти к помощнику →
-          </Link>
         </div>
       )}
     </div>

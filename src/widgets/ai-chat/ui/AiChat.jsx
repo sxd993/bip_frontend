@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { useAiChat, ChatMessage, SuggestionChips, INITIAL_MESSAGE } from "@/features/ai-chat";
+import { useAiChat, ChatMessage, SuggestionChips } from "@/features/ai-chat";
 import { useUser } from "@/entities/auth";
 
 const GUEST_AUTH_MESSAGE = {
   role: "assistant",
   content:
-    "Чтобы начать консультацию и отслеживать статус вашего обращения в личном кабинете, пожалуйста, войдите в аккаунт — это займёт всего пару минут.",
+    "Здравствуйте! Чтобы начать консультацию и отслеживать статус вашего обращения в личном кабинете, пожалуйста, войдите в аккаунт — это займёт всего пару минут.",
 };
 
 export const AiChat = () => {
@@ -27,7 +27,7 @@ export const AiChat = () => {
   } = useAiChat();
 
   const isAuthorized = Boolean(user);
-  const displayMessages = isAuthorized ? messages : [INITIAL_MESSAGE, GUEST_AUTH_MESSAGE];
+  const displayMessages = isAuthorized ? messages : [GUEST_AUTH_MESSAGE];
   const isInputDisabled = isStreaming || isLocked || !isAuthorized || isSessionLoading;
   const showSuggestions = isAuthorized && messages.length === 1 && !isStreaming && !isLocked;
 
@@ -72,7 +72,7 @@ export const AiChat = () => {
           <Link to="/personal-account/orders" className="text-primary hover:underline">
             личный кабинет
           </Link>
-          , чтобы оплатить.
+          , чтобы передать в работу.
         </div>
       )}
 

@@ -220,4 +220,9 @@ export const validationRules = {
   loginPassword: {
     validate: validateLoginPassword,
   },
+
+  personalDataConsent: {
+    validate: (value) =>
+      value === true || "Необходимо согласие на обработку персональных данных",
+  },
 };

@@ -15,7 +15,7 @@ export const OrdersAccount = ({ user }) => {
   return (
     <AccountLayout
       title={`Здравствуйте, ${getGreetingName(user)}`}
-      subtitle="Заявки на оплату после консультации с интеллектуальным помощником"
+      subtitle="Неоплаченные заявки после консультации с интеллектуальным помощником"
       sidebar={sidebar}
     >
       <PendingOrdersSection />
