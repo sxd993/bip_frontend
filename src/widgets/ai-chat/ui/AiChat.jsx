@@ -19,6 +19,7 @@ export const AiChat = () => {
     orderId,
     messagesEndRef,
     scrollContainerRef,
+    inputRef,
     sendMessage,
     handleKeyDown,
     handleInputChange,
@@ -84,6 +85,7 @@ export const AiChat = () => {
           }`}
         >
           <textarea
+            ref={inputRef}
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}

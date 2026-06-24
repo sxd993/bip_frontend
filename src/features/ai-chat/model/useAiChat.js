@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { streamAiMessage } from '@/entities/ai-chat/api/aiChatApi';
+import { getCurrentOrderApi } from '@/entities/orders';
 
 const ORDER_JSON_REGEX = /\{"action":"create_(?:order|deal)"[\s\S]*?\}/;
 
@@ -19,6 +20,19 @@ export const useAiChat = () => {
   const [orderId, setOrderId] = useState(null);
   const messagesEndRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const wasStreamingRef = useRef(false);
+  useEffect(() => {
+    if (wasStreamingRef.current && !isStreaming && !isLocked) {
+      inputRef.current?.focus();
+    }
+    wasStreamingRef.current = isStreaming;
+  }, [isStreaming, isLocked]);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -86,9 +100,14 @@ export const useAiChat = () => {
               scrollToBottom();
             } else if (event.done === true) {
               setIsLocked(true);
-              const createdOrderId = event.orderId ?? event.dealId ?? null;
-              if (createdOrderId) setOrderId(createdOrderId);
               queryClient.invalidateQueries({ queryKey: ['pendingOrder'] });
+              try {
+                const order = await getCurrentOrderApi();
+                if (order?.order_number) setOrderId(order.order_number);
+              } catch {
+                const fallback = event.orderId ?? event.dealId ?? null;
+                if (fallback) setOrderId(fallback);
+              }
             } else if (event.error) {
               showError('Произошла ошибка. Попробуйте позже или свяжитесь с нами напрямую.');
             }
@@ -136,6 +155,7 @@ export const useAiChat = () => {
     orderId,
     messagesEndRef,
     scrollContainerRef,
+    inputRef,
     sendMessage,
     handleKeyDown,
     handleInputChange,

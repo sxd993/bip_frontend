@@ -12,7 +12,7 @@ export const PendingOrderCard = ({ order, onPay, isPaying, payError }) => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1 space-y-2">
           <p className="text-[0.6875rem] font-semibold uppercase tracking-widest text-primary sm:text-xs">
-            Заявка на оплату #{order.id}
+            Заявка на оплату #{order.order_number ?? order.id}
           </p>
           <h3 className="text-sm font-semibold leading-snug text-text sm:text-base md:text-lg">
             {order.title}
