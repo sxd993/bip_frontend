@@ -28,8 +28,10 @@ export const AiChat = () => {
 
   const isAuthorized = Boolean(user);
   const displayMessages = isAuthorized ? messages : [GUEST_AUTH_MESSAGE];
-  const isInputDisabled = isStreaming || isLocked || !isAuthorized || isSessionLoading;
-  const showSuggestions = isAuthorized && messages.length === 1 && !isStreaming && !isLocked;
+  const isInputDisabled =
+    isStreaming || isLocked || !isAuthorized || isSessionLoading;
+  const showSuggestions =
+    isAuthorized && messages.length === 1 && !isStreaming && !isLocked;
 
   return (
     <div
@@ -38,13 +40,10 @@ export const AiChat = () => {
     >
       <div className="flex shrink-0 items-center gap-3 bg-primary px-5 py-4">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/15 text-xs font-bold text-on-primary">
-          БП
+          БиП
         </div>
         <div>
-          <p className="font-semibold text-on-primary">
-            Интеллектуальный помощник
-          </p>
-          <p className="text-xs text-on-primary/70">Онлайн · отвечает сразу</p>
+          <p className="font-semibold text-on-primary">Создать заявку</p>
         </div>
       </div>
 
@@ -59,9 +58,7 @@ export const AiChat = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {showSuggestions && (
-        <SuggestionChips onSelect={selectSuggestion} />
-      )}
+      {showSuggestions && <SuggestionChips onSelect={selectSuggestion} />}
 
       {isLocked && (
         <div className="shrink-0 border-t border-border bg-surface px-4 py-3 text-sm leading-relaxed text-text">
@@ -69,7 +66,10 @@ export const AiChat = () => {
             Заявка на оплату создана{orderId ? ` № ${orderId}` : ""}.
           </span>{" "}
           Перейдите в{" "}
-          <Link to="/personal-account/orders" className="text-primary hover:underline">
+          <Link
+            to="/personal-account/orders"
+            className="text-primary hover:underline"
+          >
             личный кабинет
           </Link>
           , чтобы передать в работу.

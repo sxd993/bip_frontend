@@ -20,6 +20,9 @@ export const AccountNav = ({ user }) => {
       <NavLink to="/personal-account/orders" className={navLinkClass}>
         Неоплаченные заявки
       </NavLink>
+      <NavLink to="/personal-account/completed" className={navLinkClass}>
+        Завершенные
+      </NavLink>
       {isDirector && (
         <NavLink to="/personal-account/company" className={navLinkClass}>
           Управление компанией

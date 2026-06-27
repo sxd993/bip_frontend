@@ -42,7 +42,7 @@ const AppealFiles = ({ files }) => {
           onClick={() => downloadDocument(doc.id, doc.name)}
           className="truncate text-left text-sm text-primary transition hover:text-primary-hover"
         >
-          {doc.name}
+          {doc.name || `Файл ${index + 1}`}
         </button>
       ))}
     </div>

@@ -1,8 +1,10 @@
 import { Loading } from '@/shared/ui/Loading';
+import { useUser } from '@/entities/auth';
 import { usePendingOrder } from '../model/usePendingOrder';
 import { PendingOrderCard } from './PendingOrderCard';
 
 export const PendingOrdersSection = () => {
+  const { user } = useUser();
   const { order, isLoading, error, payOrder, isPaying, payError } = usePendingOrder();
 
   if (isLoading) {
@@ -33,6 +35,7 @@ export const PendingOrdersSection = () => {
       {order ? (
         <PendingOrderCard
           order={order}
+          balance={user?.balance ?? 0}
           onPay={payOrder}
           isPaying={isPaying}
           payError={payError}

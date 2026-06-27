@@ -15,6 +15,7 @@ export const usePendingOrder = () => {
     onSuccess: () => {
       queryClient.setQueryData(['pendingOrder'], null);
       queryClient.invalidateQueries({ queryKey: ['appeals'] });
+      queryClient.invalidateQueries({ queryKey: ['user'] });
     },
   });
 

@@ -1,13 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import AppealCard from "./AppealCard";
 import { useAppealsSection } from "../model/useAppealsSection";
+import { APPEALS_SECTION_VARIANTS } from "./appealsSectionConfig";
 import { Loading } from "@/shared/ui/Loading";
 import { Button } from "@/shared/ui/Button";
 
-const AppealsSection = () => {
+const AppealsSection = ({ variant = "active" }) => {
   const navigate = useNavigate();
-  const { paginatedAppeals, pagination, isLoading, error } =
-    useAppealsSection();
+  const config = APPEALS_SECTION_VARIANTS[variant] ?? APPEALS_SECTION_VARIANTS.active;
+  const { paginatedAppeals, pagination, isLoading, error } = useAppealsSection({
+    closed: config.closed,
+  });
 
   const {
     totalAppeals,
@@ -38,21 +41,23 @@ const AppealsSection = () => {
       <div className="mb-6 flex flex-col items-center gap-4 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
         <div>
           <h2 className="text-lg font-semibold text-text sm:text-xl lg:text-xl">
-            Мои обращения
+            {config.title}
           </h2>
           <p className="mt-1 text-sm text-text-muted sm:text-base lg:text-sm">
             {totalAppeals === 0
-              ? "Обращения появятся здесь после оплаты заявки из интеллектуального помощника"
+              ? config.emptySubtitle
               : `Всего обращений: ${totalAppeals}`}
           </p>
         </div>
-        <Button
-          type="button"
-          onClick={() => navigate("/")}
-          className="w-full max-w-xs shrink-0 sm:w-auto lg:self-auto"
-        >
-          Создать обращение
-        </Button>
+        {config.showCreateButton && (
+          <Button
+            type="button"
+            onClick={() => navigate("/")}
+            className="w-full max-w-xs shrink-0 sm:w-auto lg:self-auto"
+          >
+            Создать обращение
+          </Button>
+        )}
       </div>
 
       {totalAppeals === 0 ? (
@@ -73,11 +78,10 @@ const AppealsSection = () => {
             </svg>
           </div>
           <h3 className="mb-2 text-base font-medium text-text sm:text-lg lg:text-lg">
-            Пока нет обращений
+            {config.emptyTitle}
           </h3>
           <p className="mx-auto max-w-sm text-sm leading-relaxed text-text-muted sm:text-base lg:text-sm">
-            Опишите ситуацию интеллектуальному помощнику на главной странице —
-            он подготовит заявку на оплату
+            {config.emptyDescription}
           </p>
         </div>
       ) : (

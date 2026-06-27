@@ -5,6 +5,7 @@ import {
   CompanyAccount,
   CompanyManageAccount,
   OrdersAccount,
+  CompletedAccount,
 } from "@/features/profile";
 import { useUser } from "@/entities/auth";
 
@@ -38,6 +39,10 @@ export const Profile = () => {
       <Route
         path="orders"
         element={<OrdersAccount user={user} />}
+      />
+      <Route
+        path="completed"
+        element={<CompletedAccount user={user} />}
       />
       <Route
         path="company"

@@ -1,11 +1,14 @@
 import { Button } from '@/shared/ui/Button';
-import { formatDate } from '@/shared/utils/formatters';
+import { formatBalance, formatDate } from '@/shared/utils/formatters';
 
-export const PendingOrderCard = ({ order, onPay, isPaying, payError }) => {
+export const PendingOrderCard = ({ order, balance, onPay, isPaying, payError }) => {
   const payErrorMessage =
     payError?.response?.data?.error ||
     payError?.response?.data?.message ||
     payError?.message;
+  const orderAmount = Number(order.amount);
+  const currentBalance = Number(balance) || 0;
+  const hasEnoughBalance = currentBalance >= orderAmount;
 
   return (
     <article className="flex flex-col rounded-xl border border-primary/30 bg-surface p-4 sm:p-5">
@@ -55,10 +58,16 @@ export const PendingOrderCard = ({ order, onPay, isPaying, payError }) => {
         <p className="mt-4 text-sm text-error">{payErrorMessage}</p>
       )}
 
+      {!hasEnoughBalance && (
+        <p className="mt-4 text-sm text-error">
+          Недостаточно средств на балансе. Доступно: {formatBalance(currentBalance)}.
+        </p>
+      )}
+
       <div className="mt-4 border-t border-border pt-4">
         <Button
           onClick={() => onPay(order.id)}
-          disabled={isPaying}
+          disabled={isPaying || !hasEnoughBalance}
           fullWidth
         >
           {isPaying ? 'Передаём в работу...' : 'Передать в работу'}

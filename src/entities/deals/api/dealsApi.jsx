@@ -1,7 +1,9 @@
 import { client } from "@/shared/api/client";
 
-export const getDealsApi = async () => {
-  const response = await client.get("/deals/get-deals");
+export const getDealsApi = async ({ closed = false } = {}) => {
+  const response = await client.get("/deals/get-deals", {
+    params: closed ? { closed: true } : undefined,
+  });
   return response.data;
 };
 

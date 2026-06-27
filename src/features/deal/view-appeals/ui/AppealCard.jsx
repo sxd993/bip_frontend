@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ReplyModal } from "../../reply-to-appeal/ui/ReplyModal";
 import { Button } from "@/shared/ui/Button";
 import { formatDate } from "@/shared/utils/formatters";
+import { getAppealProgress } from "../lib/appealProgress";
+import { AppealProgressBar } from "./AppealProgressBar";
 
 const AppealCard = ({ appeal }) => {
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
@@ -9,6 +11,7 @@ const AppealCard = ({ appeal }) => {
   const hasStatus =
     statusText !== "" && statusText.toLowerCase() !== "не указан";
   const hasOpportunity = appeal.opportunity && Number(appeal.opportunity) > 0;
+  const progress = getAppealProgress(appeal);
 
   return (
     <article className="flex flex-col rounded-xl border border-border bg-surface p-4 sm:p-5">
@@ -24,22 +27,25 @@ const AppealCard = ({ appeal }) => {
           <p className="text-xs text-text-muted sm:text-sm">
             Создано {formatDate(appeal.created_at)}
           </p>
-          {appeal?.info?.date && (
-            <p className="text-xs text-text-muted sm:text-sm">
-              Последнее изменение {formatDate(appeal.info.date)}
-            </p>
-          )}
         </div>
 
-        {hasStatus && (
+        {hasStatus || appeal.is_closed ? (
           <span className="shrink-0 self-start rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-text sm:text-sm">
-            {statusText}
+            {appeal.is_closed ? "Завершено" : statusText}
           </span>
-        )}
+        ) : null}
       </div>
 
+      {progress && (
+        <AppealProgressBar
+          percent={progress.percent}
+          timeline={progress.timeline}
+          isCompleted={appeal.is_closed}
+        />
+      )}
+
       {hasOpportunity && (
-        <dl className="mt-4 space-y-2 border-t border-border pt-4">
+        <dl className="mt-4 space-y-2">
           <dt className="text-xs font-medium text-text-muted">Сумма сделки</dt>
           <dd className="text-sm font-semibold text-primary">
             {Number(appeal.opportunity).toLocaleString("ru-RU")} ₽
@@ -49,7 +55,11 @@ const AppealCard = ({ appeal }) => {
 
       {appeal.can_reply && (
         <div className="mt-4 border-t border-border pt-4">
-          <Button onClick={() => setIsReplyModalOpen(true)} fullWidth>
+          <Button
+            onClick={() => setIsReplyModalOpen(true)}
+            fullWidth
+            className="animate-button-blink"
+          >
             Ответить
           </Button>
         </div>

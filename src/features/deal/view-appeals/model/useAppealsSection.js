@@ -3,11 +3,11 @@ import { useAppeals } from './useAppeals';
 
 const EMPTY_ITEMS = [];
 
-export const useAppealsSection = () => {
+export const useAppealsSection = ({ closed = false } = {}) => {
   const PAGE_SIZE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data = { items: [] }, isLoading } = useAppeals();
+  const { data = { items: [] }, isLoading, error } = useAppeals({ closed });
   const appeals = data.items ?? EMPTY_ITEMS;
 
   const totalAppeals = appeals.length;
@@ -25,6 +25,7 @@ export const useAppealsSection = () => {
     appeals,
     paginatedAppeals,
     isLoading,
+    error,
     pagination: {
       currentPage,
       totalPages,

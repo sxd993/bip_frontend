@@ -20,7 +20,7 @@ export const Button = ({
     <button
       type={type}
       className={[
-        'inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm transition disabled:cursor-not-allowed disabled:opacity-50',
+        'inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm transition disabled:cursor-not-allowed disabled:opacity-50',
         isSubmit && 'text-base',
         resolvedFullWidth && 'w-full',
         VARIANT_CLASSES[variant],

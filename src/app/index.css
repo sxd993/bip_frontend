@@ -28,6 +28,35 @@
 
   /* Layout */
   --max-width-300: 75rem;
+
+  --animate-button-blink: button-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes button-blink {
+  0%,
+  100% {
+    opacity: 0.82;
+    box-shadow: 0 2px 10px color-mix(in srgb, var(--color-primary) 30%, transparent);
+    filter: brightness(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 6px 28px color-mix(in srgb, var(--color-primary) 58%, transparent);
+    filter: brightness(1.28) saturate(1.15);
+  }
+}
+
+.animate-button-blink {
+  cursor: pointer;
+}
+
+.animate-button-blink:hover,
+.animate-button-blink:focus-visible {
+  animation-play-state: paused;
+  opacity: 1;
+  filter: brightness(1.15);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-primary) 45%, transparent);
 }
 
 body {

@@ -8,18 +8,13 @@ export const CompanyProfileSidebar = ({ user }) => {
 
   return (
     <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
-      <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-on-primary">
-          {companyName.charAt(0).toUpperCase()}
-        </div>
-        <div className="min-w-0">
-          <p className="line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base">
-            {companyName}
-          </p>
-          <p className="text-[0.6875rem] font-semibold text-primary sm:text-xs">
-            {user?.role || "Сотрудник"}
-          </p>
-        </div>
+      <div>
+        <p className="line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base">
+          {companyName}
+        </p>
+        <p className="text-[0.6875rem] font-semibold text-primary sm:text-xs">
+          {user?.role || "Сотрудник"}
+        </p>
       </div>
 
       <dl className="mt-4 space-y-3 border-t border-border pt-4">
