@@ -1,7 +1,13 @@
-import { Button } from '@/shared/ui/Button';
-import { formatBalance, formatDate } from '@/shared/utils/formatters';
+import { Button } from "@/shared/ui/Button";
+import { formatDate } from "@/shared/utils/formatters";
 
-export const PendingOrderCard = ({ order, balance, onPay, isPaying, payError }) => {
+export const PendingOrderCard = ({
+  order,
+  balance,
+  onPay,
+  isPaying,
+  payError,
+}) => {
   const payErrorMessage =
     payError?.response?.data?.error ||
     payError?.response?.data?.message ||
@@ -21,7 +27,9 @@ export const PendingOrderCard = ({ order, balance, onPay, isPaying, payError }) 
             {order.title}
           </h3>
           {order.legal_area && (
-            <p className="text-xs text-text-muted sm:text-sm">{order.legal_area}</p>
+            <p className="text-xs text-text-muted sm:text-sm">
+              {order.legal_area}
+            </p>
           )}
           <p className="text-xs text-text-muted sm:text-sm">
             Создана {formatDate(order.created_at)}
@@ -37,13 +45,15 @@ export const PendingOrderCard = ({ order, balance, onPay, isPaying, payError }) 
         {order.timeline && (
           <div>
             <dt className="text-xs font-medium text-text-muted">Сроки</dt>
-            <dd className="mt-1 text-sm font-medium text-text">{order.timeline}</dd>
+            <dd className="mt-1 text-sm font-medium text-text">
+              {order.timeline}
+            </dd>
           </div>
         )}
         <div>
           <dt className="text-xs font-medium text-text-muted">Сумма</dt>
           <dd className="mt-1 text-sm font-semibold text-primary">
-            {Number(order.amount).toLocaleString('ru-RU')} ₽
+            {Number(order.amount).toLocaleString("ru-RU")} ₽
           </dd>
         </div>
       </dl>
@@ -60,7 +70,7 @@ export const PendingOrderCard = ({ order, balance, onPay, isPaying, payError }) 
 
       {!hasEnoughBalance && (
         <p className="mt-4 text-sm text-error">
-          Недостаточно средств на балансе. Доступно: {formatBalance(currentBalance)}.
+          Недостаточно средств на балансе
         </p>
       )}
 
@@ -70,7 +80,7 @@ export const PendingOrderCard = ({ order, balance, onPay, isPaying, payError }) 
           disabled={isPaying || !hasEnoughBalance}
           fullWidth
         >
-          {isPaying ? 'Передаём в работу...' : 'Передать в работу'}
+          {isPaying ? "Передаём в работу..." : "Передать в работу"}
         </Button>
       </div>
     </article>

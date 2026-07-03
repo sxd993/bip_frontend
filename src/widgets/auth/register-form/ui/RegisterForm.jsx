@@ -5,7 +5,6 @@ import { RegisterPhysicalForm } from './RegisterPhysicalForm';
 import { RegisterEmployeeForm } from './RegisterEmployeeForm';
 
 export const RegisterForm = ({
-  defaultUserType = 'physical',
   legalType,
   inviteToken,
   inviteEmail,
@@ -13,7 +12,7 @@ export const RegisterForm = ({
   const isEmployeeInvite = legalType === 'employee' && Boolean(inviteToken);
 
   const { userType, selectPhysical, selectLegal } = useRegisterTabs({
-    defaultUserType: isEmployeeInvite ? 'legal' : defaultUserType,
+    defaultUserType: 'physical',
   });
 
   const handleUserTypeChange = (type) => {

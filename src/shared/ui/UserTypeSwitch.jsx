@@ -1,3 +1,6 @@
+export const UserTypeSwitch = () => null;
+
+/* Временно скрыто для MVP-теста физлиц. Вернуть разметку ниже, когда понадобятся юрлица.
 export const UserTypeSwitch = ({ value, onChange }) => (
   <div
     className="flex border-b border-border"
@@ -32,3 +35,4 @@ export const UserTypeSwitch = ({ value, onChange }) => (
     </button>
   </div>
 );
+*/
