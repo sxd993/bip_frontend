@@ -23,7 +23,7 @@ export const Footer = () => (
         </nav>
 
         <p className="mt-4 text-center text-sm text-text-muted">
-          © {CURRENT_YEAR} «Баукен и Партнеры». Все права защищены.
+          © {CURRENT_YEAR} «КР17». Все права защищены.
         </p>
       </div>
     </div>

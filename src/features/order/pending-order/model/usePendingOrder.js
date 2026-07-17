@@ -1,30 +1,36 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getCurrentOrderApi, payOrderApi } from '@/entities/orders';
+import { getPendingOrdersApi, payOrderApi } from '@/entities/orders';
 
 export const usePendingOrder = () => {
   const queryClient = useQueryClient();
 
-  const orderQuery = useQuery({
+  const ordersQuery = useQuery({
     queryKey: ['pendingOrder'],
-    queryFn: getCurrentOrderApi,
+    queryFn: getPendingOrdersApi,
     retry: false,
   });
 
   const payMutation = useMutation({
     mutationFn: payOrderApi,
     onSuccess: () => {
-      queryClient.setQueryData(['pendingOrder'], null);
+      queryClient.invalidateQueries({ queryKey: ['pendingOrder'] });
       queryClient.invalidateQueries({ queryKey: ['appeals'] });
       queryClient.invalidateQueries({ queryKey: ['user'] });
     },
   });
 
+  const orders = ordersQuery.data ?? [];
+  const lastPayOrderId = payMutation.variables ?? null;
+
   return {
-    order: orderQuery.data ?? null,
-    isLoading: orderQuery.isLoading,
-    error: orderQuery.error,
+    orders,
+    order: orders[0] ?? null,
+    isLoading: ordersQuery.isLoading,
+    error: ordersQuery.error,
     payOrder: payMutation.mutate,
     isPaying: payMutation.isPending,
     payError: payMutation.error,
+    payingOrderId: payMutation.isPending ? lastPayOrderId : null,
+    errorOrderId: payMutation.isError ? lastPayOrderId : null,
   };
 };

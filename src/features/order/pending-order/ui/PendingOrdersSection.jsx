@@ -5,7 +5,16 @@ import { PendingOrderCard } from './PendingOrderCard';
 
 export const PendingOrdersSection = () => {
   const { user } = useUser();
-  const { order, isLoading, error, payOrder, isPaying, payError } = usePendingOrder();
+  const {
+    orders,
+    isLoading,
+    error,
+    payOrder,
+    isPaying,
+    payError,
+    payingOrderId,
+    errorOrderId,
+  } = usePendingOrder();
 
   if (isLoading) {
     return <Loading fullScreen />;
@@ -19,6 +28,8 @@ export const PendingOrdersSection = () => {
     );
   }
 
+  const hasOrders = orders.length > 0;
+
   return (
     <div>
       <div className="mb-6 text-center lg:text-left">
@@ -26,20 +37,25 @@ export const PendingOrdersSection = () => {
           Неоплаченные заявки
         </h2>
         <p className="mt-1 text-sm text-text-muted sm:text-base lg:text-sm">
-          {order
+          {hasOrders
             ? 'Оплатите заявку, чтобы мы начали работу над вашим обращением'
             : 'Здесь появятся заявки после консультации с интеллектуальным помощником'}
         </p>
       </div>
 
-      {order ? (
-        <PendingOrderCard
-          order={order}
-          balance={user?.balance ?? 0}
-          onPay={payOrder}
-          isPaying={isPaying}
-          payError={payError}
-        />
+      {hasOrders ? (
+        <div className="flex flex-col gap-4">
+          {orders.map((order) => (
+            <PendingOrderCard
+              key={order.id}
+              order={order}
+              balance={user?.balance ?? 0}
+              onPay={payOrder}
+              isPaying={isPaying && payingOrderId === order.id}
+              payError={errorOrderId === order.id ? payError : null}
+            />
+          ))}
+        </div>
       ) : (
         <div className="rounded-xl border border-dashed border-border bg-background px-6 py-14 text-center">
           <div className="mx-auto mb-5 h-14 w-14 text-text-muted">

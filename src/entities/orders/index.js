@@ -1,1 +1,6 @@
-export { getCurrentOrderApi, payOrderApi } from './api/ordersApi';
+export {
+  getCurrentOrderApi,
+  getPendingOrdersApi,
+  createOrderApi,
+  payOrderApi,
+} from './api/ordersApi';

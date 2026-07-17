@@ -6,7 +6,7 @@ const LOGO_SRC =
 export const Logo = ({ accentBackground = false }) => (
   <Link
     to="/"
-    aria-label="Баукен и Партнеры — на главную"
+    aria-label="КР17 — на главную"
     className={[
       'inline-flex shrink-0',
       accentBackground && 'rounded-lg bg-primary px-2 py-1',
@@ -14,6 +14,6 @@ export const Logo = ({ accentBackground = false }) => (
       .filter(Boolean)
       .join(' ')}
   >
-    <img src={LOGO_SRC} alt="Баукен и Партнеры" className="h-8 w-auto" />
+    <img src={LOGO_SRC} alt="КР17" className="h-8 w-auto" />
   </Link>
 );

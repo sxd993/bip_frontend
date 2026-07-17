@@ -7,6 +7,7 @@ const SIZE_CLASSES = {
   sm: "max-w-sm",
   md: "max-w-lg",
   lg: "max-w-2xl",
+  xl: "max-w-5xl",
 };
 
 const ModalRoot = ({
@@ -51,7 +52,7 @@ const ModalRoot = ({
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
         className={[
-          "flex w-full max-h-[90vh] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl",
+          "flex w-full max-h-[95vh] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl",
           SIZE_CLASSES[size],
         ].join(" ")}
       >

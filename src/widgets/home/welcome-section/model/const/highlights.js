@@ -11,4 +11,10 @@ export const WELCOME_HIGHLIGHTS = [
     to: '/auth/register',
     cta: 'Создать аккаунт',
   },
+  {
+    title: 'Пополнение баланса',
+    description: 'Пополните баланс, чтобы передавать заявки юристу в работу.',
+    to: '/personal-account',
+    cta: 'Пополнить',
+  },
 ];

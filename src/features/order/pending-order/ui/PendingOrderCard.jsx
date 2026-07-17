@@ -26,11 +26,6 @@ export const PendingOrderCard = ({
           <h3 className="text-sm font-semibold leading-snug text-text sm:text-base md:text-lg">
             {order.title}
           </h3>
-          {order.legal_area && (
-            <p className="text-xs text-text-muted sm:text-sm">
-              {order.legal_area}
-            </p>
-          )}
           <p className="text-xs text-text-muted sm:text-sm">
             Создана {formatDate(order.created_at)}
           </p>

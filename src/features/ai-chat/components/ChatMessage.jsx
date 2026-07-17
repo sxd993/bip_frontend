@@ -1,6 +1,6 @@
 const BotAvatar = () => (
   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold tracking-tight text-on-primary shadow-sm">
-    БиП
+    KR17
   </div>
 );
 
