@@ -1,7 +1,7 @@
-import { Loading } from '@/shared/ui/Loading';
-import { useUser } from '@/entities/auth';
-import { usePendingOrder } from '../model/usePendingOrder';
-import { PendingOrderCard } from './PendingOrderCard';
+import { Loading } from "@/shared/ui/Loading";
+import { useUser } from "@/entities/auth";
+import { usePendingOrder } from "../model/usePendingOrder";
+import { PendingOrderCard } from "./PendingOrderCard";
 
 export const PendingOrdersSection = () => {
   const { user } = useUser();
@@ -38,8 +38,8 @@ export const PendingOrdersSection = () => {
         </h2>
         <p className="mt-1 text-sm text-text-muted sm:text-base lg:text-sm">
           {hasOrders
-            ? 'Оплатите заявку, чтобы мы начали работу над вашим обращением'
-            : 'Здесь появятся заявки после консультации с интеллектуальным помощником'}
+            ? "Оплатите заявку, чтобы мы начали работу над вашим обращением"
+            : "Здесь появятся заявки после консультации с интеллектуальным помощником"}
         </p>
       </div>
 
@@ -77,8 +77,8 @@ export const PendingOrdersSection = () => {
             Нет неоплаченных заявок
           </h3>
           <p className="mx-auto max-w-sm text-sm leading-relaxed text-text-muted sm:text-base lg:text-sm">
-            Опишите ситуацию интеллектуальному помощнику на главной странице — он
-            подготовит заявку с суммой и сроками
+            Опишите ситуацию интеллектуальному помощнику на главной странице —
+            он подготовит заявку с суммой и сроками
           </p>
         </div>
       )}

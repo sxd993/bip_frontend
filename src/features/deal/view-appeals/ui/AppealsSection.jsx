@@ -7,7 +7,8 @@ import { Button } from "@/shared/ui/Button";
 
 const AppealsSection = ({ variant = "active" }) => {
   const navigate = useNavigate();
-  const config = APPEALS_SECTION_VARIANTS[variant] ?? APPEALS_SECTION_VARIANTS.active;
+  const config =
+    APPEALS_SECTION_VARIANTS[variant] ?? APPEALS_SECTION_VARIANTS.active;
   const { paginatedAppeals, pagination, isLoading, error } = useAppealsSection({
     closed: config.closed,
   });

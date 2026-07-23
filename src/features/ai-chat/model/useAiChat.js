@@ -106,7 +106,6 @@ const parseOrderProposal = (rawText) => {
     return {
       title: data.title,
       summary: data.summary,
-      legal_area: data.legal_area || 'другое',
       timeline: data.timeline,
       amount,
       situation_type: normalizeSituationType(
@@ -336,7 +335,6 @@ export const useAiChat = () => {
               streamedProposal = {
                 title: event.proposeOrder.title,
                 summary: event.proposeOrder.summary,
-                legal_area: event.proposeOrder.legal_area || 'другое',
                 timeline: event.proposeOrder.timeline,
                 amount: Number(event.proposeOrder.amount),
                 situation_type: normalizeSituationType(
