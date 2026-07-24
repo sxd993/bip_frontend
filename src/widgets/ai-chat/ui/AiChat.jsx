@@ -37,7 +37,7 @@ export const AiChat = () => {
     <>
       <div
         id="chat"
-        className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm"
+        className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
       >
         <div className="flex shrink-0 items-center gap-3 bg-primary px-5 py-4">
           <div>

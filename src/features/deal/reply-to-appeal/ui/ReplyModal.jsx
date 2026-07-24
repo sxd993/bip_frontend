@@ -116,7 +116,11 @@ export const ReplyModal = ({ isOpen, onClose, appealId }) => {
       ) : isLoadingDetails ? (
         <Modal.State variant="loading" text="Загрузка..." />
       ) : (
-        <form onSubmit={onFormSubmit} noValidate>
+        <form
+          onSubmit={onFormSubmit}
+          noValidate
+          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+        >
           <Modal.Body className="flex flex-col gap-4">
             {errorText && (
               <Modal.Message type="error">{errorText}</Modal.Message>

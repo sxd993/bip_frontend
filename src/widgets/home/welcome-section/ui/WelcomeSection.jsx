@@ -5,7 +5,7 @@ import { WELCOME_HIGHLIGHTS } from "../model/const/highlights";
 export const WelcomeSection = () => (
   <section>
     <div className="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-10">
-      <div className="relative h-[min(440px,70vh)] lg:h-auto">
+      <div className="relative h-[min(560px,80vh)] lg:h-auto">
         <div className="h-full lg:absolute lg:inset-0">
           <AiChat />
         </div>

@@ -231,6 +231,19 @@ export const useAiChat = () => {
     }, 0);
   };
 
+  useEffect(() => {
+    if (isStreaming || isTyping || isLocked || isConfirmOpen) return;
+    if (!suggestions.length) return;
+
+    scrollToBottom();
+    const timer = setTimeout(() => {
+      const el = scrollContainerRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [suggestions, isStreaming, isTyping, isLocked, isConfirmOpen]);
+
   const openProposalModal = (proposal) => {
     if (!proposal) return;
     const resolvedType = normalizeSituationType(

@@ -15,7 +15,10 @@ export const FormModal = ({
   submitDisabled = false,
 }) => (
   <Modal isOpen={isOpen} onClose={onClose} title={title} size={size}>
-    <form onSubmit={onSubmit}>
+    <form
+      onSubmit={onSubmit}
+      className="flex min-h-0 flex-1 flex-col overflow-hidden"
+    >
       <Modal.Body className="flex flex-col gap-4">
         {error && <Modal.Message type="error">{error}</Modal.Message>}
         {children}

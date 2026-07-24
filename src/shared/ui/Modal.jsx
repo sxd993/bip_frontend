@@ -46,13 +46,13 @@ const ModalRoot = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 backdrop-blur-sm sm:items-center sm:p-4">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
         className={[
-          "flex w-full max-h-[95vh] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl",
+          "flex w-full max-h-[100dvh] flex-col overflow-hidden rounded-t-xl border border-border bg-surface pb-[env(safe-area-inset-bottom)] shadow-2xl sm:max-h-[calc(100dvh-2rem)] sm:rounded-xl sm:pb-0",
           SIZE_CLASSES[size],
         ].join(" ")}
       >
@@ -67,7 +67,7 @@ const ModalRoot = ({
           </div>
         )}
 
-        <div className="min-h-0 flex-1 overflow-y-auto text-text">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden text-text">
           {children}
         </div>
       </div>
@@ -77,7 +77,14 @@ const ModalRoot = ({
 };
 
 const ModalBody = ({ children, className = "" }) => (
-  <div className={["px-5 py-5 sm:px-6", className].filter(Boolean).join(" ")}>
+  <div
+    className={[
+      "min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6",
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ")}
+  >
     {children}
   </div>
 );

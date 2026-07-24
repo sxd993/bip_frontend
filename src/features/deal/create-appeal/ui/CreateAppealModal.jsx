@@ -37,7 +37,11 @@ const CreateAppealModal = ({ isOpen, onClose }) => {
       title="Новое обращение"
       size="md"
     >
-      <form onSubmit={form.handleSubmit} noValidate>
+      <form
+        onSubmit={form.handleSubmit}
+        noValidate
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      >
         <Modal.Body className="flex flex-col gap-4">
           {(isError || error) && (
             <Modal.Message type="error">{errorMessage}</Modal.Message>

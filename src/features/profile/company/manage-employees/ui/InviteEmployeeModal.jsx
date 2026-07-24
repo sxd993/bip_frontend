@@ -70,7 +70,11 @@ export const InviteEmployeeModal = ({ isOpen, onClose }) => {
       title="Приглашение сотрудника"
       size="md"
     >
-      <form onSubmit={form.handleSubmit} noValidate>
+      <form
+        onSubmit={form.handleSubmit}
+        noValidate
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      >
         <Modal.Body className="flex flex-col gap-4">
           <p className="text-sm leading-relaxed text-text-muted">
             Укажите email сотрудника — мы создадим персональную ссылку для

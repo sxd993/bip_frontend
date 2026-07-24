@@ -46,7 +46,10 @@ export const ConfirmOrderModal = ({
       size="xl"
       closeOnEscape={!isSubmitting}
     >
-      <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
+      <form
+        onSubmit={handleSubmit}
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      >
         <Modal.Body className="flex flex-col gap-4 py-4 sm:gap-5">
           {(error || formError) && (
             <Modal.Message type="error">{error || formError}</Modal.Message>
