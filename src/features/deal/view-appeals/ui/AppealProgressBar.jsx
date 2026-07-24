@@ -16,10 +16,7 @@ export const AppealProgressBar = ({ percent, timeline, isCompleted = false }) =>
       aria-label="Прогресс обращения"
     >
       <div
-        className={[
-          "h-full rounded-full transition-all duration-300",
-          isCompleted ? "bg-success" : "bg-primary",
-        ].join(" ")}
+        className="h-full rounded-full bg-primary transition-all duration-300"
         style={{ width: `${percent}%` }}
       />
     </div>

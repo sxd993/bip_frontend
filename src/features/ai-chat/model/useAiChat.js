@@ -251,6 +251,7 @@ export const useAiChat = () => {
     );
     setPendingProposal({
       ...proposal,
+      proposal_id: proposal.proposal_id,
       situation_type: resolvedType,
       status: resolvedType,
     });
@@ -296,7 +297,8 @@ export const useAiChat = () => {
       let buffer = '';
       let botText = '';
       let firstToken = false;
-      let streamedProposal = null;
+      let serverProposal = null;
+      let parsedProposal = null;
       let latestSuggestions = [];
 
       while (true) {
@@ -329,7 +331,7 @@ export const useAiChat = () => {
                 suggestions: nextSuggestions,
                 proposal,
               } = parseAssistantPayload(botText);
-              if (proposal) streamedProposal = proposal;
+              if (proposal) parsedProposal = proposal;
               if (nextSuggestions.length) {
                 latestSuggestions = nextSuggestions;
                 setSuggestions(nextSuggestions);
@@ -345,19 +347,26 @@ export const useAiChat = () => {
               });
               scrollToBottom();
             } else if (event.proposeOrder) {
-              streamedProposal = {
-                title: event.proposeOrder.title,
-                summary: event.proposeOrder.summary,
-                timeline: event.proposeOrder.timeline,
-                amount: Number(event.proposeOrder.amount),
-                situation_type: normalizeSituationType(
-                  event.proposeOrder.situation_type ||
-                    event.proposeOrder.status,
-                ),
-                confirmations: normalizeConfirmations(
-                  event.proposeOrder.confirmations,
-                ),
-              };
+              if (!event.proposeOrder.proposal_id) {
+                showError(
+                  'Не удалось закрепить предложение. Попробуйте ещё раз.',
+                );
+              } else {
+                serverProposal = {
+                  proposal_id: event.proposeOrder.proposal_id,
+                  title: event.proposeOrder.title,
+                  summary: event.proposeOrder.summary,
+                  timeline: event.proposeOrder.timeline,
+                  amount: Number(event.proposeOrder.amount),
+                  situation_type: normalizeSituationType(
+                    event.proposeOrder.situation_type ||
+                      event.proposeOrder.status,
+                  ),
+                  confirmations: normalizeConfirmations(
+                    event.proposeOrder.confirmations,
+                  ),
+                };
+              }
             } else if (event.done === true) {
               setIsLocked(true);
               setSuggestions([]);
@@ -388,7 +397,7 @@ export const useAiChat = () => {
           suggestions: nextSuggestions,
           proposal,
         } = parseAssistantPayload(botText);
-        if (proposal) streamedProposal = proposal;
+        if (proposal) parsedProposal = proposal;
         if (nextSuggestions.length) {
           latestSuggestions = nextSuggestions;
         }
@@ -405,13 +414,15 @@ export const useAiChat = () => {
           return updated;
         });
 
-        if (!streamedProposal) {
+        if (!serverProposal) {
           setSuggestions(latestSuggestions);
         }
       }
 
-      if (streamedProposal) {
-        openProposalModal(streamedProposal);
+      if (serverProposal) {
+        openProposalModal(serverProposal);
+      } else if (parsedProposal) {
+        showError('Не удалось закрепить предложение. Попробуйте ещё раз.');
       }
     } catch (err) {
       console.error('[AI Chat] ошибка:', err);
@@ -459,7 +470,7 @@ export const useAiChat = () => {
   };
 
   const confirmOrder = async (formPayload = {}) => {
-    if (!pendingProposal || isConfirming) return;
+    if (!pendingProposal?.proposal_id || isConfirming) return;
 
     const {
       files = [],
@@ -472,16 +483,8 @@ export const useAiChat = () => {
     setConfirmError(null);
 
     try {
-      const resolvedType = normalizeSituationType(
-        situationTypeRef.current ||
-          pendingProposal.situation_type ||
-          pendingProposal.status,
-      );
-
       const result = await createOrderApi({
-        ...pendingProposal,
-        situation_type: resolvedType,
-        status: resolvedType,
+        proposal_id: pendingProposal.proposal_id,
         client_name: fullName,
         additional_description: additionalDescription,
         files: Array.isArray(files) ? files : [],

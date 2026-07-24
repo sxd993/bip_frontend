@@ -7,10 +7,7 @@ export const Logo = ({ accentBackground = false }) => (
   <Link
     to="/"
     aria-label="КР17 — на главную"
-    className={[
-      "inline-flex shrink-0",
-      accentBackground && "rounded-lg bg-primary px-2 py-1",
-    ]
+    className={["inline-flex shrink-0", accentBackground]
       .filter(Boolean)
       .join(" ")}
   >

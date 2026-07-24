@@ -31,7 +31,7 @@ export const PendingOrderCard = ({
           </p>
         </div>
 
-        <span className="shrink-0 self-start rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-text sm:text-sm">
+        <span className="shrink-0 self-start rounded-lg border border-primary bg-background px-3 py-1.5 text-xs font-medium text-text sm:text-sm">
           Ожидает оплаты
         </span>
       </div>
