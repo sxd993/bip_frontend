@@ -21,7 +21,7 @@ export const Loading = ({
   const content = (
     <div className={['flex flex-col items-center justify-center', className].filter(Boolean).join(' ')}>
       <div
-        className={`animate-spin rounded-full border-b-2 border-red-600 ${sizeClasses[size]}`}
+        className={`animate-spin rounded-full border-b-2 border-primary ${sizeClasses[size]}`}
       />
       {text && (
         <p className={`mt-2 font-medium text-text-muted ${textSizes[size]}`}>{text}</p>

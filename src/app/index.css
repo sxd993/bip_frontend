@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand */
-  --color-primary: #a01e1e;
-  --color-primary-hover: #871919;
+  /* Brand — deep navy, official / legal */
+  --color-primary: #1b3a5f;
+  --color-primary-hover: #152e4c;
   --color-on-primary: #ffffff;
 
   /* Surfaces: белые элементы на сером фоне */
