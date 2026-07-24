@@ -6,6 +6,7 @@ import { useFileUpload } from "@/shared/hooks/useFileUpload";
 import ReplyFields from "./ReplyForm";
 import { downloadFileApi } from "@/entities/deals";
 import { REPLY_VALIDATION_RULES } from "../../create-appeal/model/constants";
+import { sanitizeRichHtml } from "@/shared/lib/sanitizeHtml";
 
 const AppealFiles = ({ files }) => {
   if (files.length === 0) return null;
@@ -128,7 +129,11 @@ export const ReplyModal = ({ isOpen, onClose, appealId }) => {
 
             {appealMessage && (
               <Modal.Message type="info">
-                <span dangerouslySetInnerHTML={{ __html: appealMessage }} />
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeRichHtml(appealMessage),
+                  }}
+                />
               </Modal.Message>
             )}
 
