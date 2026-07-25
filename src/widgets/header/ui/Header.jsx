@@ -12,7 +12,7 @@ export const Header = () => {
       <div className="mx-auto w-full max-w-300 px-4 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-2xl border border-border bg-surface">
           <div className="flex h-16 items-center justify-between px-4 sm:px-5 lg:px-6">
-            <Logo accentBackground />
+            <Logo />
 
             <div className="flex items-center gap-3">
               <HeaderDesktopActions />

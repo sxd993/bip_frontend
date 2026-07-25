@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 
-const LOGO_SRC =
-  "https://s3.twcstorage.ru/1718254b-3e5a-4845-8527-e67480872a8b/%D0%9A%D0%A017.svg";
-
-export const Logo = ({ accentBackground = false }) => (
+export const Logo = () => (
   <Link
     to="/"
     aria-label="КР17 — на главную"
-    className={["inline-flex shrink-0", accentBackground]
-      .filter(Boolean)
-      .join(" ")}
+    className="inline-flex shrink-0 items-start text-primary transition-opacity hover:opacity-80"
   >
-    <img src={LOGO_SRC} alt="КР17" className="h-8 w-auto" />
+    <span className="text-[1.5rem] font-bold leading-none tracking-tight">
+      КР
+    </span>
+    <span className="ml-0.5 mt-0.5 text-[0.8125rem] font-bold leading-none tracking-tight tabular-nums">
+      17
+    </span>
   </Link>
 );
