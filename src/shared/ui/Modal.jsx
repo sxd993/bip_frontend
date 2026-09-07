@@ -46,13 +46,13 @@ const ModalRoot = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 backdrop-blur-sm sm:items-center sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
         className={[
-          "flex w-full max-h-[100dvh] flex-col overflow-hidden rounded-t-xl border border-border bg-surface pb-[env(safe-area-inset-bottom)] shadow-2xl sm:max-h-[calc(100dvh-2rem)] sm:rounded-xl sm:pb-0",
+          "flex w-full max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl",
           SIZE_CLASSES[size],
         ].join(" ")}
       >

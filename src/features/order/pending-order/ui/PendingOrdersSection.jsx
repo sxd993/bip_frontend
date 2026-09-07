@@ -1,9 +1,9 @@
-import { Loading } from "@/shared/ui/Loading";
 import { useUser } from "@/entities/auth";
 import { usePendingOrder } from "../model/usePendingOrder";
 import { PendingOrderCard } from "./PendingOrderCard";
+import { PendingOrdersSectionSkeleton } from "./PendingOrdersSectionSkeleton";
 
-export const PendingOrdersSection = () => {
+export const PendingOrdersSection = ({ syncError = null }) => {
   const { user } = useUser();
   const {
     orders,
@@ -17,7 +17,7 @@ export const PendingOrdersSection = () => {
   } = usePendingOrder();
 
   if (isLoading) {
-    return <Loading fullScreen />;
+    return <PendingOrdersSectionSkeleton />;
   }
 
   if (error) {
@@ -42,6 +42,8 @@ export const PendingOrdersSection = () => {
             : "Здесь появятся заявки после консультации с интеллектуальным помощником"}
         </p>
       </div>
+
+      {syncError && <p className="mb-4 text-sm text-error">{syncError}</p>}
 
       {hasOrders ? (
         <div className="flex flex-col gap-4">

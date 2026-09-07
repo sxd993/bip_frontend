@@ -1,11 +1,13 @@
-import { AccountLayout } from '@/widgets/profile/ui/AccountLayout';
-import { PhysicalProfileSidebar } from '@/widgets/profile/ui/PhysicalProfileSidebar';
-import { CompanyProfileSidebar } from '@/widgets/profile/ui/CompanyProfileSidebar';
-import { PendingOrdersSection } from '@/features/order/pending-order/ui/PendingOrdersSection';
-import { getGreetingName } from '@/widgets/profile/lib/getGreetingName';
+import { AccountLayout } from "@/widgets/profile/ui/AccountLayout";
+import { PhysicalProfileSidebar } from "@/widgets/profile/ui/PhysicalProfileSidebar";
+import { CompanyProfileSidebar } from "@/widgets/profile/ui/CompanyProfileSidebar";
+import { PendingOrdersSection } from "@/features/order/pending-order";
+import { usePaymentReturn } from "@/features/balance";
+import { getGreetingName } from "@/widgets/profile/lib/getGreetingName";
 
 export const OrdersAccount = ({ user }) => {
-  const isLegal = user?.user_type === 'legal';
+  const { syncError } = usePaymentReturn();
+  const isLegal = user?.user_type === "legal";
   const sidebar = isLegal ? (
     <CompanyProfileSidebar user={user} />
   ) : (
@@ -18,7 +20,7 @@ export const OrdersAccount = ({ user }) => {
       subtitle="Неоплаченные заявки после консультации с интеллектуальным помощником"
       sidebar={sidebar}
     >
-      <PendingOrdersSection />
+      <PendingOrdersSection syncError={syncError} />
     </AccountLayout>
   );
 };

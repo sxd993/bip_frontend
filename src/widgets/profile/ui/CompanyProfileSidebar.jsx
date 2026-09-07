@@ -1,6 +1,7 @@
 import { ProfileSidebarField } from "./ProfileSidebarField";
 import { formatBalance } from "@/shared/utils/formatters";
 import { AccountNav } from "./AccountNav";
+import { TopUpBalanceButton } from "@/features/balance";
 
 export const CompanyProfileSidebar = ({ user }) => {
   const company = user?.company;
@@ -8,13 +9,16 @@ export const CompanyProfileSidebar = ({ user }) => {
 
   return (
     <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
-      <div>
-        <p className="line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base">
-          {companyName}
-        </p>
-        <p className="text-[0.6875rem] font-semibold text-primary sm:text-xs">
-          {user?.role || "Сотрудник"}
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base">
+            {companyName}
+          </p>
+          <p className="text-[0.6875rem] font-semibold text-primary sm:text-xs">
+            {user?.role || "Сотрудник"}
+          </p>
+        </div>
+        <TopUpBalanceButton />
       </div>
 
       <dl className="mt-4 space-y-3 border-t border-border pt-4">

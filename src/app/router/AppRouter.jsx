@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import { Loading } from "@/shared/ui/Loading";
 import { AuthGuard } from "@/entities/auth";
 import { ProfilePage } from "@/pages/ProfilePage";
@@ -9,6 +9,16 @@ const HomePage = lazy(() =>
   import("@/pages/HomePage").then((module) => ({ default: module.HomePage })),
 );
 
+const PaymentReturnRedirect = () => {
+  const location = useLocation();
+  return (
+    <Navigate
+      to={`/personal-account/orders${location.search}`}
+      replace
+    />
+  );
+};
+
 export const AppRouter = () => (
   <Suspense
     fallback={<Loading fullScreen />}
@@ -17,6 +27,14 @@ export const AppRouter = () => (
       <Route path="/" element={<HomePage />} />
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/auth/:stage" element={<AuthPage />} />
+      <Route
+        path="/payment/return"
+        element={
+          <AuthGuard>
+            <PaymentReturnRedirect />
+          </AuthGuard>
+        }
+      />
       <Route
         path="/personal-account/*"
         element={

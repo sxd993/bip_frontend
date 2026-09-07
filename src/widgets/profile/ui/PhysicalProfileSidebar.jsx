@@ -1,6 +1,7 @@
 import { ProfileSidebarField } from './ProfileSidebarField';
 import { formatBalance } from '@/shared/utils/formatters';
 import { AccountNav } from './AccountNav';
+import { TopUpBalanceButton } from '@/features/balance';
 
 const getFullName = (user) =>
   [user?.last_name, user?.first_name, user?.second_name].filter(Boolean).join(' ');
@@ -10,13 +11,16 @@ export const PhysicalProfileSidebar = ({ user }) => {
 
   return (
     <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
-      <div>
-        <p className="truncate text-sm font-semibold text-text sm:text-base">
-          {fullName || 'Пользователь'}
-        </p>
-        <p className="text-[0.6875rem] font-semibold text-primary sm:text-xs">
-          Частное лицо
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-text sm:text-base">
+            {fullName || 'Пользователь'}
+          </p>
+          <p className="text-[0.6875rem] font-semibold text-primary sm:text-xs">
+            Частное лицо
+          </p>
+        </div>
+        <TopUpBalanceButton />
       </div>
 
       <dl className="mt-4 space-y-3 border-t border-border pt-4">
